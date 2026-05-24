@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Food Roulette</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@900&family=DM+Sans:wght@400;500;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<title>Fat Ass Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=DM+Sans:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
 <style>
 /* ── Reset & Tokens ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -57,8 +57,8 @@ body::before{content:'';position:fixed;inset:11px;border:1px solid rgba(201,168,
 h1{font-family:'Cinzel',serif;font-size:clamp(1.4rem,5.5vw,2.4rem);font-weight:900;line-height:1.15;color:var(--cream);text-shadow:0 2px 20px rgba(0,0,0,.9),0 0 40px rgba(201,168,76,.2);letter-spacing:.04em;margin-bottom:6px;}
 h1 span{
   display:block;
-  font-family:'Great Vibes',cursive;
-  font-size:clamp(2.4rem,9vw,4.2rem);
+  font-family:'Pacifico',cursive;
+  font-size:clamp(2.2rem,8.5vw,3.8rem);
   font-weight:400;
   letter-spacing:.02em;
   color:#e03030;
@@ -86,7 +86,7 @@ h1 span{
   70%{color:#d02828;text-shadow:0 0 6px rgba(210,35,35,.7),0 0 14px rgba(180,20,20,.4),0 2px 6px rgba(0,0,0,.8);}
   75%{color:#e03030;text-shadow:0 0 8px rgba(220,40,40,.9),0 0 20px rgba(220,40,40,.7),0 0 40px rgba(220,40,40,.4),0 2px 6px rgba(0,0,0,.8);}
 }
-.sub{font-size:.68rem;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px;}
+.sub{font-size:.68rem;color:rgba(255,255,255,.75);letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px;}
 
 
 
@@ -166,67 +166,148 @@ h1 span{
 .rb:hover{border-color:var(--gold);background:rgba(201,168,76,.12);}
 .rb:disabled{opacity:0;pointer-events:none;}
 
-/* ── Result Strip ── */
-.strip{width:calc(100% - 24px);max-width:600px;margin:10px auto 14px;position:relative;z-index:1;}
-.rs-empty{display:flex;align-items:center;justify-content:center;padding:14px 18px;border:1px solid rgba(201,168,76,.15);border-radius:12px;background:rgba(0,0,0,.2);text-align:center;}
+/* ── Result Strip — unified vp-card ── */
+@keyframes winPop{0%{opacity:0;transform:translateY(12px) scale(.96)}70%{opacity:1;transform:translateY(-2px) scale(1.01)}100%{opacity:1;transform:none}}
+@keyframes fadeOut{0%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px)}}
+.strip{width:calc(100% - 24px);max-width:600px;margin:22px auto 14px;position:relative;z-index:1;}
+.vp-card{animation:none;}
+.rs-empty{display:flex;align-items:center;justify-content:center;padding:0;border:none;background:none;}
 .rs-empty.hide{display:none;}
-.rs-empty-txt{color:var(--dim);}
-.rs-empty-txt strong{display:block;font-family:'Cinzel',serif;font-size:.72rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
-.rs-empty-txt span{font-size:.7rem;color:var(--dim);}
-/* ── Winner card ── */
-@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
-.rs-winner{
-  display:none;
-  background:linear-gradient(160deg,#030f05 0%,#061508 50%,#020c04 100%);
-  border:1px solid rgba(201,168,76,.5);
-  border-radius:14px;overflow:hidden;
-  box-shadow:0 0 0 1px rgba(201,168,76,.15),0 8px 40px rgba(0,0,0,.6),0 0 60px rgba(201,168,76,.08);
-}
-.rs-winner.show{display:block;animation:winPop .35s cubic-bezier(.22,1,.36,1) both;}
-/* Gold shimmer bar at top */
-.rs-winner::before{
-  content:'';display:block;height:3px;
-  background:linear-gradient(90deg,transparent 0%,#7a5010 15%,#f0c93a 35%,#fff8c0 50%,#f0c93a 65%,#7a5010 85%,transparent 100%);
-  background-size:200% auto;
-  animation:shimmer 2.5s linear infinite;
-}
-.rw-in{padding:0;}
+.rs-empty-txt{width:100%;}
 
-/* Hero emoji + name section */
-.rw-hero{
+/* ── Unified video poker style card ── */
+.vp-card{
+  /* Casino felt table */
+  background:#0d5c2a;
+  border-radius:12px;
+  border:2px solid #c9a84c;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 4px #0d5c2a,
+    0 0 0 6px #c9a84c,
+    0 0 0 10px rgba(0,0,0,.5),
+    0 12px 40px rgba(0,0,0,.7);
+  font-family:'Cinzel',serif;
+  /* Felt weave texture */
+  background-image:
+    repeating-linear-gradient(47deg,transparent,transparent 2px,rgba(0,0,0,.06) 2px,rgba(0,0,0,.06) 3px),
+    repeating-linear-gradient(-47deg,transparent,transparent 2px,rgba(255,255,255,.025) 2px,rgba(255,255,255,.025) 3px),
+    radial-gradient(ellipse 100% 80% at 50% 0%,rgba(255,255,255,.06) 0%,transparent 60%),
+    linear-gradient(180deg,#0f6b30 0%,#0d5c2a 40%,#0a4d22 100%);
+}
+/* Red banner top — like the table's decorative border */
+.vp-header{
+  background:linear-gradient(90deg,#8b0000,#cc0000 30%,#dd0000 50%,#cc0000 70%,#8b0000);
+  border-bottom:3px solid #c9a84c;
+  border-top:none;
+  padding:8px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;
+}
+/* Gold lines top and bottom of header */
+.vp-header::before{
+  content:'';position:absolute;bottom:-5px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#c9a84c 20%,#fff8c0 50%,#c9a84c 80%,transparent);
+}
+.vp-header-txt{
+  font-family:'Cinzel',serif;font-size:.72rem;font-weight:900;
+  letter-spacing:.25em;text-transform:uppercase;color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,.6);
+}
+.vp-header-icons{font-size:.9rem;letter-spacing:3px;opacity:.9;}
+/* Body — felt surface */
+.vp-body{
+  background:transparent;
+  padding:16px 16px 12px;
+  position:relative;
+}
+/* Subtle gold rule lines across felt — like table layout lines */
+.vp-body::before{
+  content:'';position:absolute;left:12px;right:12px;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.25) 20%,rgba(201,168,76,.4) 50%,rgba(201,168,76,.25) 80%,transparent);
+}
+/* Spinning state — food icons row */
+.vp-spin-row{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:6px 0 10px;
+}
+.vp-food{
+  font-size:2.6rem;line-height:1;
+  filter:drop-shadow(2px 2px 0 rgba(0,0,0,.12));
+  animation:vpBounce 1.8s ease-in-out infinite;
+}
+.vp-food:nth-child(2){animation-delay:.25s;}
+.vp-food:nth-child(3){animation-delay:.5s;}
+.vp-food:nth-child(4){animation-delay:.75s;}
+.vp-food:nth-child(5){animation-delay:1s;}
+@keyframes vpBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+.vp-spin-msg{
   text-align:center;
-  padding:22px 16px 16px;
-  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,76,.12) 0%,transparent 70%);
-  border-bottom:1px solid rgba(201,168,76,.1);
+  font-size:.75rem;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:4px;
 }
-.rw-emoji{
-  font-size:4rem;line-height:1;
-  display:block;margin-bottom:10px;
-  filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));
+/* Winner state — restaurant info */
+.vp-winner-emoji{
+  font-size:4rem;line-height:1;display:block;text-align:center;
+  margin-bottom:6px;
+  filter:drop-shadow(2px 2px 0 rgba(0,0,0,.12));
+  animation:winnerPop .4s cubic-bezier(.34,1.6,.64,1) both;
 }
-.rw-label{
-  font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.35em;
-  color:var(--gold);text-transform:uppercase;margin-bottom:8px;font-weight:700;
-  opacity:.8;
+@keyframes winnerPop{0%{transform:scale(0) rotate(-15deg);}100%{transform:scale(1) rotate(0);}}
+.vp-winner-name{
+  font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;
+  color:#fff;text-align:center;letter-spacing:.06em;text-transform:uppercase;
+  display:block;line-height:1.1;margin-bottom:8px;
+  text-shadow:0 2px 8px rgba(0,0,0,.6);
 }
-.rw-name{
-  font-family:'Cinzel',serif;font-size:1.45rem;font-weight:900;
-  color:#fff;line-height:1.1;margin-bottom:10px;
-  text-shadow:0 2px 20px rgba(201,168,76,.3);
+.vp-pills{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:6px;}
+.vp-pill{
+  font-family:'Cinzel',serif;font-size:.6rem;font-weight:700;
+  padding:3px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;
 }
-.rw-desc{font-size:.76rem;color:var(--dim);font-style:italic;margin-bottom:8px;display:none;line-height:1.4;}
-.rw-pills{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:2px;}
-.pill{font-size:.65rem;padding:3px 10px;border-radius:20px;font-weight:600;}
-.p-c{background:rgba(0,0,0,.5);color:#88c878;border:1px solid rgba(80,160,60,.3);}
-.p-p{background:rgba(0,0,0,.5);color:#88c878;border:1px solid rgba(80,160,60,.25);}
-.p-r{background:rgba(0,0,0,.5);color:#e8c86a;border:1px solid rgba(201,168,76,.3);}
-.p-o{background:rgba(0,50,15,.6);color:#55c878;border:1px solid rgba(50,160,80,.3);}
-.rw-addr{font-size:.68rem;color:var(--dim);margin-top:6px;}
+.vp-pill.cuisine{background:rgba(0,0,0,.5);color:#88c878;border:1px solid rgba(80,160,60,.3);}
+.vp-pill.price{background:rgba(0,0,0,.5);color:#88c878;border:1px solid rgba(80,160,60,.25);}
+.vp-pill.rating{background:rgba(0,0,0,.5);color:#e8c86a;border:1px solid rgba(201,168,76,.3);}
+.vp-pill.open{background:rgba(0,50,15,.6);color:#55c878;border:1px solid rgba(50,160,80,.3);}
+.vp-addr{font-size:.68rem;color:rgba(255,255,255,.55);text-align:center;display:block;margin-bottom:4px;}
+/* Photo */
+.rw-photo-wrap{overflow:hidden;max-height:150px;border-bottom:2px solid rgba(201,168,76,.4);}
+.rw-photo{width:100%;height:150px;object-fit:cover;display:block;}
+.rw-photo-attr{font-size:.55rem;color:#888;text-align:right;padding:2px 8px;background:#f8f8f8;border-bottom:1px solid #eee;}
+.rw-photo-attr a{color:#888;text-decoration:none;}
+/* Items */
+.vp-items{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(201,168,76,.2);}
+.vp-item{flex:1;background:rgba(0,0,0,.2);border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:8px 10px;}
+.vp-item-emoji{font-size:1.2rem;display:block;margin-bottom:4px;}
+.vp-item-name{font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:2px;}
+.vp-item-desc{font-size:.63rem;color:rgba(255,255,255,.5);line-height:1.3;}
+/* Contact row */
+.vp-contact{display:flex;gap:6px;margin-top:8px;}
+.vp-contact-btn{
+  flex:1;padding:8px 12px;border-radius:8px;font-size:.78rem;font-weight:600;
+  text-decoration:none;border:1px solid rgba(201,168,76,.2);
+  background:rgba(0,0,0,.3);color:#fff;cursor:pointer;
+  transition:border-color .15s,background .15s;display:flex;align-items:center;justify-content:center;gap:5px;
+  font-family:'DM Sans',sans-serif;
+}
+.vp-contact-btn:hover{border-color:var(--gold);background:rgba(201,168,76,.08);}
+/* Footer bar */
+.vp-footer{
+  padding:12px 16px 14px;
+  display:flex;align-items:center;justify-content:center;
+  border-top:1px solid rgba(201,168,76,.25);
+  background:rgba(0,0,0,.1);
+}
+.vp-footer-btn{
+  flex:1;padding:11px;border:none;border-radius:9px;
+  background:linear-gradient(135deg,var(--gl),var(--gold));
+  color:#1a0800;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:700;
+  cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;
+  gap:5px;transition:transform .15s;
+}
+.vp-footer-btn:hover{transform:translateY(-2px);}
+.vp-footer-btn.red{background:linear-gradient(135deg,var(--gl),var(--gold));color:#1a0800;}
 
-/* Body section below hero */
-.rw-body{padding:14px 16px 16px;}
-.rw-info{flex:1;min-width:0;}
-.rw-top{display:flex;gap:12px;align-items:center;margin-bottom:12px;}
 
 /* Restaurant photo */
 .rw-photo{
@@ -248,21 +329,22 @@ h1 span{
 .rw-contact{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
 .rw-contact-btn{
   display:flex;align-items:center;gap:5px;
-  padding:8px 12px;border-radius:8px;font-size:.78rem;font-weight:600;
-  text-decoration:none;border:1px solid rgba(201,168,76,.2);
-  background:rgba(0,0,0,.3);color:var(--cream);cursor:pointer;
-  transition:border-color .15s,background .15s;flex:1;justify-content:center;
+  padding:8px 12px;border-radius:4px;font-size:.78rem;font-weight:700;
+  text-decoration:none;border:2px solid #1a1a1a;
+  background:#fff;color:#1a1a1a;cursor:pointer;
+  transition:all .1s;flex:1;justify-content:center;
+  font-family:'DM Sans',sans-serif;
 }
-.rw-contact-btn:hover{border-color:var(--gold);background:rgba(201,168,76,.08);}
+.rw-contact-btn:hover{background:#1a1a1a;color:#fff;}
 /* Items to try */
-.rw-items{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(201,168,76,.12);}
-.rw-item{flex:1;background:rgba(0,0,0,.25);border:1px solid rgba(201,168,76,.1);border-radius:8px;padding:8px 10px;}
+.rw-items{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:2px solid #1a1a1a;}
+.rw-item{flex:1;background:#f5f5f5;border:2px solid #1a1a1a;border-radius:6px;padding:8px 10px;}
 .rw-item-emoji{font-size:1.2rem;margin-bottom:4px;}
-.rw-item-name{font-size:.72rem;font-weight:700;color:var(--cream);margin-bottom:2px;}
-.rw-item-desc{font-size:.63rem;color:var(--dim);line-height:1.3;}
+.rw-item-name{font-size:.72rem;font-weight:700;color:#1a1a1a;margin-bottom:2px;font-family:'Cinzel',serif;text-transform:uppercase;letter-spacing:.05em;}
+.rw-item-desc{font-size:.63rem;color:#666;line-height:1.3;}
 .rw-acts{display:flex;gap:8px;}
-.btn-dd{flex:1;padding:11px;border:none;border-radius:9px;background:linear-gradient(135deg,var(--gl),var(--gold));color:#1a0800;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;transition:transform .15s;}
-.btn-dd:hover{transform:translateY(-2px);}
+.btn-dd{flex:1;padding:11px;border:3px solid #1a1a1a;border-radius:6px;background:#c0392b;color:#fff;font-family:'Cinzel',serif;font-size:.78rem;font-weight:900;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .1s;letter-spacing:.08em;text-transform:uppercase;box-shadow:3px 3px 0 #1a1a1a;}
+.btn-dd:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #1a1a1a;}
 
 /* ── Filter Sheet ── */
 .so{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
@@ -326,8 +408,8 @@ h1 span{
 
 <div class="hd">
   <div class="logo-r"><div class="logo-l"></div><div class="logo-t">✦ Food Roulette ✦</div><div class="logo-l"></div></div>
-  <h1>Get Ready To <span>Shove Your Face.</span></h1>
-  <p class="sub">Place your bets · The wheel decides</p>
+  <h1>Welcome to <span>Fat Ass Roulette</span></h1>
+  <p class="sub" id="tagline">Place your bets · The wheel decides</p>
 </div>
 
 
@@ -346,41 +428,57 @@ h1 span{
 </div>
 
 <div class="strip">
-  <div class="rs-empty" id="rsE">
-    <div class="rs-empty-txt"><strong id="rsStatus">Spin the wheel to find your next meal</strong><span id="rsSub">Tap the wheel or hit the button above</span></div>
-  </div>
-  <div class="rs-winner" id="rsW">
-    <div class="rw-in">
-      <!-- Photo (hidden until live data provides one) -->
-      <div class="rw-photo-wrap" id="wPhotoWrap" style="display:none">
-        <img class="rw-photo" id="wPhoto" src="" alt="">
+  <div id="vpCard" class="vp-card">
+    <!-- SPIN STATE (default) -->
+    <div id="vpSpin">
+      <div class="vp-header">
+        <span class="vp-header-icons">🎰 🎲</span>
+        <span class="vp-header-txt" id="rsStatus">Spin to reveal your fate</span>
+        <span class="vp-header-icons">🎲 🎰</span>
       </div>
-      <div class="rw-photo-attr" id="wPhotoAttr" style="display:none"></div>
-      <!-- Hero: emoji + name centered -->
-      <div class="rw-hero">
-        <span class="rw-emoji" id="wE">🍕</span>
-        <div class="rw-label" id="wL">Tonight's Restaurant</div>
-        <div class="rw-name"  id="wN">—</div>
-        <div class="rw-desc"  id="wD"></div>
-        <div class="rw-pills" id="wP"></div>
-        <div class="rw-addr"  id="wA"></div>
-      </div>
-      <!-- Body: items + actions -->
-      <div class="rw-body">
-        <div class="rw-items" id="wItems"></div>
-        <!-- Contact row: phone + website + maps -->
-        <div class="rw-contact" id="wContact" style="display:none">
-          <a class="rw-contact-btn" id="wPhone"   href="#" style="display:none">📞 Call</a>
-          <a class="rw-contact-btn" id="wWebsite" href="#" target="_blank" style="display:none">🌐 Website</a>
-          <a class="rw-contact-btn" id="wMaps"    href="#" target="_blank" style="display:none">🗺️ Maps</a>
+      <div class="vp-body">
+        <div class="vp-spin-row">
+          <span class="vp-food">🍕</span>
+          <span class="vp-food">🍔</span>
+          <span class="vp-food">🌮</span>
+          <span class="vp-food">🍣</span>
+          <span class="vp-food">🥩</span>
         </div>
-        <a class="btn-dd" id="wLink" href="#" target="_blank" style="margin-top:10px;display:flex;">🛵 Order on DoorDash</a>
+        <div class="vp-spin-msg" id="rsSub">No judgment &bull; No refunds</div>
+      </div>
+      <div class="vp-footer">
+        <span style="font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;color:rgba(201,168,76,.8);letter-spacing:.3em;text-transform:uppercase;text-shadow:0 0 12px rgba(201,168,76,.3);">GOOD LUCK</span>
+      </div>
+    </div>
+    <!-- WINNER STATE (hidden until spin) -->
+    <div id="vpWin" style="display:none">
+      <div class="rw-photo-wrap" id="wPhotoWrap" style="display:none"><img class="rw-photo" id="wPhoto" src="" alt=""></div>
+      <div class="rw-photo-attr" id="wPhotoAttr" style="display:none"></div>
+      <div class="vp-header">
+        <span class="vp-header-icons">🎰 🎲</span>
+        <span class="vp-header-txt" id="wL">Tonight's Restaurant</span>
+        <span class="vp-header-icons">🎲 🎰</span>
+      </div>
+      <div class="vp-body">
+        <span class="vp-winner-emoji" id="wE">🍕</span>
+        <span class="vp-winner-name"  id="wN">—</span>
+        <div class="vp-pills" id="wP"></div>
+        <span class="vp-addr"  id="wA"></span>
+        <div class="vp-items"  id="wItems" style="display:none"></div>
+        <div class="vp-contact" id="wContact" style="display:none">
+          <a class="vp-contact-btn" id="wPhone"   href="#" style="display:none">📞 Call</a>
+          <a class="vp-contact-btn" id="wWebsite" href="#" target="_blank" style="display:none">🌐 Website</a>
+          <a class="vp-contact-btn" id="wMaps"    href="#" target="_blank" style="display:none">🗺️ Maps</a>
+        </div>
+      </div>
+      <div class="vp-footer">
+        <a class="vp-footer-btn red" id="wLink" href="#" target="_blank">🛵 Order on DoorDash</a>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Spin history — last 5 results -->
+
+<!-- Recent spins history -->
 <div class="hist" id="histSection" style="display:none">
   <div class="hist-hd">
     <div class="hist-hd-line"></div>
@@ -473,66 +571,127 @@ h1 span{
 
 <script>
 const FALLBACK_REST=[
-  {name:"Tony's Pizza",short:"Tony's",emoji:"🍕",cuisine:"pizza",price:"$$",pl:2,rating:4.6,open:true,dist:0.3,addr:"1570 Stockton St",phone:"+1 415-835-9888",website:"https://tonyspizzanapoletana.com",mapsUrl:"https://maps.google.com/?q=Tony's+Pizza+Napoletana+SF",photoRef:"https://picsum.photos/seed/pizza/600/320",items:[{name:"Margherita",emoji:"🍕",desc:"San Marzano tomato, mozzarella"},{name:"Funghi Tartufo",emoji:"🍕",desc:"Wild mushrooms, truffle oil"}]},
-  {name:"Burma Superstar",short:"Burma",emoji:"🍜",cuisine:"thai",price:"$$",pl:2,rating:4.4,open:true,dist:0.8,addr:"309 Clement St",phone:"+1 415-387-2147",website:"https://www.burmasuperstar.com",mapsUrl:"https://maps.google.com/?q=Burma+Superstar",photoRef:"https://picsum.photos/seed/burma/600/320",items:[{name:"Tea Leaf Salad",emoji:"🥗",desc:"Fermented tea leaves, crunchy mix"},{name:"Rainbow Salad",emoji:"🌈",desc:"12 ingredients, tamarind"}]},
-  {name:"Sushirrito",short:"Sushirrito",emoji:"🍣",cuisine:"sushi",price:"$$",pl:2,rating:4.2,open:false,dist:1.1,addr:"59 New Montgomery",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Sushirrito",photoRef:"",items:[{name:"Sumo Crunch",emoji:"🍣",desc:"Spicy tuna, tempura, avocado"},{name:"Geisha's Kiss",emoji:"🍣",desc:"Salmon, yuzu cream cheese"}]},
-  {name:"Tacolicious",short:"Tacolicious",emoji:"🌮",cuisine:"mexican",price:"$$",pl:2,rating:4.3,open:true,dist:0.6,addr:"741 Valencia St",phone:"+1 415-626-1344",website:"https://tacolicious.com",mapsUrl:"https://maps.google.com/?q=Tacolicious",photoRef:"https://picsum.photos/seed/taco/600/320",items:[{name:"Carnitas Taco",emoji:"🌮",desc:"Braised pork, salsa verde"},{name:"Fish Taco",emoji:"🌮",desc:"Beer battered, cabbage slaw"}]},
-  {name:"Nopa",short:"Nopa",emoji:"🥩",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.5,addr:"560 Divisadero St",phone:"+1 415-864-8643",website:"https://nopasf.com",mapsUrl:"https://maps.google.com/?q=Nopa+San+Francisco",photoRef:"https://picsum.photos/seed/nopa/600/320",items:[{name:"Pork Chop",emoji:"🥩",desc:"Stone fruit chutney, greens"},{name:"Burger",emoji:"🍔",desc:"Grass-fed beef, aged cheddar"}]},
-  {name:"Cheung Hing",short:"Cheung Hing",emoji:"🥡",cuisine:"chinese",price:"$",pl:1,rating:4.1,open:true,dist:0.9,addr:"209 Clement St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cheung+Hing",photoRef:"https://picsum.photos/seed/chinese/600/320",items:[{name:"BBQ Pork Rice",emoji:"🍖",desc:"Char siu, steamed rice"},{name:"Wonton Soup",emoji:"🍜",desc:"Hand-folded wontons"}]},
-  {name:"Lers Ros Thai",short:"Lers Ros",emoji:"🍛",cuisine:"thai",price:"$",pl:1,rating:4.4,open:false,dist:0.7,addr:"730 Larkin St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Lers+Ros+Thai",photoRef:"",items:[{name:"Pad Kee Mao",emoji:"🍜",desc:"Drunken noodles, Thai basil"},{name:"Massaman Curry",emoji:"🍛",desc:"Braised beef, potato, peanuts"}]},
-  {name:"The Bird",short:"The Bird",emoji:"🍔",cuisine:"burger",price:"$",pl:1,rating:4.3,open:true,dist:1.2,addr:"115 New Montgomery",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=The+Bird",photoRef:"",items:[{name:"Chicken Sandwich",emoji:"🍗",desc:"Buttermilk-brined, slaw"},{name:"Chicken & Waffles",emoji:"🧇",desc:"Maple sriracha"}]},
-  {name:"Flour + Water",short:"Flour+Water",emoji:"🍝",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:1.4,addr:"2401 Harrison St",phone:"+1 415-826-7000",website:"https://flourandwater.com",mapsUrl:"https://maps.google.com/?q=Flour+++Water",photoRef:"https://picsum.photos/seed/pasta/600/320",items:[{name:"Tagliatelle",emoji:"🍝",desc:"Lamb ragu, pecorino, herbs"},{name:"Ricotta Gnudi",emoji:"🍝",desc:"Brown butter, sage"}]},
-  {name:"PPQ Dungeness",short:"PPQ",emoji:"🦀",cuisine:"chinese",price:"$$",pl:2,rating:4.5,open:true,dist:2.1,addr:"2332 Clement St",phone:"+1 415-386-8266",website:"https://ppqdungeness.com",mapsUrl:"https://maps.google.com/?q=PPQ+Dungeness",photoRef:"",items:[{name:"Roast Crab",emoji:"🦀",desc:"Garlic noodles, ginger scallion"},{name:"Salt Pepper Shrimp",emoji:"🍤",desc:"Crispy, chili, garlic"}]},
-  {name:"Komaaj",short:"Komaaj",emoji:"🫓",cuisine:"indian",price:"$$",pl:2,rating:4.6,open:true,dist:1.8,addr:"2404 Mission St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Komaaj",photoRef:"",items:[{name:"Ghormeh Sabzi",emoji:"🍲",desc:"Herb stew, kidney beans, lamb"},{name:"Zereshk Polo",emoji:"🍚",desc:"Barberry rice, saffron chicken"}]},
-  {name:"Liholiho Yacht",short:"Liholiho",emoji:"🌺",cuisine:"american",price:"$$$",pl:3,rating:4.8,open:false,dist:0.6,addr:"871 Sutter St",phone:"+1 415-440-5446",website:"https://liholihoyachtclub.com",mapsUrl:"https://maps.google.com/?q=Liholiho+Yacht",photoRef:"",items:[{name:"Spam Fried Rice",emoji:"🍱",desc:"Kalua pork, fried egg"},{name:"Oxtail Dumplings",emoji:"🥟",desc:"Ginger, scallion"}]},
-  {name:"Dragon Beaux",short:"Dragon Beaux",emoji:"🐉",cuisine:"chinese",price:"$$$",pl:3,rating:4.5,open:true,dist:3.2,addr:"5700 Geary Blvd",phone:"+1 415-333-8899",website:"https://dragonbeaux.com",mapsUrl:"https://maps.google.com/?q=Dragon+Beaux",photoRef:"",items:[{name:"Har Gow",emoji:"🥟",desc:"Steamed shrimp dumplings"},{name:"Char Siu Bao",emoji:"🍞",desc:"BBQ pork buns"}]},
-  {name:"Daeho",short:"Daeho",emoji:"🥩",cuisine:"korean",price:"$$",pl:2,rating:4.6,open:true,dist:0.4,addr:"2355 Lombard St",phone:"+1 415-931-1028",website:"https://daehosf.com",mapsUrl:"https://maps.google.com/?q=Daeho",photoRef:"https://picsum.photos/seed/korean/600/320",items:[{name:"Galbi Jim",emoji:"🥩",desc:"Braised short ribs, radish"},{name:"Brisket",emoji:"🥩",desc:"House BBQ, banchan"}]},
-  {name:"Sotto Mare",short:"Sotto Mare",emoji:"🦞",cuisine:"italian",price:"$$",pl:2,rating:4.5,open:true,dist:0.9,addr:"552 Green St",phone:"+1 415-398-3181",website:"https://sottomaresf.com",mapsUrl:"https://maps.google.com/?q=Sotto+Mare",photoRef:"https://picsum.photos/seed/seafood/600/320",items:[{name:"Cioppino",emoji:"🦞",desc:"Dungeness crab, clams, fish"},{name:"Calamari",emoji:"🦑",desc:"Grilled, lemon, herbs"}]},
-  {name:"Rich Table",short:"Rich Table",emoji:"🍽️",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:1.1,addr:"199 Gough St",phone:"+1 415-355-9085",website:"https://richtablesf.com",mapsUrl:"https://maps.google.com/?q=Rich+Table",photoRef:"https://picsum.photos/seed/richtable/600/320",items:[{name:"Sardine Chips",emoji:"🐟",desc:"Porcini, rosemary"},{name:"Pasta",emoji:"🍝",desc:"Seasonal, house made"}]},
-  {name:"Bi-Rite Creamery",short:"Bi-Rite",emoji:"🍦",cuisine:"american",price:"$",pl:1,rating:4.7,open:true,dist:0.7,addr:"3692 18th St",phone:"+1 415-626-5600",website:"https://biritemarket.com",mapsUrl:"https://maps.google.com/?q=Bi-Rite+Creamery",photoRef:"",items:[{name:"Salted Caramel",emoji:"🍦",desc:"House made, sea salt"},{name:"Honey Lavender",emoji:"🍦",desc:"Local honey, lavender"}]},
-  {name:"Z & Y Restaurant",short:"Z & Y",emoji:"🌶️",cuisine:"chinese",price:"$$",pl:2,rating:4.3,open:true,dist:0.5,addr:"655 Jackson St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Z+&+Y+Restaurant",photoRef:"",items:[{name:"Dan Dan Noodles",emoji:"🍜",desc:"Sichuan peppercorn, pork"},{name:"Mapo Tofu",emoji:"🍲",desc:"Silken tofu, Sichuan spice"}]},
-  {name:"Tartine Bakery",short:"Tartine",emoji:"🥐",cuisine:"american",price:"$",pl:1,rating:4.8,open:true,dist:0.8,addr:"600 Guerrero St",phone:"+1 415-487-2600",website:"https://tartinebakery.com",mapsUrl:"https://maps.google.com/?q=Tartine+Bakery+San+Francisco",photoRef:"https://picsum.photos/seed/bakery/600/320",items:[{name:"Country Loaf",emoji:"🍞",desc:"Sourdough, wood fired"},{name:"Morning Bun",emoji:"🥐",desc:"Orange zest, cinnamon"}]},
-  {name:"Mensho Tokyo",short:"Mensho",emoji:"🍥",cuisine:"sushi",price:"$$",pl:2,rating:4.6,open:true,dist:0.6,addr:"672 Geary St",phone:"+1 415-800-8345",website:"https://mensho.tokyo",mapsUrl:"https://maps.google.com/?q=Mensho+Tokyo",photoRef:"https://picsum.photos/seed/ramen/600/320",items:[{name:"Toripaitan Ramen",emoji:"🍥",desc:"Rich chicken broth, truffle"},{name:"Lamb Tsukemen",emoji:"🍜",desc:"Dipping ramen, spiced lamb"}]},
-  {name:"State Bird",short:"State Bird",emoji:"🐦",cuisine:"american",price:"$$$",pl:3,rating:4.7,open:true,dist:1.3,addr:"1529 Fillmore St",phone:"+1 415-795-1272",website:"https://statebirddprovisions.com",mapsUrl:"https://maps.google.com/?q=State+Bird",photoRef:"https://picsum.photos/seed/statebird/600/320",items:[{name:"State Bird",emoji:"🐦",desc:"Fried quail, pine nut"},{name:"Dungeness Pancake",emoji:"🥞",desc:"Crab, black bean sauce"}]},
-  {name:"Zuni Café",short:"Zuni",emoji:"🍗",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:0.8,addr:"1658 Market St",phone:"+1 415-552-2522",website:"https://zunicafe.com",mapsUrl:"https://maps.google.com/?q=Zuni+Café",photoRef:"https://picsum.photos/seed/zuni/600/320",items:[{name:"Roast Chicken",emoji:"🍗",desc:"Brick oven, bread salad"},{name:"Burger",emoji:"🍔",desc:"Focaccia, house pickles"}]},
-  {name:"Nopalito",short:"Nopalito",emoji:"🌿",cuisine:"mexican",price:"$$",pl:2,rating:4.5,open:true,dist:1.0,addr:"306 Broderick St",phone:"+1 415-437-0303",website:"https://nopalitosf.com",mapsUrl:"https://maps.google.com/?q=Nopalito",photoRef:"",items:[{name:"Carnitas",emoji:"🌮",desc:"Slow roasted pork"},{name:"Enchiladas",emoji:"🫔",desc:"Mole negro, crema"}]},
-  {name:"Hog Island Oyster",short:"Hog Island",emoji:"🦪",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.4,addr:"1 Ferry Building",phone:"+1 415-391-7117",website:"https://hogislandoysters.com",mapsUrl:"https://maps.google.com/?q=Hog+Island+Oyster",photoRef:"https://picsum.photos/seed/oyster/600/320",items:[{name:"Oysters",emoji:"🦪",desc:"Tomales Bay, mignonette"},{name:"Clam Chowder",emoji:"🍲",desc:"New England, sourdough bowl"}]},
-  {name:"Izakaya Rintaro",short:"Rintaro",emoji:"🍱",cuisine:"korean",price:"$$$",pl:3,rating:4.7,open:true,dist:1.6,addr:"82 14th St",phone:"+1 415-589-7022",website:"https://izakayarintaro.com",mapsUrl:"https://maps.google.com/?q=Izakaya+Rintaro",photoRef:"",items:[{name:"Yakitori",emoji:"🍢",desc:"Binchotan grilled chicken"},{name:"Karaage",emoji:"🍗",desc:"Fried chicken, kewpie mayo"}]},
-  {name:"Beretta",short:"Beretta",emoji:"🫙",cuisine:"italian",price:"$$",pl:2,rating:4.3,open:true,dist:0.9,addr:"1199 Valencia St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Beretta",photoRef:"",items:[{name:"Margherita",emoji:"🍕",desc:"Neapolitan, fior di latte"},{name:"Meatballs",emoji:"🍖",desc:"San Marzano, basil"}]},
-  {name:"Plow",short:"Plow",emoji:"🥚",cuisine:"american",price:"$$",pl:2,rating:4.4,open:true,dist:2.0,addr:"1299 18th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Plow",photoRef:"",items:[{name:"Ricotta Pancakes",emoji:"🥞",desc:"Seasonal fruit, maple syrup"},{name:"Eggs Baked in Cream",emoji:"🥚",desc:"House toast, chives"}]},
-  {name:"Kin Khao",short:"Kin Khao",emoji:"🌸",cuisine:"thai",price:"$$",pl:2,rating:4.5,open:true,dist:0.3,addr:"55 Cyril Magnin St",phone:"+1 415-362-7456",website:"https://kinkhao.com",mapsUrl:"https://maps.google.com/?q=Kin+Khao",photoRef:"",items:[{name:"Khao Soi",emoji:"🍜",desc:"Coconut curry, crispy noodles"},{name:"Som Tum",emoji:"🥗",desc:"Green papaya, peanut"}]},
-  {name:"Mister Jiu's",short:"Mister Jiu's",emoji:"🥢",cuisine:"chinese",price:"$$$",pl:3,rating:4.6,open:false,dist:0.4,addr:"28 Waverly Place",phone:"+1 415-857-9688",website:"https://misterjius.com",mapsUrl:"https://maps.google.com/?q=Mister+Jiu's",photoRef:"",items:[{name:"Quail & Foie Gras",emoji:"🥢",desc:"House XO, crispy rice"},{name:"Kung Pao Pastrami",emoji:"🌶️",desc:"Peanuts, dried chilies"}]},
-  {name:"Cotogna",short:"Cotogna",emoji:"🫕",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:0.5,addr:"490 Pacific Ave",phone:"+1 415-775-8508",website:"https://cotognasf.com",mapsUrl:"https://maps.google.com/?q=Cotogna",photoRef:"https://picsum.photos/seed/italian/600/320",items:[{name:"Wood-Fired Pizza",emoji:"🍕",desc:"House cured meats"},{name:"Handmade Pasta",emoji:"🍝",desc:"Daily changing"}]},
-  {name:"Soba Ichi",short:"Soba Ichi",emoji:"🍜",cuisine:"sushi",price:"$$",pl:2,rating:4.5,open:true,dist:2.8,addr:"2218 Broadway, Oakland",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Soba+Ichi",photoRef:"",items:[{name:"Zaru Soba",emoji:"🍜",desc:"Cold buckwheat, dipping broth"},{name:"Tempura Set",emoji:"🍤",desc:"Seasonal vegetables"}]},
-  {name:"Shizen",short:"Shizen",emoji:"🌱",cuisine:"sushi",price:"$$",pl:2,rating:4.6,open:true,dist:1.0,addr:"370 14th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Shizen",photoRef:"",items:[{name:"Vegan Omakase",emoji:"🌱",desc:"Seasonal plant-based nigiri"},{name:"Truffle Roll",emoji:"🍣",desc:"Truffle oil, asparagus"}]},
-  {name:"La Ciccia",short:"La Ciccia",emoji:"🐟",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:false,dist:2.2,addr:"291 30th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=La+Ciccia",photoRef:"",items:[{name:"Spaghetti Bottarga",emoji:"🐟",desc:"Sardinian mullet roe"},{name:"Roast Suckling Pig",emoji:"🐷",desc:"Myrtle, fennel, sea salt"}]},
-  {name:"Cockscomb",short:"Cockscomb",emoji:"🍖",cuisine:"american",price:"$$$",pl:3,rating:4.4,open:true,dist:0.7,addr:"564 4th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cockscomb",photoRef:"",items:[{name:"Whole Roast Pig",emoji:"🐷",desc:"For the table, house sauces"},{name:"Foie Gras Torchon",emoji:"🦆",desc:"Brioche, fig jam"}]},
-  {name:"Akiko's",short:"Akiko's",emoji:"🎌",cuisine:"sushi",price:"$$$",pl:3,rating:4.8,open:true,dist:0.5,addr:"431 Bush St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Akiko's",photoRef:"",items:[{name:"Omakase",emoji:"🍣",desc:"Chef's choice, 12 pieces nigiri"},{name:"Toro Tartare",emoji:"🐟",desc:"Bluefin, caviar, quail egg"}]},
-  {name:"Cassava",short:"Cassava",emoji:"🥗",cuisine:"american",price:"$$",pl:2,rating:4.5,open:true,dist:2.3,addr:"3519 Balboa St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cassava",photoRef:"",items:[{name:"Breakfast Sandwich",emoji:"🥚",desc:"Focaccia, egg, aioli"},{name:"Grain Bowl",emoji:"🥗",desc:"Seasonal grains, soft egg"}]},
-  {name:"The Progress",short:"The Progress",emoji:"🌽",cuisine:"american",price:"$$$",pl:3,rating:4.7,open:true,dist:1.3,addr:"1525 Fillmore St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=The+Progress",photoRef:"",items:[{name:"Smoked Whitefish",emoji:"🐟",desc:"Potato chips, dill crème"},{name:"Seasonal Vegetable",emoji:"🌽",desc:"Wood fired, changing weekly"}]},
+  {name:"Tony's Pizza",short:"Tony's",emoji:"🍕",cuisine:"pizza",price:"$$",pl:2,rating:4.6,open:true,dist:0.3,addr:"1570 Stockton St",phone:"+1 415-835-9888",website:"https://tonyspizzanapoletana.com",mapsUrl:"https://maps.google.com/?q=Tony's+Pizza+SF",photoRef:"https://picsum.photos/seed/pizza/600/320",photoAttr:null,items:[{name:"Margherita",emoji:"🍕",desc:"San Marzano tomato, mozzarella"},{name:"Funghi Tartufo",emoji:"🍕",desc:"Wild mushrooms, truffle oil"}]},
+  {name:"Burma Superstar",short:"Burma",emoji:"🍜",cuisine:"thai",price:"$$",pl:2,rating:4.4,open:true,dist:0.8,addr:"309 Clement St",phone:"+1 415-387-2147",website:"https://www.burmasuperstar.com",mapsUrl:"https://maps.google.com/?q=Burma+Superstar",photoRef:"https://picsum.photos/seed/burma/600/320",photoAttr:null,items:[{name:"Tea Leaf Salad",emoji:"🥗",desc:"Fermented tea leaves, crunchy mix"},{name:"Rainbow Salad",emoji:"🌈",desc:"12 ingredients, tamarind"}]},
+  {name:"Sushirrito",short:"Sushirrito",emoji:"🍣",cuisine:"sushi",price:"$$",pl:2,rating:4.2,open:false,dist:1.1,addr:"59 New Montgomery",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Sushirrito",photoRef:"",photoAttr:null,items:[{name:"Sumo Crunch",emoji:"🍣",desc:"Spicy tuna, tempura, avocado"},{name:"Geisha's Kiss",emoji:"🍣",desc:"Salmon, yuzu cream cheese"}]},
+  {name:"Tacolicious",short:"Tacolicious",emoji:"🌮",cuisine:"mexican",price:"$$",pl:2,rating:4.3,open:true,dist:0.6,addr:"741 Valencia St",phone:"+1 415-626-1344",website:"https://tacolicious.com",mapsUrl:"https://maps.google.com/?q=Tacolicious",photoRef:"https://picsum.photos/seed/taco/600/320",photoAttr:null,items:[{name:"Carnitas Taco",emoji:"🌮",desc:"Braised pork, salsa verde"},{name:"Fish Taco",emoji:"🌮",desc:"Beer battered, cabbage slaw"}]},
+  {name:"Nopa",short:"Nopa",emoji:"🥩",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.5,addr:"560 Divisadero St",phone:"+1 415-864-8643",website:"https://nopasf.com",mapsUrl:"https://maps.google.com/?q=Nopa+San+Francisco",photoRef:"https://picsum.photos/seed/nopa/600/320",photoAttr:null,items:[{name:"Pork Chop",emoji:"🥩",desc:"Stone fruit chutney, greens"},{name:"Burger",emoji:"🍔",desc:"Grass-fed beef, aged cheddar"}]},
+  {name:"Flour + Water",short:"Flour+Water",emoji:"🍝",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:1.4,addr:"2401 Harrison St",phone:"+1 415-826-7000",website:"https://flourandwater.com",mapsUrl:"https://maps.google.com/?q=Flour+Water",photoRef:"https://picsum.photos/seed/pasta/600/320",photoAttr:null,items:[{name:"Tagliatelle",emoji:"🍝",desc:"Lamb ragu, pecorino, herbs"},{name:"Ricotta Gnudi",emoji:"🍝",desc:"Brown butter, sage"}]},
+  {name:"Lers Ros Thai",short:"Lers Ros",emoji:"🍛",cuisine:"thai",price:"$",pl:1,rating:4.4,open:false,dist:0.7,addr:"730 Larkin St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Lers+Ros+Thai",photoRef:"",photoAttr:null,items:[{name:"Pad Kee Mao",emoji:"🍜",desc:"Drunken noodles, Thai basil"},{name:"Massaman Curry",emoji:"🍛",desc:"Braised beef, potato, peanuts"}]},
+  {name:"The Bird",short:"The Bird",emoji:"🍔",cuisine:"burger",price:"$",pl:1,rating:4.3,open:true,dist:1.2,addr:"115 New Montgomery",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=The+Bird+SF",photoRef:"",photoAttr:null,items:[{name:"Chicken Sandwich",emoji:"🍗",desc:"Buttermilk-brined, slaw"},{name:"Chicken & Waffles",emoji:"🧇",desc:"Maple sriracha"}]},
+  {name:"Daeho",short:"Daeho",emoji:"🥩",cuisine:"korean",price:"$$",pl:2,rating:4.6,open:true,dist:0.4,addr:"2355 Lombard St",phone:"+1 415-931-1028",website:"https://daehosf.com",mapsUrl:"https://maps.google.com/?q=Daeho",photoRef:"https://picsum.photos/seed/korean/600/320",photoAttr:null,items:[{name:"Galbi Jim",emoji:"🥩",desc:"Braised short ribs, radish"},{name:"Brisket",emoji:"🥩",desc:"House BBQ, banchan"}]},
+  {name:"Sotto Mare",short:"Sotto Mare",emoji:"🦞",cuisine:"italian",price:"$$",pl:2,rating:4.5,open:true,dist:0.9,addr:"552 Green St",phone:"+1 415-398-3181",website:"https://sottomaresf.com",mapsUrl:"https://maps.google.com/?q=Sotto+Mare",photoRef:"https://picsum.photos/seed/seafood/600/320",photoAttr:null,items:[{name:"Cioppino",emoji:"🦞",desc:"Dungeness crab, clams, fish"},{name:"Calamari",emoji:"🦑",desc:"Grilled, lemon, herbs"}]},
+  {name:"Tartine Bakery",short:"Tartine",emoji:"🥐",cuisine:"american",price:"$",pl:1,rating:4.8,open:true,dist:0.8,addr:"600 Guerrero St",phone:"+1 415-487-2600",website:"https://tartinebakery.com",mapsUrl:"https://maps.google.com/?q=Tartine+Bakery",photoRef:"https://picsum.photos/seed/bakery/600/320",photoAttr:null,items:[{name:"Country Loaf",emoji:"🍞",desc:"Sourdough, wood fired"},{name:"Morning Bun",emoji:"🥐",desc:"Orange zest, cinnamon"}]},
+  {name:"Zuni Café",short:"Zuni",emoji:"🍗",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:0.8,addr:"1658 Market St",phone:"+1 415-552-2522",website:"https://zunicafe.com",mapsUrl:"https://maps.google.com/?q=Zuni+Cafe",photoRef:"https://picsum.photos/seed/zuni/600/320",photoAttr:null,items:[{name:"Roast Chicken",emoji:"🍗",desc:"Brick oven, bread salad"},{name:"Burger",emoji:"🍔",desc:"Focaccia, house pickles"}]},
+  {name:"State Bird",short:"State Bird",emoji:"🐦",cuisine:"american",price:"$$$",pl:3,rating:4.7,open:true,dist:1.3,addr:"1529 Fillmore St",phone:"+1 415-795-1272",website:"https://statebirddprovisions.com",mapsUrl:"https://maps.google.com/?q=State+Bird",photoRef:"https://picsum.photos/seed/statebird/600/320",photoAttr:null,items:[{name:"State Bird",emoji:"🐦",desc:"Fried quail, pine nut"},{name:"Dungeness Pancake",emoji:"🥞",desc:"Crab, black bean sauce"}]},
+  {name:"Rich Table",short:"Rich Table",emoji:"🍽️",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:1.1,addr:"199 Gough St",phone:"+1 415-355-9085",website:"https://richtablesf.com",mapsUrl:"https://maps.google.com/?q=Rich+Table",photoRef:"https://picsum.photos/seed/richtable/600/320",photoAttr:null,items:[{name:"Sardine Chips",emoji:"🐟",desc:"Porcini, rosemary"},{name:"Pasta",emoji:"🍝",desc:"Seasonal, house made"}]},
+  {name:"Mensho Tokyo",short:"Mensho",emoji:"🍥",cuisine:"sushi",price:"$$",pl:2,rating:4.6,open:true,dist:0.6,addr:"672 Geary St",phone:"+1 415-800-8345",website:"https://mensho.tokyo",mapsUrl:"https://maps.google.com/?q=Mensho+Tokyo",photoRef:"https://picsum.photos/seed/ramen/600/320",photoAttr:null,items:[{name:"Toripaitan Ramen",emoji:"🍥",desc:"Rich chicken broth, truffle"},{name:"Lamb Tsukemen",emoji:"🍜",desc:"Dipping ramen, spiced lamb"}]},
+  {name:"PPQ Dungeness",short:"PPQ",emoji:"🦀",cuisine:"chinese",price:"$$",pl:2,rating:4.5,open:true,dist:2.1,addr:"2332 Clement St",phone:"+1 415-386-8266",website:"https://ppqdungeness.com",mapsUrl:"https://maps.google.com/?q=PPQ+Dungeness",photoRef:"",photoAttr:null,items:[{name:"Roast Crab",emoji:"🦀",desc:"Garlic noodles, ginger scallion"},{name:"Salt Pepper Shrimp",emoji:"🍤",desc:"Crispy, chili, garlic"}]},
+  {name:"Komaaj",short:"Komaaj",emoji:"🫓",cuisine:"indian",price:"$$",pl:2,rating:4.6,open:true,dist:1.8,addr:"2404 Mission St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Komaaj",photoRef:"",photoAttr:null,items:[{name:"Ghormeh Sabzi",emoji:"🍲",desc:"Herb stew, kidney beans, lamb"},{name:"Zereshk Polo",emoji:"🍚",desc:"Barberry rice, saffron chicken"}]},
+  {name:"Liholiho Yacht",short:"Liholiho",emoji:"🌺",cuisine:"american",price:"$$$",pl:3,rating:4.8,open:false,dist:0.6,addr:"871 Sutter St",phone:"+1 415-440-5446",website:"https://liholihoyachtclub.com",mapsUrl:"https://maps.google.com/?q=Liholiho+Yacht",photoRef:"",photoAttr:null,items:[{name:"Spam Fried Rice",emoji:"🍱",desc:"Kalua pork, fried egg"},{name:"Oxtail Dumplings",emoji:"🥟",desc:"Ginger, scallion"}]},
+  {name:"Dragon Beaux",short:"Dragon Beaux",emoji:"🐉",cuisine:"chinese",price:"$$$",pl:3,rating:4.5,open:true,dist:3.2,addr:"5700 Geary Blvd",phone:"+1 415-333-8899",website:"https://dragonbeaux.com",mapsUrl:"https://maps.google.com/?q=Dragon+Beaux",photoRef:"",photoAttr:null,items:[{name:"Har Gow",emoji:"🥟",desc:"Steamed shrimp dumplings"},{name:"Char Siu Bao",emoji:"🍞",desc:"BBQ pork buns"}]},
+  {name:"Nopalito",short:"Nopalito",emoji:"🌿",cuisine:"mexican",price:"$$",pl:2,rating:4.5,open:true,dist:1.0,addr:"306 Broderick St",phone:"+1 415-437-0303",website:"https://nopalitosf.com",mapsUrl:"https://maps.google.com/?q=Nopalito",photoRef:"",photoAttr:null,items:[{name:"Carnitas",emoji:"🌮",desc:"Slow roasted pork"},{name:"Enchiladas",emoji:"🫔",desc:"Mole negro, crema"}]},
+  {name:"Hog Island Oyster",short:"Hog Island",emoji:"🦪",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.4,addr:"1 Ferry Building",phone:"+1 415-391-7117",website:"https://hogislandoysters.com",mapsUrl:"https://maps.google.com/?q=Hog+Island+Oyster",photoRef:"https://picsum.photos/seed/oyster/600/320",photoAttr:null,items:[{name:"Oysters",emoji:"🦪",desc:"Tomales Bay, mignonette"},{name:"Clam Chowder",emoji:"🍲",desc:"New England, sourdough bowl"}]},
+  {name:"Izakaya Rintaro",short:"Rintaro",emoji:"🍱",cuisine:"korean",price:"$$$",pl:3,rating:4.7,open:true,dist:1.6,addr:"82 14th St",phone:"+1 415-589-7022",website:"https://izakayarintaro.com",mapsUrl:"https://maps.google.com/?q=Izakaya+Rintaro",photoRef:"",photoAttr:null,items:[{name:"Yakitori",emoji:"🍢",desc:"Binchotan grilled chicken"},{name:"Karaage",emoji:"🍗",desc:"Fried chicken, kewpie mayo"}]},
+  {name:"Z & Y Restaurant",short:"Z & Y",emoji:"🌶️",cuisine:"chinese",price:"$$",pl:2,rating:4.3,open:true,dist:0.5,addr:"655 Jackson St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Z+%26+Y+Restaurant",photoRef:"",photoAttr:null,items:[{name:"Dan Dan Noodles",emoji:"🍜",desc:"Sichuan peppercorn, pork"},{name:"Mapo Tofu",emoji:"🍲",desc:"Silken tofu, Sichuan spice"}]},
+  {name:"Bi-Rite Creamery",short:"Bi-Rite",emoji:"🍦",cuisine:"american",price:"$",pl:1,rating:4.7,open:true,dist:0.7,addr:"3692 18th St",phone:"+1 415-626-5600",website:"https://biritemarket.com",mapsUrl:"https://maps.google.com/?q=Bi-Rite+Creamery",photoRef:"",photoAttr:null,items:[{name:"Salted Caramel",emoji:"🍦",desc:"House made, sea salt"},{name:"Honey Lavender",emoji:"🍦",desc:"Local honey, lavender"}]},
+  {name:"Mister Jiu's",short:"Mister Jiu's",emoji:"🥢",cuisine:"chinese",price:"$$$",pl:3,rating:4.6,open:false,dist:0.4,addr:"28 Waverly Place",phone:"+1 415-857-9688",website:"https://misterjius.com",mapsUrl:"https://maps.google.com/?q=Mister+Jiu%27s",photoRef:"",photoAttr:null,items:[{name:"Quail & Foie Gras",emoji:"🥢",desc:"House XO, crispy rice"},{name:"Kung Pao Pastrami",emoji:"🌶️",desc:"Peanuts, dried chilies"}]},
+  {name:"Cotogna",short:"Cotogna",emoji:"🫕",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:0.5,addr:"490 Pacific Ave",phone:"+1 415-775-8508",website:"https://cotognasf.com",mapsUrl:"https://maps.google.com/?q=Cotogna",photoRef:"https://picsum.photos/seed/italian/600/320",photoAttr:null,items:[{name:"Wood-Fired Pizza",emoji:"🍕",desc:"House cured meats"},{name:"Handmade Pasta",emoji:"🍝",desc:"Daily changing"}]},
+  {name:"Akiko's",short:"Akiko's",emoji:"🎌",cuisine:"sushi",price:"$$$",pl:3,rating:4.8,open:true,dist:0.5,addr:"431 Bush St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Akiko%27s+Sushi",photoRef:"",photoAttr:null,items:[{name:"Omakase",emoji:"🍣",desc:"Chef's choice, 12 pieces nigiri"},{name:"Toro Tartare",emoji:"🐟",desc:"Bluefin, caviar, quail egg"}]},
+  {name:"The Progress",short:"The Progress",emoji:"🌽",cuisine:"american",price:"$$$",pl:3,rating:4.7,open:true,dist:1.3,addr:"1525 Fillmore St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=The+Progress+SF",photoRef:"",photoAttr:null,items:[{name:"Smoked Whitefish",emoji:"🐟",desc:"Potato chips, dill crème"},{name:"Seasonal Vegetable",emoji:"🌽",desc:"Wood fired, changing weekly"}]},
+  {name:"Rich Table",short:"Rich Table",emoji:"🍽️",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:1.1,addr:"199 Gough St",phone:"+1 415-355-9085",website:"https://richtablesf.com",mapsUrl:"https://maps.google.com/?q=Rich+Table",photoRef:"https://picsum.photos/seed/richtable/600/320",photoAttr:null,items:[{name:"Sardine Chips",emoji:"🐟",desc:"Porcini, rosemary"},{name:"Pasta",emoji:"🍝",desc:"Seasonal, house made"}]},
+  {name:"Cheung Hing",short:"Cheung Hing",emoji:"🥡",cuisine:"chinese",price:"$",pl:1,rating:4.1,open:true,dist:0.9,addr:"209 Clement St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cheung+Hing",photoRef:"https://picsum.photos/seed/chinese/600/320",photoAttr:null,items:[{name:"BBQ Pork Rice",emoji:"🍖",desc:"Char siu, steamed rice"},{name:"Wonton Soup",emoji:"🍜",desc:"Hand-folded wontons"}]},
+  {name:"Shizen",short:"Shizen",emoji:"🌱",cuisine:"sushi",price:"$$",pl:2,rating:4.6,open:true,dist:1.0,addr:"370 14th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Shizen+SF",photoRef:"",photoAttr:null,items:[{name:"Vegan Omakase",emoji:"🌱",desc:"Seasonal plant-based nigiri"},{name:"Truffle Roll",emoji:"🍣",desc:"Truffle oil, asparagus"}]},
+  {name:"Kin Khao",short:"Kin Khao",emoji:"🌸",cuisine:"thai",price:"$$",pl:2,rating:4.5,open:true,dist:0.3,addr:"55 Cyril Magnin St",phone:"+1 415-362-7456",website:"https://kinkhao.com",mapsUrl:"https://maps.google.com/?q=Kin+Khao",photoRef:"",photoAttr:null,items:[{name:"Khao Soi",emoji:"🍜",desc:"Coconut curry, crispy noodles"},{name:"Som Tum",emoji:"🥗",desc:"Green papaya, peanut"}]},
+  {name:"Plow",short:"Plow",emoji:"🥚",cuisine:"american",price:"$$",pl:2,rating:4.4,open:true,dist:2.0,addr:"1299 18th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Plow+SF",photoRef:"",photoAttr:null,items:[{name:"Ricotta Pancakes",emoji:"🥞",desc:"Seasonal fruit, maple syrup"},{name:"Eggs Baked in Cream",emoji:"🥚",desc:"House toast, chives"}]},
+  {name:"Beretta",short:"Beretta",emoji:"🫙",cuisine:"italian",price:"$$",pl:2,rating:4.3,open:true,dist:0.9,addr:"1199 Valencia St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Beretta+SF",photoRef:"",photoAttr:null,items:[{name:"Margherita",emoji:"🍕",desc:"Neapolitan, fior di latte"},{name:"Meatballs",emoji:"🍖",desc:"San Marzano, basil"}]},
+  {name:"Cassava",short:"Cassava",emoji:"🥗",cuisine:"american",price:"$$",pl:2,rating:4.5,open:true,dist:2.3,addr:"3519 Balboa St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cassava+SF",photoRef:"",photoAttr:null,items:[{name:"Breakfast Sandwich",emoji:"🥚",desc:"Focaccia, egg, aioli"},{name:"Grain Bowl",emoji:"🥗",desc:"Seasonal grains, soft egg"}]},
 ];
-let REST = FALLBACK_REST; // populated from API or fallback
+let REST = FALLBACK_REST;
 
-/* ════════════════════════════════════════════
+/* ═══════════════════════════════════════════
    APP STATE
-════════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 const BD = {1:{l:'$',d:'Under $15'},2:{l:'$$',d:'~$15–$30'},3:{l:'$$$',d:'~$30–$60'},4:{l:'$$$$',d:'~$60+'}};
 const mode = 'restaurant';
 let spinning = false;
-let rndRest  = null;   // shuffled restaurant pool
+let rndRest  = null;
 const F = { cuisines:['any'], budget:2, dist:'any', rating:0, openNow:false, diet:[] };
-const history = []; // last 5 results: {emoji, name, sub, price, open, col}
+const history = [];
+let hasSpunOnce = false;
 
 const WORKER_URL = 'https://frworker.zosebaum.workers.dev';
-// Public API key used ONLY for photo image URLs (restricted to this domain)
-// Photo URLs are fetched by the browser directly — they're not sensitive if referrer-restricted
 const GOOGLE_CLIENT_KEY = 'AIzaSyAX6fk2Auv8z6qiAjLgz6lzFMdoAb3nrFs';
 
-/* ════════════════════════════════════════════
+const TAGLINES = [
+  "Don't you ever stop eating?",
+  "More food? The wheel respects the commitment.",
+  "Hungry & Humble club, table for one.",
+  "Spin it. Eat it. Regret it.",
+  "Let fate pick what destroys you tonight.",
+  "The wheel has spoken. Your pants have not.",
+  "Another spin, another reason to unbutton.",
+  "Spinning away your grocery budget.",
+  "Roulette: because decisions are hard.",
+  "Your diet starts tomorrow. Again.",
+  "Gluttony is a lifestyle, not a choice.",
+  "You could cook. But why would you.",
+  "Feeding the beast since forever.",
+  "Your stomach has no chill.",
+  "Another meal, another excuse.",
+  "Your fridge called. It needs space.",
+  "Your cardiologist would like a word.",
+  "Hunger: 1. Willpower: 0.",
+  "Your stomach called. It's thrilled.",
+  "Eating your feelings, one spin at a time.",
+  "This is not a meal. This is a lifestyle.",
+  "Your future self is already disappointed.",
+  "Nutritionists hate this one weird trick.",
+  "Your bank account said no. The wheel said yes.",
+  "DoorDash fees: a small price for joy.",
+  "Broke and full is still full.",
+  "Your Venmo history tells a story.",
+  "Bold of you to spin again.",
+  "The wheel doesn't judge. We do.",
+  "At least the food won't leave you.",
+  "Your metabolism filed a complaint.",
+  "Dinner number two? Respect.",
+  "The wheel is enabling you. We love it.",
+  "You eat like nobody's watching. They are.",
+  "Sir, this is a roulette wheel.",
+  "Ma'am, this is a roulette wheel.",
+  "Your stomach is writing checks your wallet can't cash.",
+  "Live. Laugh. Eat. Repeat. Regret.",
+  "Somewhere a salad is crying.",
+  "The audacity to spin again is inspiring.",
+  "Your doctor said eat better. Not like this.",
+  "This is peak decision-making.",
+  "Five stars, no notes, no shame.",
+  "You had a perfectly good fridge at home.",
+  "Every spin is a prayer your pants survive.",
+  "The wheel provides. Your wallet protests.",
+  "Destiny is just hunger with better branding.",
+  "Eating: the original extreme sport.",
+  "Your stomach never met a stranger.",
+  "Zero regrets. Maximum calories.",
+  "Life is short. Spin again.",
+  "The table is set. You set it on fire.",
+  "One more spin won't hurt. It will.",
+  "You're not lost, you're just hungry.",
+  "Fortune favors the full.",
+  "In food we trust.",
+  "Your gut feeling? More food.",
+  "Spin fast, eat faster.",
+];
+
+function setTagline() {
+  const el = document.getElementById('tagline');
+  if (el) el.textContent = TAGLINES[Math.floor(Math.random() * TAGLINES.length)];
+}
+
+/* ═══════════════════════════════════════════
    CANVAS + RADII
-   All bRad / bVR values are in PIXEL units.
-   bVA is in radians/frame.
-════════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 const cv   = document.getElementById('wc');
 const cx   = cv.getContext('2d');
 const ring = document.getElementById('wRing');
@@ -543,7 +702,6 @@ cv.width = cv.height = SZ;
 cv.style.width = cv.style.height = SZ + 'px';
 ring.style.width = ring.style.height = SZ + 'px';
 
-// Touch swipe on canvas → spin (swipe in any direction)
 let touchStartX = 0, touchStartY = 0;
 cv.addEventListener('touchstart', e => {
   touchStartX = e.touches[0].clientX;
@@ -552,36 +710,32 @@ cv.addEventListener('touchstart', e => {
 cv.addEventListener('touchend', e => {
   const dx = e.changedTouches[0].clientX - touchStartX;
   const dy = e.changedTouches[0].clientY - touchStartY;
-  const dist = Math.sqrt(dx*dx + dy*dy);
-  if (dist > 30) doSpin();   // swipe = spin
+  if (Math.sqrt(dx*dx + dy*dy) > 30) doSpin();
 }, {passive:true});
 
-// Radii (pixels) — from outside in
-const RO  = R * .960;  // outer wood edge (inner face of raised border)
-const ROB = R * .995;  // raised border outer edge
-const RWI = R * .800;  // inner wood / outer gold band
-const RGA = R * .748;  // outer pocket wall  ← ball bounces here
-const RPI = R * .490;  // inner pocket wall  ← ball bounces here
-const RBL = R * .440;  // bowl outer edge
-const RGC = R * .434;  // spindle collar
-const RGD = R * .394;  // spindle inner
-const RSH = R * .088;  // shaft radius
-const RDM = R * .128;  // dome radius
-const RTK = R * .940;  // ball orbit track (just inside raised border, on wood surface)
-const RMD = (RGA + RPI) / 2;  // pocket midpoint — labels + settled ball
-// Effective bounce walls — inset by ~half ball radius so ball stays visually inside pocket
-const RBO = RGA - R * 0.030;  // outer bounce wall (just inside gold band)
-const RBI = RPI + R * 0.018;  // inner bounce wall (just outside spindle collar)
+const RO  = R * .960;
+const ROB = R * .995;
+const RWI = R * .800;
+const RGA = R * .748;
+const RPI = R * .490;
+const RBL = R * .440;
+const RGC = R * .434;
+const RGD = R * .394;
+const RSH = R * .088;
+const RDM = R * .128;
+const RTK = R * .940;
+const RMD = (RGA + RPI) / 2;
+const RBO = RGA - R * 0.030;
+const RBI = RPI + R * 0.018;
 
-// Pocket colours
 const RCOL = i => i === 0 ? '#0d8020' : i % 2 === 1 ? '#cc1000' : '#111111';
 
-/* ════════════════════════════════════════════
+/* ═══════════════════════════════════════════
    SEGMENTS
-════════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 let segs = [];
-let wAng = 0;   // wheel angle (radians)
-let wIdx = 0;   // winning pocket index
+let wAng = 0;
+let wIdx = 0;
 
 function buildSegs(pool) {
   const n   = pool.length;
@@ -590,21 +744,17 @@ function buildSegs(pool) {
   const nSz = n <= 8 ? 13 : n <= 14 ? 11 : n <= 20 ?  9 : n <= 28 ?  8 :  7;
   segs = pool.map((item, i) => ({
     item, i,
-    sa: i * arc,       // start angle
-    ea: (i+1) * arc,   // end angle
-    ma: (i+.5) * arc,  // mid angle (label position)
+    sa: i * arc,
+    ea: (i+1) * arc,
+    ma: (i+.5) * arc,
     eSz, nSz,
     col: RCOL(i),
   }));
 }
 
-/* ════════════════════════════════════════════
-   STATIC IMAGE (baked once, never redrawn)
-   Covers outer donut (wood + gold band) and
-   inner disc (bowl + spindle + dome).
-   Pocket zone RPI→RGA is left transparent so
-   the rotating coloured wedges show through.
-════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   STATIC BAKED IMAGE
+═══════════════════════════════════════════ */
 let staticImg = null;
 
 function bakeStatic() {
@@ -612,18 +762,13 @@ function bakeStatic() {
   oc.width = oc.height = SZ;
   const ox = oc.getContext('2d');
 
-  // — Raised outer border (darker wood rim, sits higher) —
+  // Raised outer border
   ox.save();
   ox.beginPath(); ox.arc(R,R,ROB,0,Math.PI*2,false); ox.arc(R,R,RO,0,Math.PI*2,true); ox.clip();
-
-  // Darker mahogany for raised border
   ox.beginPath(); ox.arc(R,R,ROB,0,Math.PI*2);
   const rbg = ox.createRadialGradient(R-R*.3,R-R*.3,R*.05,R,R,ROB);
-  rbg.addColorStop(0,'#7a2c08'); rbg.addColorStop(.3,'#5e2006');
-  rbg.addColorStop(.65,'#3c1404'); rbg.addColorStop(1,'#1a0802');
+  rbg.addColorStop(0,'#7a2c08'); rbg.addColorStop(.3,'#5e2006'); rbg.addColorStop(.65,'#3c1404'); rbg.addColorStop(1,'#1a0802');
   ox.fillStyle=rbg; ox.fill();
-
-  // Border wood grain rings
   const bwW = ROB - RO;
   for (let i=0;i<12;i++) {
     const r = RO + bwW*(0.05+i/11*0.9);
@@ -632,959 +777,479 @@ function bakeStatic() {
     ox.strokeStyle=i%3===0?`rgba(15,4,1,${alpha})`:`rgba(160,70,25,${alpha})`;
     ox.lineWidth=i%3===0?1.5:0.8; ox.stroke();
   }
-
-  // Side lighting on border
   const bLit=ox.createRadialGradient(R-R*.4,R-R*.4,R*.05,R,R,ROB);
-  bLit.addColorStop(0,'rgba(200,120,60,0.22)');
-  bLit.addColorStop(.5,'rgba(0,0,0,0)');
-  bLit.addColorStop(1,'rgba(0,0,0,0.4)');
+  bLit.addColorStop(0,'rgba(200,120,60,0.22)'); bLit.addColorStop(.5,'rgba(0,0,0,0)'); bLit.addColorStop(1,'rgba(0,0,0,0.4)');
   ox.beginPath(); ox.arc(R,R,ROB,0,Math.PI*2); ox.fillStyle=bLit; ox.fill();
-
-  // Gloss on top face of border
   ox.beginPath(); ox.arc(R,R,(ROB+RO)*.5,Math.PI*1.05,Math.PI*1.6);
   ox.strokeStyle='rgba(220,150,70,0.20)'; ox.lineWidth=(ROB-RO)*.5; ox.stroke();
-
   ox.restore();
 
-  // Inner shadow cast by raised border onto the main wood surface
-  ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2,false); ox.arc(R,R,RO-R*.04,0,Math.PI*2,true);
   const borderShadow=ox.createRadialGradient(R,R,RO-R*.04,R,R,RO);
-  borderShadow.addColorStop(0,'rgba(0,0,0,0)');
-  borderShadow.addColorStop(1,'rgba(0,0,0,0.45)');
+  borderShadow.addColorStop(0,'rgba(0,0,0,0)'); borderShadow.addColorStop(1,'rgba(0,0,0,0.45)');
+  ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2,false); ox.arc(R,R,RO-R*.04,0,Math.PI*2,true);
   ox.fillStyle=borderShadow; ox.fill();
+  ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2); ox.strokeStyle='rgba(180,100,40,0.5)'; ox.lineWidth=2; ox.stroke();
+  ox.beginPath(); ox.arc(R,R,RO-1,0,Math.PI*2); ox.strokeStyle='rgba(0,0,0,0.6)'; ox.lineWidth=1.5; ox.stroke();
 
-  // Step edge — bright highlight on inner lip of raised border (raised edge catches light)
-  ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2);
-  ox.strokeStyle='rgba(180,100,40,0.5)'; ox.lineWidth=2; ox.stroke();
-  ox.beginPath(); ox.arc(R,R,RO-1,0,Math.PI*2);
-  ox.strokeStyle='rgba(0,0,0,0.6)'; ox.lineWidth=1.5; ox.stroke();
-
-  // — Main wood donut + gold band —
+  // Main wood + gold band
   ox.save();
   ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2,false); ox.arc(R,R,RGA,0,Math.PI*2,true); ox.clip();
-
-  // ── Base mahogany tone ──
   ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2);
-  const wg = ox.createRadialGradient(R,R,RWI*0.3, R,R,RO);
-  wg.addColorStop(0,  '#9b3a10');
-  wg.addColorStop(.3, '#7a2c0a');
-  wg.addColorStop(.6, '#5e2008');
-  wg.addColorStop(1,  '#2e0e02');
+  const wg = ox.createRadialGradient(R,R,RWI*0.3,R,R,RO);
+  wg.addColorStop(0,'#9b3a10'); wg.addColorStop(.3,'#7a2c0a'); wg.addColorStop(.6,'#5e2008'); wg.addColorStop(1,'#2e0e02');
   ox.fillStyle = wg; ox.fill();
-
-  // ── Concentric ring grain (growth rings) ──
   const woodW = RO - RWI;
-  for (let i = 0; i < 28; i++) {
-    const t   = i / 27;
-    const r   = RWI + woodW * (0.02 + t * 0.96);
-    const ox2 = R + Math.sin(i * 1.3) * R * 0.018;
-    const oy2 = R + Math.cos(i * 0.9) * R * 0.012;
-    ox.beginPath();
-    ox.ellipse(ox2, oy2, r, r * (0.97 + Math.sin(i*0.7)*0.02), 0, 0, Math.PI*2);
-    const dark = (i % 3 === 0);
-    const alpha = dark ? 0.10 + Math.sin(i)*0.04 : 0.05 + Math.sin(i*1.1)*0.02;
-    ox.strokeStyle = dark
-      ? `rgba(20,6,2,${alpha})`
-      : `rgba(180,80,30,${alpha * 0.7})`;
-    ox.lineWidth = dark ? 1.8 : 1.1;
-    ox.stroke();
+  for (let i=0;i<28;i++) {
+    const t=i/27, r=RWI+woodW*(0.02+t*0.96);
+    const ox2=R+Math.sin(i*1.3)*R*0.018, oy2=R+Math.cos(i*0.9)*R*0.012;
+    ox.beginPath(); ox.ellipse(ox2,oy2,r,r*(0.97+Math.sin(i*.7)*.02),0,0,Math.PI*2);
+    const dark=i%3===0, alpha=dark?0.10+Math.sin(i)*.04:0.05+Math.sin(i*1.1)*.02;
+    ox.strokeStyle=dark?`rgba(20,6,2,${alpha})`:`rgba(180,80,30,${alpha*.7})`; ox.lineWidth=dark?1.8:1.1; ox.stroke();
   }
-
-  // ── Ray figure ──
-  for (let f = 0; f < 18; f++) {
-    const fa  = (f / 18) * Math.PI * 2 + 0.15;
-    const fr  = RWI + woodW * (0.1 + Math.random() * 0.8);
-    const fw  = woodW * (0.08 + Math.random() * 0.12);
-    ox.save();
-    ox.translate(R, R); ox.rotate(fa);
-    ox.beginPath();
-    ox.ellipse(fr + fw/2, 0, fw/2, R*0.008, 0, 0, Math.PI*2);
-    ox.fillStyle = 'rgba(210,120,60,0.06)';
-    ox.fill();
-    ox.restore();
+  for (let p=0;p<60;p++) {
+    const pa=(p/60)*Math.PI*2, pr=RWI+woodW*(0.05+(p*0.618%1)*0.9), pLen=R*(0.025+Math.random()*.04);
+    ox.save(); ox.translate(R,R); ox.rotate(pa);
+    ox.beginPath(); ox.moveTo(pr,-0.5); ox.lineTo(pr+pLen,-0.5);
+    ox.strokeStyle='rgba(15,4,1,0.12)'; ox.lineWidth=0.8+Math.random()*.6; ox.stroke(); ox.restore();
   }
-
-  // ── Pore streaks ──
-  for (let p = 0; p < 60; p++) {
-    const pa = (p / 60) * Math.PI * 2;
-    const pr = RWI + woodW * (0.05 + (p * 0.618 % 1) * 0.9);
-    const pLen = R * (0.025 + Math.random() * 0.04);
-    ox.save();
-    ox.translate(R, R); ox.rotate(pa);
-    ox.beginPath();
-    ox.moveTo(pr, -0.5); ox.lineTo(pr + pLen, -0.5);
-    ox.strokeStyle = 'rgba(15,4,1,0.12)';
-    ox.lineWidth = 0.8 + Math.random() * 0.6;
-    ox.stroke();
-    ox.restore();
-  }
-
-  // ── Side lighting ──
-  const wLit = ox.createRadialGradient(R-R*.45, R-R*.45, R*.05, R, R, RO*1.1);
-  wLit.addColorStop(0,   'rgba(255,160,80,0.18)');
-  wLit.addColorStop(.35, 'rgba(200,100,40,0.08)');
-  wLit.addColorStop(.7,  'rgba(0,0,0,0)');
-  wLit.addColorStop(1,   'rgba(0,0,0,0.22)');
-  ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2);
-  ox.fillStyle = wLit; ox.fill();
-
-  // ── Varnish gloss ──
-  ox.beginPath();
-  ox.arc(R, R, (RO+RWI)*0.5, Math.PI*1.05, Math.PI*1.65);
-  const gloss = ox.createLinearGradient(
-    R + Math.cos(Math.PI*1.35)*(RO+RWI)*0.5,
-    R + Math.sin(Math.PI*1.35)*(RO+RWI)*0.5,
-    R + Math.cos(Math.PI*1.35)*RWI,
-    R + Math.sin(Math.PI*1.35)*RWI
-  );
-  gloss.addColorStop(0,   'rgba(255,220,160,0.0)');
-  gloss.addColorStop(.4,  'rgba(255,220,160,0.22)');
-  gloss.addColorStop(.6,  'rgba(255,230,180,0.14)');
-  gloss.addColorStop(1,   'rgba(255,220,160,0.0)');
-  ox.strokeStyle = gloss;
-  ox.lineWidth = (RO - RWI) * 0.55;
-  ox.stroke();
-
-  // Lacquer edges
-  ox.beginPath(); ox.arc(R,R,RO-1,0,Math.PI*2);
-  ox.strokeStyle='rgba(255,180,100,0.12)'; ox.lineWidth=2; ox.stroke();
-  ox.beginPath(); ox.arc(R,R,RWI+1,0,Math.PI*2);
-  ox.strokeStyle='rgba(0,0,0,0.35)'; ox.lineWidth=2; ox.stroke();
-
-  // Gold band (RWI → RGA)
+  const wLit=ox.createRadialGradient(R-R*.45,R-R*.45,R*.05,R,R,RO*1.1);
+  wLit.addColorStop(0,'rgba(255,160,80,0.18)'); wLit.addColorStop(.35,'rgba(200,100,40,0.08)'); wLit.addColorStop(.7,'rgba(0,0,0,0)'); wLit.addColorStop(1,'rgba(0,0,0,0.22)');
+  ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2); ox.fillStyle=wLit; ox.fill();
+  ox.beginPath(); ox.arc(R,R,(RO+RWI)*.5,Math.PI*1.05,Math.PI*1.65);
+  const gloss=ox.createLinearGradient(R+Math.cos(Math.PI*1.35)*(RO+RWI)*.5,R+Math.sin(Math.PI*1.35)*(RO+RWI)*.5,R+Math.cos(Math.PI*1.35)*RWI,R+Math.sin(Math.PI*1.35)*RWI);
+  gloss.addColorStop(0,'rgba(255,220,160,0.0)'); gloss.addColorStop(.4,'rgba(255,220,160,0.22)'); gloss.addColorStop(.6,'rgba(255,230,180,0.14)'); gloss.addColorStop(1,'rgba(255,220,160,0.0)');
+  ox.strokeStyle=gloss; ox.lineWidth=(RO-RWI)*.55; ox.stroke();
+  ox.beginPath(); ox.arc(R,R,RWI+1,0,Math.PI*2); ox.strokeStyle='rgba(0,0,0,0.35)'; ox.lineWidth=2; ox.stroke();
+  // Gold band
   ox.beginPath(); ox.arc(R,R,RWI,0,Math.PI*2,false); ox.arc(R,R,RGA,0,Math.PI*2,true);
-  const gg = ox.createLinearGradient(R-RWI,R,R+RWI,R);
-  gg.addColorStop(0,'#2a1800'); gg.addColorStop(.1,'#8a6010'); gg.addColorStop(.25,'#d4a020');
-  gg.addColorStop(.38,'#f5d040'); gg.addColorStop(.5,'#fff0a0'); gg.addColorStop(.62,'#f5d040');
-  gg.addColorStop(.75,'#d4a020'); gg.addColorStop(.9,'#8a6010'); gg.addColorStop(1,'#2a1800');
-  ox.fillStyle = gg; ox.fill();
-
-  // Track dots
-  const dotR = (RGA + RWI) / 2;
-  for (let d = 0; d < 60; d++) {
-    const a = (d/60)*Math.PI*2;
-    ox.beginPath(); ox.arc(R+Math.cos(a)*dotR, R+Math.sin(a)*dotR, R*.009, 0, Math.PI*2);
-    ox.fillStyle = d%3===0 ? 'rgba(255,255,180,.35)' : 'rgba(255,235,150,.18)'; ox.fill();
+  const gg=ox.createLinearGradient(R-RWI,R,R+RWI,R);
+  gg.addColorStop(0,'#2a1800'); gg.addColorStop(.1,'#8a6010'); gg.addColorStop(.25,'#d4a020'); gg.addColorStop(.38,'#f5d040'); gg.addColorStop(.5,'#fff0a0'); gg.addColorStop(.62,'#f5d040'); gg.addColorStop(.75,'#d4a020'); gg.addColorStop(.9,'#8a6010'); gg.addColorStop(1,'#2a1800');
+  ox.fillStyle=gg; ox.fill();
+  const dotR=(RGA+RWI)/2;
+  for (let d=0;d<60;d++) {
+    const a=(d/60)*Math.PI*2;
+    ox.beginPath(); ox.arc(R+Math.cos(a)*dotR,R+Math.sin(a)*dotR,R*.009,0,Math.PI*2);
+    ox.fillStyle=d%3===0?'rgba(255,255,180,.35)':'rgba(255,235,150,.18)'; ox.fill();
   }
   ox.restore();
 
-  // — Inner disc: gold ring + bowl + spindle + dome —
-  ox.save();
-  ox.beginPath(); ox.arc(R,R,RPI,0,Math.PI*2); ox.clip();
-
-  // Gold separator ring
+  // Inner disc
+  ox.save(); ox.beginPath(); ox.arc(R,R,RPI,0,Math.PI*2); ox.clip();
   ox.beginPath(); ox.arc(R,R,RPI,0,Math.PI*2);
-  const gc = ox.createLinearGradient(R-RPI,R,R+RPI,R);
-  gc.addColorStop(0,'#3a2200'); gc.addColorStop(.25,'#c8940a');
-  gc.addColorStop(.5,'#f0c030'); gc.addColorStop(.75,'#c8940a'); gc.addColorStop(1,'#3a2200');
-  ox.fillStyle = gc; ox.fill();
-
-  // Bowl
+  const gc=ox.createLinearGradient(R-RPI,R,R+RPI,R);
+  gc.addColorStop(0,'#3a2200'); gc.addColorStop(.25,'#c8940a'); gc.addColorStop(.5,'#f0c030'); gc.addColorStop(.75,'#c8940a'); gc.addColorStop(1,'#3a2200');
+  ox.fillStyle=gc; ox.fill();
   ox.beginPath(); ox.arc(R,R,RBL,0,Math.PI*2);
-  const bG = ox.createRadialGradient(R-R*.07,R-R*.07,R*.02,R,R,RBL);
-  bG.addColorStop(0,'#6a3214'); bG.addColorStop(.3,'#4e2209');
-  bG.addColorStop(.65,'#301404'); bG.addColorStop(1,'#180802');
-  ox.fillStyle = bG; ox.fill(); ox.strokeStyle='rgba(201,168,76,.4)'; ox.lineWidth=1.5; ox.stroke();
-
-  // Spindle collar
+  const bG=ox.createRadialGradient(R-R*.07,R-R*.07,R*.02,R,R,RBL);
+  bG.addColorStop(0,'#6a3214'); bG.addColorStop(.3,'#4e2209'); bG.addColorStop(.65,'#301404'); bG.addColorStop(1,'#180802');
+  ox.fillStyle=bG; ox.fill(); ox.strokeStyle='rgba(201,168,76,.4)'; ox.lineWidth=1.5; ox.stroke();
   ox.beginPath(); ox.arc(R,R,RGC,0,Math.PI*2);
-  const sg = ox.createRadialGradient(R-R*.03,R-R*.03,R*.01,R,R,RGC);
-  sg.addColorStop(0,'#c8a030'); sg.addColorStop(.3,'#8a6012');
-  sg.addColorStop(.7,'#5a3c08'); sg.addColorStop(1,'#1a1000');
-  ox.fillStyle = sg; ox.fill(); ox.strokeStyle='rgba(255,220,80,.7)'; ox.lineWidth=2; ox.stroke();
-
-  // Spindle inner ring
+  const sg=ox.createRadialGradient(R-R*.03,R-R*.03,R*.01,R,R,RGC);
+  sg.addColorStop(0,'#c8a030'); sg.addColorStop(.3,'#8a6012'); sg.addColorStop(.7,'#5a3c08'); sg.addColorStop(1,'#1a1000');
+  ox.fillStyle=sg; ox.fill(); ox.strokeStyle='rgba(255,220,80,.7)'; ox.lineWidth=2; ox.stroke();
   ox.beginPath(); ox.arc(R,R,RGD,0,Math.PI*2);
-  const sg2 = ox.createLinearGradient(R-RGD,R,R+RGD,R);
-  sg2.addColorStop(0,'#3a2000'); sg2.addColorStop(.2,'#c8940a');
-  sg2.addColorStop(.5,'#f5d040'); sg2.addColorStop(.8,'#c8940a'); sg2.addColorStop(1,'#3a2000');
-  ox.fillStyle = sg2; ox.fill();
-
-  // Shaft
+  const sg2=ox.createLinearGradient(R-RGD,R,R+RGD,R);
+  sg2.addColorStop(0,'#3a2000'); sg2.addColorStop(.2,'#c8940a'); sg2.addColorStop(.5,'#f5d040'); sg2.addColorStop(.8,'#c8940a'); sg2.addColorStop(1,'#3a2000');
+  ox.fillStyle=sg2; ox.fill();
   ox.beginPath(); ox.arc(R,R,RSH+3,0,Math.PI*2); ox.fillStyle='#1a0e00'; ox.fill();
-  const shG = ox.createLinearGradient(R-RSH,R,R+RSH,R);
-  shG.addColorStop(0,'#3a2000'); shG.addColorStop(.15,'#c8940a'); shG.addColorStop(.35,'#f5d040');
-  shG.addColorStop(.5,'#fff0a0'); shG.addColorStop(.65,'#f5d040'); shG.addColorStop(.85,'#c8940a'); shG.addColorStop(1,'#3a2000');
+  const shG=ox.createLinearGradient(R-RSH,R,R+RSH,R);
+  shG.addColorStop(0,'#3a2000'); shG.addColorStop(.15,'#c8940a'); shG.addColorStop(.35,'#f5d040'); shG.addColorStop(.5,'#fff0a0'); shG.addColorStop(.65,'#f5d040'); shG.addColorStop(.85,'#c8940a'); shG.addColorStop(1,'#3a2000');
   ox.beginPath(); ox.arc(R,R,RSH,0,Math.PI*2); ox.fillStyle=shG; ox.fill();
-  for (let i=0; i<5; i++) {
-    const ry = R-RSH+RSH*.25+i*RSH*.3;
-    ox.beginPath(); ox.ellipse(R,ry,RSH*.9,RSH*.12,0,0,Math.PI*2);
-    ox.fillStyle='rgba(255,240,120,.25)'; ox.fill();
+  for (let i=0;i<5;i++) {
+    const ry=R-RSH+RSH*.25+i*RSH*.3;
+    ox.beginPath(); ox.ellipse(R,ry,RSH*.9,RSH*.12,0,0,Math.PI*2); ox.fillStyle='rgba(255,240,120,.25)'; ox.fill();
   }
-
-  // Dome
-  ox.beginPath(); ox.arc(R,R,RDM*1.1,0,Math.PI*2);
-  ox.strokeStyle='rgba(255,210,60,.5)'; ox.lineWidth=1.5; ox.stroke();
+  ox.beginPath(); ox.arc(R,R,RDM*1.1,0,Math.PI*2); ox.strokeStyle='rgba(255,210,60,.5)'; ox.lineWidth=1.5; ox.stroke();
   ox.beginPath(); ox.arc(R,R,RDM,0,Math.PI*2);
-  const dG = ox.createRadialGradient(R-R*.04,R-R*.045,R*.004,R,R,RDM);
-  dG.addColorStop(0,'#ffffff'); dG.addColorStop(.12,'#fff0a0'); dG.addColorStop(.3,'#f8d038');
-  dG.addColorStop(.5,'#d4a010'); dG.addColorStop(.72,'#9a7008'); dG.addColorStop(.9,'#5a3c04'); dG.addColorStop(1,'#2e1c02');
+  const dG=ox.createRadialGradient(R-R*.04,R-R*.045,R*.004,R,R,RDM);
+  dG.addColorStop(0,'#ffffff'); dG.addColorStop(.12,'#fff0a0'); dG.addColorStop(.3,'#f8d038'); dG.addColorStop(.5,'#d4a010'); dG.addColorStop(.72,'#9a7008'); dG.addColorStop(.9,'#5a3c04'); dG.addColorStop(1,'#2e1c02');
   ox.fillStyle=dG; ox.fill(); ox.strokeStyle='rgba(255,230,80,.6)'; ox.lineWidth=1.5; ox.stroke();
-  ox.beginPath(); ox.ellipse(R-R*.035,R-R*.04,R*.05,R*.035,Math.PI*-.4,0,Math.PI*2);
-  ox.fillStyle='rgba(255,255,255,.55)'; ox.fill();
+  ox.beginPath(); ox.ellipse(R-R*.035,R-R*.04,R*.05,R*.035,Math.PI*-.4,0,Math.PI*2); ox.fillStyle='rgba(255,255,255,.55)'; ox.fill();
   ox.beginPath(); ox.arc(R,R,R*.014,0,Math.PI*2); ox.fillStyle='#1a0e00'; ox.fill();
-
   ox.restore();
-  staticImg=oc;
+  staticImg = oc;
 }
 
 function draw(ang) {
-  cx.clearRect(0, 0, SZ, SZ);
-
-  // Black pocket base
+  cx.clearRect(0,0,SZ,SZ);
   cx.beginPath(); cx.arc(R,R,RGA,0,Math.PI*2); cx.fillStyle='#060606'; cx.fill();
-
-  // Coloured pocket wedges (rotate with ang)
   segs.forEach(seg => {
-    const sa = seg.sa + ang, ea = seg.ea + ang;
+    const sa=seg.sa+ang, ea=seg.ea+ang;
     cx.beginPath(); cx.moveTo(R,R); cx.arc(R,R,RGA,sa,ea); cx.closePath();
-    cx.fillStyle = seg.col; cx.fill();
-    cx.strokeStyle='rgba(0,0,0,.7)'; cx.lineWidth=1.2; cx.stroke();
+    cx.fillStyle=seg.col; cx.fill();
   });
-
-  // Static image (wood rim, gold band, bowl, dome — pocket zone transparent)
-  if (staticImg) cx.drawImage(staticImg, 0, 0);
-
-  // Labels — drawn upright in screen space (not rotated)
+  const outerShadow=cx.createRadialGradient(R,R,RGA*0.88,R,R,RGA);
+  outerShadow.addColorStop(0,'rgba(0,0,0,0.0)'); outerShadow.addColorStop(1,'rgba(0,0,0,0.22)');
+  cx.beginPath(); cx.arc(R,R,RGA,0,Math.PI*2); cx.fillStyle=outerShadow; cx.fill();
+  segs.forEach(seg => {
+    const sa=seg.sa+ang;
+    const ix=R+Math.cos(sa)*RPI, iy=R+Math.sin(sa)*RPI;
+    const ox2=R+Math.cos(sa)*RGA, oy2=R+Math.sin(sa)*RGA;
+    cx.beginPath(); cx.moveTo(ix,iy); cx.lineTo(ox2,oy2); cx.strokeStyle='rgba(0,0,0,0.8)'; cx.lineWidth=2.5; cx.stroke();
+    cx.beginPath(); cx.moveTo(ix,iy); cx.lineTo(ox2,oy2); cx.strokeStyle='rgba(220,200,140,0.65)'; cx.lineWidth=1.0; cx.stroke();
+  });
+  if (staticImg) cx.drawImage(staticImg,0,0);
   cx.textAlign='center'; cx.textBaseline='middle';
   segs.forEach(seg => {
-    const ma = seg.ma + ang;
-    const lx = R + Math.cos(ma)*RMD;
-    const ly = R + Math.sin(ma)*RMD;
-    if (lx < 0 || lx > SZ || ly < 0 || ly > SZ) return;
+    const ma=seg.ma+ang, lx=R+Math.cos(ma)*RMD, ly=R+Math.sin(ma)*RMD;
+    if (lx<0||lx>SZ||ly<0||ly>SZ) return;
     cx.save();
     cx.beginPath(); cx.moveTo(R,R); cx.arc(R,R,RGA,seg.sa+ang,seg.ea+ang); cx.closePath(); cx.clip();
-    cx.font = seg.eSz + 'px serif';
-    cx.fillStyle = 'rgba(255,255,255,.95)';
-    cx.fillText(seg.item.emoji, lx, ly - seg.eSz*.72);
-    const nm = (seg.item.short || seg.item.name).substring(0, 10);
-    cx.font = '700 ' + seg.nSz + 'px "DM Sans",sans-serif';
+    cx.font=seg.eSz+'px serif'; cx.fillStyle='rgba(255,255,255,.95)';
+    cx.fillText(seg.item.emoji,lx,ly-seg.eSz*.72);
+    const nm=(seg.item.short||seg.item.name).substring(0,10);
+    cx.font='700 '+seg.nSz+'px "DM Sans",sans-serif';
     cx.lineWidth=2.5; cx.strokeStyle='rgba(0,0,0,.9)'; cx.lineJoin='round';
-    cx.strokeText(nm, lx, ly + seg.eSz*.7);
-    cx.fillStyle='#fff'; cx.fillText(nm, lx, ly + seg.eSz*.7);
+    cx.strokeText(nm,lx,ly+seg.eSz*.7); cx.fillStyle='#fff'; cx.fillText(nm,lx,ly+seg.eSz*.7);
     cx.restore();
   });
 }
 
-/* ════════════════════════════════════════════
-   BALL RENDER
-════════════════════════════════════════════ */
-function drawBall(bx, by) {
-  const br = R * .052;
-  // Shadow
+function drawBall(bx,by) {
+  const br=R*.052;
   cx.beginPath(); cx.arc(bx+2,by+3,br,0,Math.PI*2); cx.fillStyle='rgba(0,0,0,.55)'; cx.fill();
-  // Shiny sphere
-  const bg = cx.createRadialGradient(bx-br*.35,by-br*.38,br*.04,bx,by,br);
+  const bg=cx.createRadialGradient(bx-br*.35,by-br*.38,br*.04,bx,by,br);
   bg.addColorStop(0,'#ffffff'); bg.addColorStop(.5,'#e2e2e2'); bg.addColorStop(1,'#999');
   cx.beginPath(); cx.arc(bx,by,br,0,Math.PI*2); cx.fillStyle=bg; cx.fill();
-  // Specular
-  cx.beginPath(); cx.arc(bx-br*.3,by-br*.35,br*.28,0,Math.PI*2);
-  cx.fillStyle='rgba(255,255,255,.9)'; cx.fill();
+  cx.beginPath(); cx.arc(bx-br*.3,by-br*.35,br*.28,0,Math.PI*2); cx.fillStyle='rgba(255,255,255,.9)'; cx.fill();
 }
 
-/* ════════════════════════════════════════════
+/* ═══════════════════════════════════════════
    PHYSICS STATE
-   bRad / bVR are in PIXEL units.
-   bA / bVA are in RADIANS.
-   States: idle → orbit → fall → bounce → locked → parked
-════════════════════════════════════════════ */
-let bP          = 'idle'; // ball phase
-let bA          = 0;      // ball absolute angle (rad)
-let bRad        = 0;      // ball radius (px)
-let bVA         = 0;      // angular velocity (rad/frame)
-let bVR         = 0;      // radial velocity (px/frame, +ve = outward)
-let wV          = 0;      // wheel angular velocity (rad/frame)
-let fired       = false;  // onDone guard
-let parkedOffset= 0;      // pocket angle at park time
-let bounceF     = 0;      // frames spent in bounce phase
+═══════════════════════════════════════════ */
+let bP='idle', bA=0, bRad=0, bVA=0, bVR=0, wV=0, fired=false, parkedOffset=0, bounceF=0;
 
-/* ════════════════════════════════════════════
-   MAIN LOOP
-════════════════════════════════════════════ */
 function loop() {
   requestAnimationFrame(loop);
-
   if (spinning) {
-    // Smooth continuous deceleration using smoothstep blend:
-    // Fast decay when spinning hard, gradually transitions to gentle coast.
-    // No sudden gear-change — feels like a real roulette wheel coasting to rest.
-    const wvAbs   = Math.abs(wV);
-    const wvHigh  = 0.18, wvLow = 0.025;
-    const t       = Math.max(0, Math.min(1, (wvAbs - wvLow) / (wvHigh - wvLow)));
-    const smooth  = t * t * (3 - 2 * t);  // smoothstep
-    const decay   = 0.986 + (0.977 - 0.986) * smooth;  // slow→fast
-    wV *= decay;
-    if (Math.abs(wV) < 0.003) wV = 0.003;
-    wAng += wV;
+    // Smooth continuous deceleration (smoothstep blend)
+    const wvAbs=Math.abs(wV), wvHigh=0.18, wvLow=0.025;
+    const t=Math.max(0,Math.min(1,(wvAbs-wvLow)/(wvHigh-wvLow)));
+    const smooth=t*t*(3-2*t);
+    const decay=0.986+(0.977-0.986)*smooth;
+    wV*=decay;
+    if (Math.abs(wV)<0.003) wV=0.003;
+    wAng+=wV;
 
-    // — Ball state machine —
-    if (bP === 'orbit') {
-      // Ball races along outer wood track, decelerating
-      bVA  *= 0.9952;
-      bA   += bVA;
-      bRad  = RTK;
-      if (Math.abs(bVA) < 0.013) { bP = 'fall'; bVR = 0; }
-
-    } else if (bP === 'fall') {
-      // Ball gravity-drops inward across wood toward pocket
-      bVR  += 0.18;
-      bRad -= bVR;
-      bVA  *= 0.985;
-      bA   += bVA;
-      if (bRad <= RBO) {
-        bRad = RBO;
-        bVR  = -(R * 0.20 * (0.85 + Math.random() * 0.30));
-        bVA += (Math.random() - 0.5) * 0.10;
-        bP   = 'bounce';
-        bounceF = 0;
+    if (bP==='orbit') {
+      bVA*=0.9952; bA+=bVA; bRad=RTK;
+      if (Math.abs(bVA)<0.013) { bP='fall'; bVR=0; }
+    } else if (bP==='fall') {
+      bVR+=0.18; bRad-=bVR; bVA*=0.985; bA+=bVA;
+      if (bRad<=RBO) {
+        bRad=RBO; bVR=-(R*0.20*(0.85+Math.random()*0.30)); bVA+=(Math.random()-0.5)*0.10; bP='bounce'; bounceF=0;
       }
-
-    } else if (bP === 'bounce') {
+    } else if (bP==='bounce') {
       bounceF++;
-      const pArc = (Math.PI * 2) / segs.length;
-
-      // Angular + radial physics
-      bVA  *= 0.975;
-      bA   += bVA;
-      bRad += bVR;
-
-      // Radial wall bounces — pure damping, no gravity
-      if (bRad >= RBO) {
-        bRad = RBO;
-        bVR  = -(Math.abs(bVR) * 0.74);
-        bVA += (Math.random() - 0.5) * 0.09;
-      } else if (bRad <= RBI) {
-        bRad = RBI;
-        bVR  = Math.abs(bVR) * 0.72;
-        bVA += (Math.random() - 0.5) * 0.09;
-      }
-
-      // Fret interaction — deflect when fast, hard wall when slow
-      if (segs.length > 0) {
-        const rel  = ((bA - wAng) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-        const ci   = Math.floor(rel / pArc) % segs.length;
-        const dSa  = (rel - segs[ci].sa + Math.PI*2) % (Math.PI*2);
-        const dEa  = (segs[ci].ea - rel + Math.PI*2) % (Math.PI*2);
-
-        if (Math.min(dSa, dEa) < pArc * 0.05) {
-          const fretStrength = Math.min(1, Math.abs(wV) / 0.06);
-          if (fretStrength > 0.3) {
-            // Fast — chaotic deflection
-            bVA = -bVA * (0.5 + 0.2 * fretStrength) + (Math.random() - 0.5) * 0.18 * fretStrength;
+      const pArc=(Math.PI*2)/segs.length;
+      bVA*=0.975; bA+=bVA; bRad+=bVR;
+      if (bRad>=RBO) { bRad=RBO; bVR=-(Math.abs(bVR)*0.74); bVA+=(Math.random()-0.5)*0.09; }
+      else if (bRad<=RBI) { bRad=RBI; bVR=Math.abs(bVR)*0.72; bVA+=(Math.random()-0.5)*0.09; }
+      if (segs.length>0) {
+        const rel=((bA-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+        const ci=Math.floor(rel/pArc)%segs.length;
+        const dSa=(rel-segs[ci].sa+Math.PI*2)%(Math.PI*2);
+        const dEa=(segs[ci].ea-rel+Math.PI*2)%(Math.PI*2);
+        if (Math.min(dSa,dEa)<pArc*0.05) {
+          const fretStrength=Math.min(1,Math.abs(wV)/0.06);
+          if (fretStrength>0.3) {
+            bVA=-bVA*(0.5+0.2*fretStrength)+(Math.random()-0.5)*0.18*fretStrength;
           } else {
-            // Slow — hard wall, ball stays in pocket
-            if (dSa < dEa && bVA < 0) bVA = Math.abs(bVA) * 0.35;
-            if (dEa < dSa && bVA > 0) bVA = -Math.abs(bVA) * 0.35;
-            // Angular clamp within pocket bounds + margin
-            const margin = pArc * 0.04;
-            if (dSa < margin) bA = wAng + segs[ci].sa + margin;
-            if (dEa < margin) bA = wAng + segs[ci].ea - margin;
+            if (dSa<dEa&&bVA<0) bVA=Math.abs(bVA)*0.35;
+            if (dEa<dSa&&bVA>0) bVA=-Math.abs(bVA)*0.35;
+            const margin=pArc*0.04;
+            if (dSa<margin) bA=wAng+segs[ci].sa+margin;
+            if (dEa<margin) bA=wAng+segs[ci].ea-margin;
           }
         }
       }
-
-      // Settle
-      if (bounceF >= 40 && Math.abs(bVR) < R * 0.04 && Math.abs(bVA) < 0.04) {
-        const rel = ((bA - wAng) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-        wIdx  = Math.floor(rel / pArc) % segs.length;
-        bA    = wAng + segs[wIdx].ma;
-        bRad  = RMD; bVA = 0; bVR = 0;
-        bP    = 'locked';
-        requestAnimationFrame(onDone);  // defer UI update to next frame so physics frame stays clean
+      if (bounceF>=40&&Math.abs(bVR)<R*0.04&&Math.abs(bVA)<0.04) {
+        const rel=((bA-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+        wIdx=Math.floor(rel/pArc)%segs.length;
+        bA=wAng+segs[wIdx].ma; bRad=RMD; bVA=0; bVR=0; bP='locked';
+        requestAnimationFrame(onDone);
       }
-
-    } else if (bP === 'locked') {
-      // Ball rides with wheel until wheel reaches idle speed
-      bA   = wAng + segs[wIdx].ma;
-      bRad = RMD;
-      // Park when wheel is at or near idle speed (wV floors at 0.003)
-      if (Math.abs(wV) <= 0.0032) {
-        parkedOffset = segs[wIdx].ma;
-        bP       = 'parked';
-        spinning  = false;
-        wV        = 0.003;
-      }
+    } else if (bP==='locked') {
+      bA=wAng+segs[wIdx].ma; bRad=RMD;
+      if (Math.abs(wV)<=0.0032) { parkedOffset=segs[wIdx].ma; bP='parked'; spinning=false; wV=0.003; }
     }
-
   } else {
-    // Idle: smooth constant drift
-    wV    = 0.003;
-    wAng += wV;
+    wV=0.003; wAng+=wV;
   }
-
-  // Render
   draw(wAng);
-  // Ball always drawn when parked or locked — stays in pocket during idle drift
-  if (bP === 'parked') {
-    drawBall(R + Math.cos(wAng + parkedOffset) * RMD,
-             R + Math.sin(wAng + parkedOffset) * RMD);
-  } else if (bP === 'locked') {
-    drawBall(R + Math.cos(wAng + segs[wIdx].ma) * RMD,
-             R + Math.sin(wAng + segs[wIdx].ma) * RMD);
-  } else if (bP !== 'idle') {
-    let cr;
-    if (bP === 'bounce') {
-      // During bounce: strictly inside pocket zone
-      cr = Math.max(RBI, Math.min(RBO, bRad));
-    } else {
-      // During orbit/fall: ball travels from raised border inward to pocket
-      cr = Math.max(RGA, Math.min(RTK, bRad));
-    }
-    drawBall(R + Math.cos(bA) * cr, R + Math.sin(bA) * cr);
+  if (bP==='parked') {
+    drawBall(R+Math.cos(wAng+parkedOffset)*RMD, R+Math.sin(wAng+parkedOffset)*RMD);
+  } else if (bP==='locked') {
+    drawBall(R+Math.cos(wAng+segs[wIdx].ma)*RMD, R+Math.sin(wAng+segs[wIdx].ma)*RMD);
+  } else if (bP!=='idle') {
+    const cr=bP==='bounce'?Math.max(RBI,Math.min(RBO,bRad)):Math.max(RGA,Math.min(RTK,bRad));
+    drawBall(R+Math.cos(bA)*cr, R+Math.sin(bA)*cr);
   }
 }
 
-/* ════════════════════════════════════════════
-   SPIN
-════════════════════════════════════════════ */
-// Cached DOM refs
+/* ═══════════════════════════════════════════
+   SPIN + DONE
+═══════════════════════════════════════════ */
 const elSBtn  = document.getElementById('sBtn');
 const elFBtn  = document.getElementById('fBtn');
 const elRndBtn= document.getElementById('rndBtn');
-const elRsW  = document.getElementById('rsW');
-const elRsE  = document.getElementById('rsE');
+const elVpSpin = document.getElementById('vpSpin');
+const elVpWin  = document.getElementById('vpWin');
 
 function doSpin() {
-  if (spinning && bP !== 'parked' && bP !== 'locked') return;
-  const pool = getActivePool();
+  if (spinning && bP!=='parked' && bP!=='locked') return;
+  setTagline();
+  const pool=getActivePool();
   if (!pool.length) { alert('No restaurants match your filters!'); return; }
-
-  // Reset state
-  spinning      = true;
-  fired         = false;
-  bP            = 'idle';
-  parkedOffset  = 0;
-  bounceF       = 0;
-
-  // Fade out result card if visible, then hide
-  if (elRsW.classList.contains('show')) {
-    elRsW.classList.add('fading');
-    setTimeout(() => { elRsW.classList.remove('show','fading'); }, 220);
-  } else {
-    elRsW.classList.remove('show');
+  spinning=true; fired=false; bP='idle'; parkedOffset=0; bounceF=0;
+  // Show spin state
+  elVpWin.style.display='none'; elVpSpin.style.display='';
+  if (hasSpunOnce) {
+    document.getElementById('rsStatus').textContent='Awaiting next spin…';
+    document.getElementById('rsSub').textContent='';
   }
-  elRsE.classList.remove('hide');
   ring.classList.add('spinning');
-  elSBtn.disabled = true;
-  elFBtn.disabled = true;
-  elRndBtn.disabled = true;
-
+  elSBtn.disabled=true; elFBtn.disabled=true; elRndBtn.disabled=true;
   buildSegs(pool);
-  wIdx = Math.floor(Math.random() * pool.length);
-
-  // Wheel velocity — enough rotations to feel satisfying
-  const arc    = (Math.PI * 2) / pool.length;
-  const pMid   = (wIdx + .5) * arc;
-  const tFinal = -pMid - Math.PI / 2;
-  const extra  = 4 + Math.floor(Math.random() * 3);
-  const total  = Math.PI*2*extra + ((tFinal - wAng) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-  // Normalize spin speed by canvas size so it looks same on all screen sizes
-  const sizeScale = Math.min(1, SZ / 600);
-  wV = total * 0.010 * sizeScale;
-
-  // Ball launches fast, counter to wheel
-  bA   = Math.random() * Math.PI * 2;
-  bRad = RTK;
-  // Scale ball angular speed so it looks same visual speed on all screens
-  const ballScale = 600 / Math.max(SZ, 300);
-  bVA  = -(0.24 + Math.random() * 0.06) * Math.min(ballScale, 1.8);
-  bVR  = 0;
-  bP   = 'orbit';
+  wIdx=Math.floor(Math.random()*pool.length);
+  const arc=(Math.PI*2)/pool.length, pMid=(wIdx+.5)*arc, tFinal=-pMid-Math.PI/2;
+  const extra=4+Math.floor(Math.random()*3);
+  const total=Math.PI*2*extra+((tFinal-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+  const sizeScale=Math.min(1,SZ/600);
+  wV=total*0.010*sizeScale;
+  bA=Math.random()*Math.PI*2; bRad=RTK;
+  const ballScale=600/Math.max(SZ,300);
+  bVA=-(0.24+Math.random()*0.06)*Math.min(ballScale,1.8); bVR=0; bP='orbit';
 }
 
-/* ════════════════════════════════════════════
-   ON DONE — show result card
-════════════════════════════════════════════ */
-// Cached DOM refs
-const elWE   = document.getElementById('wE');
-const elWL   = document.getElementById('wL');
-const elWN   = document.getElementById('wN');
-const elWD   = document.getElementById('wD');
-const elWP   = document.getElementById('wP');
-const elWA   = document.getElementById('wA');
-const elWLnk     = document.getElementById('wLink');
-const elWPhoto   = document.getElementById('wPhoto');
-const elWPhotoAt = document.getElementById('wPhotoAttr');
-const elWPhotoW  = document.getElementById('wPhotoWrap');
-const elWContact = document.getElementById('wContact');
-const elWPhone   = document.getElementById('wPhone');
-const elWWebsite = document.getElementById('wWebsite');
-const elWMaps    = document.getElementById('wMaps');
-const elWItms = document.getElementById('wItems');
-const elHist  = document.getElementById('histSection');
-const elHBoard= document.getElementById('histBoard');
+const elWE=document.getElementById('wE');
+const elWL=document.getElementById('wL');
+const elWN=document.getElementById('wN');
+const elWP=document.getElementById('wP');
+const elWA=document.getElementById('wA');
+const elWLnk=document.getElementById('wLink');
+const elWPhoto=document.getElementById('wPhoto');
+const elWPhotoAt=document.getElementById('wPhotoAttr');
+const elWPhotoW=document.getElementById('wPhotoWrap');
+const elWContact=document.getElementById('wContact');
+const elWPhone=document.getElementById('wPhone');
+const elWWebsite=document.getElementById('wWebsite');
+const elWMaps=document.getElementById('wMaps');
+const elWItms=document.getElementById('wItems');
+const elHist=document.getElementById('histSection');
+const elHBoard=document.getElementById('histBoard');
 
 function onDone() {
-  if (fired) return;
-  fired = true;
+  if (fired) return; fired=true;
   ring.classList.remove('spinning');
-  elSBtn.disabled = false;
-  elSBtn.innerHTML = '<span class="sb-txt">Let Fate Decide</span>';
-  elFBtn.disabled = false;
-  elRndBtn.disabled = false;
-
-  const w = segs[wIdx];
-  if (!w) return;
-  const item = w.item;
-
-  elWE.textContent    = item.emoji;
-  elWL.textContent    = "Tonight's Restaurant";
-  elWN.textContent    = item.name;
-  elWD.style.display  = 'none';
-  elWP.innerHTML = `<span class="pill p-c">${item.cuisine}</span><span class="pill p-p">${item.price}</span><span class="pill p-r">⭐${item.rating}</span><span class="pill p-o">${item.open?'● Open':'○ Closed'}</span>`;
-  elWLnk.href = `https://www.doordash.com/search/store/${encodeURIComponent(item.name)}/`;
-  elWA.textContent = '📍 ' + (item.addr || '');
-
-  // Photo — built from photoRef using Places photo URL format
+  elSBtn.disabled=false; elSBtn.innerHTML='<span class="sb-txt">Let Fate Decide</span>';
+  elFBtn.disabled=false; elRndBtn.disabled=false;
+  const w=segs[wIdx]; if (!w) return;
+  const item=w.item;
+  elWE.textContent=item.emoji;
+  elWL.textContent="Tonight's Restaurant";
+  elWN.textContent=item.name;
+  elWP.innerHTML=`<span class="vp-pill cuisine">${item.cuisine}</span><span class="vp-pill price">${item.price}</span><span class="vp-pill rating">⭐${item.rating}</span><span class="vp-pill open">${item.open?'● Open':'○ Closed'}</span>`;
+  elWA.textContent='📍 '+(item.addr||'');
+  elWLnk.href=`https://www.doordash.com/search/store/${encodeURIComponent(item.name)}/`;
   if (item.photoRef) {
-    const photoUrl = item.photoRef.startsWith('http')
-      ? item.photoRef
-      : `https://places.googleapis.com/v1/${item.photoRef}/media?maxHeightPx=320&maxWidthPx=600&key=${GOOGLE_CLIENT_KEY}`;
-    elWPhoto.src = photoUrl;
-    elWPhoto.onload  = () => { elWPhotoW.style.display = ''; };
-    elWPhoto.onerror = () => { elWPhotoW.style.display = 'none'; };
-    // Photo attribution — required by Google Places API policy
-    if (item.photoAttr && item.photoAttr.name) {
-      elWPhotoAt.style.display = '';
-      elWPhotoAt.innerHTML = `Photo: <a href="${item.photoAttr.uri||'#'}" target="_blank" rel="noopener">${item.photoAttr.name}</a> · Google Maps`;
-    } else if (!item.photoRef.startsWith('http')) {
-      elWPhotoAt.style.display = '';
-      elWPhotoAt.innerHTML = `Photo via <a href="https://maps.google.com" target="_blank" rel="noopener">Google Maps</a>`;
-    } else {
-      elWPhotoAt.style.display = 'none';
-    }
-  } else {
-    elWPhotoW.style.display = 'none';
-    elWPhotoAt.style.display = 'none';
-  }
-
-  // Contact links
-  let hasContact = false;
-  if (item.phone) {
-    elWPhone.href = `tel:${item.phone}`;
-    elWPhone.style.display = 'flex'; hasContact = true;
-  } else { elWPhone.style.display = 'none'; }
-
-  if (item.website) {
-    elWWebsite.href = item.website;
-    elWWebsite.style.display = 'flex'; hasContact = true;
-  } else { elWWebsite.style.display = 'none'; }
-
-  // Always show Maps — fallback to Google search if no direct link
-  const mapsHref = item.mapsUrl || `https://maps.google.com/?q=${encodeURIComponent(item.name + ' ' + item.addr)}`;
-  elWMaps.href = mapsHref;
-  elWMaps.style.display = 'flex'; hasContact = true;
-
-  elWContact.style.display = hasContact ? 'flex' : 'none';
-
-  // Items to try — hide for live data (placeholder)
-  const hasRealItems = item.items && item.items.length && item.items[0].name !== 'See menu';
+    const photoUrl=item.photoRef.startsWith('http')?item.photoRef:`https://places.googleapis.com/v1/${item.photoRef}/media?maxHeightPx=320&maxWidthPx=600&key=${GOOGLE_CLIENT_KEY}`;
+    elWPhoto.src=photoUrl;
+    elWPhoto.onload=()=>{elWPhotoW.style.display='';};
+    elWPhoto.onerror=()=>{elWPhotoW.style.display='none';};
+    if (item.photoAttr&&item.photoAttr.name) { elWPhotoAt.style.display=''; elWPhotoAt.innerHTML=`Photo: <a href="${item.photoAttr.uri||'#'}" target="_blank">${item.photoAttr.name}</a> · Google Maps`; }
+    else if (!item.photoRef.startsWith('http')) { elWPhotoAt.style.display=''; elWPhotoAt.innerHTML=`Photo via <a href="https://maps.google.com" target="_blank">Google Maps</a>`; }
+    else { elWPhotoAt.style.display='none'; }
+  } else { elWPhotoW.style.display='none'; elWPhotoAt.style.display='none'; }
+  let hasContact=false;
+  if (item.phone) { elWPhone.href=`tel:${item.phone}`; elWPhone.style.display='flex'; hasContact=true; } else { elWPhone.style.display='none'; }
+  if (item.website) { elWWebsite.href=item.website; elWWebsite.style.display='flex'; hasContact=true; } else { elWWebsite.style.display='none'; }
+  const mapsHref=item.mapsUrl||`https://maps.google.com/?q=${encodeURIComponent(item.name+' '+(item.addr||''))}`;
+  elWMaps.href=mapsHref; elWMaps.style.display='flex'; hasContact=true;
+  elWContact.style.display=hasContact?'flex':'none';
+  const hasRealItems=item.items&&item.items.length&&item.items[0].name!=='See menu';
   if (hasRealItems) {
-    elWItms.style.display = '';
-    elWItms.innerHTML = item.items.map(it =>
-      `<div class="rw-item">
-        <div class="rw-item-emoji">${it.emoji}</div>
-        <div class="rw-item-name">${it.name}</div>
-        <div class="rw-item-desc">${it.desc}</div>
-      </div>`
-    ).join('');
-  } else {
-    elWItms.style.display = 'none';
-    elWItms.innerHTML = '';
-  }
-
-  // Add to history
-  const restName = item.name;
-  const restItem = REST.find(r => r.name === restName) || item;
-  const col = restItem.items ? (RCOL(segs.indexOf(w)) === '#cc1000' ? 'red' : RCOL(segs.indexOf(w)) === '#0d8020' ? 'green' : 'black') : 'black';
-  // Use pocket colour for casino dot
-  const pCol = w.col === '#cc1000' ? 'red' : w.col === '#0d8020' ? 'green' : 'black';
-  history.unshift({ emoji: item.emoji, name: item.name, sub: `${item.cuisine||item.price} · ${item.price}`, price:item.price, open:item.open, col:pCol });
-  if (history.length > 5) history.pop();
+    elWItms.style.display='';
+    elWItms.innerHTML=item.items.map(it=>`<div class="vp-item"><span class="vp-item-emoji">${it.emoji}</span><span class="vp-item-name">${it.name}</span><span class="vp-item-desc">${it.desc}</span></div>`).join('');
+  } else { elWItms.style.display='none'; elWItms.innerHTML=''; }
+  const pCol=w.col==='#cc1000'?'red':w.col==='#0d8020'?'green':'black';
+  history.unshift({emoji:item.emoji,name:item.name,sub:`${item.cuisine}·${item.price}`,price:item.price,open:item.open,col:pCol});
+  if (history.length>5) history.pop();
   renderHistory();
-
-  elRsE.classList.add('hide');
-  setTimeout(() => elRsW.classList.add('show'), 80);
-  setTimeout(confetti, 120);  // delay confetti slightly so card animation renders first
+  hasSpunOnce=true;
+  setTimeout(()=>{ elVpSpin.style.display='none'; elVpWin.style.display=''; elVpWin.style.animation='winPop .35s cubic-bezier(.22,1,.36,1) both'; },80);
+  setTimeout(confetti,120);
 }
 
 function renderHistory() {
   if (!history.length) { elHist.style.display='none'; return; }
-  elHist.style.display = '';
-  elHBoard.innerHTML = history.map((h, i) => `
+  elHist.style.display='';
+  elHBoard.innerHTML=history.map((h,i)=>`
     <div class="hist-row ${i===0?'newest':''}">
       <div class="hist-num">${i+1}</div>
       <div class="hist-dot ${h.col}">${h.emoji}</div>
-      <div class="hist-info">
-        <div class="hist-name">${h.name}</div>
-        <div class="hist-sub">${h.sub}</div>
-      </div>
+      <div class="hist-info"><div class="hist-name">${h.name}</div><div class="hist-sub">${h.sub}</div></div>
       <div class="hist-badge">${h.open?'● Open':'○ Closed'}</div>
     </div>`).join('');
 }
 
-/* ════════════════════════════════════════════
-   MODE + POOL
-════════════════════════════════════════════ */
-
-
-function getActivePool() {
-  if (rndRest) return rndRest;
-  return getPool();
-}
-
+function getActivePool() { return rndRest||getPool(); }
 function getPool() {
-  const base = REST.filter(r => {
-    if (F.cuisines[0] !== 'any' && !F.cuisines.includes(r.cuisine)) return false;
-    if (r.pl > F.budget)                                             return false;
-    if (F.dist !== 'any' && r.dist > parseFloat(F.dist))           return false;
-    if (r.rating < F.rating)                                         return false;
-    if (F.openNow && !r.open)                                        return false;
+  return REST.filter(r=>{
+    if (F.cuisines[0]!=='any'&&!F.cuisines.includes(r.cuisine)) return false;
+    if (r.pl>F.budget) return false;
+    if (F.dist!=='any'&&r.dist>parseFloat(F.dist)) return false;
+    if (r.rating<F.rating) return false;
+    if (F.openNow&&!r.open) return false;
     return true;
   });
-  return base;
 }
 
-/* ════════════════════════════════════════════
-   RANDOMIZE
-════════════════════════════════════════════ */
 function doRandomize() {
-  if (spinning && bP !== 'parked' && bP !== 'locked') return;
-
-  // Draw a fresh random subset from the FULL REST array each time —
-  // bypasses filters so every press gives genuinely new restaurants.
-  const count = Math.max(getPool().length, 8);
-  const shuffled = [...REST].sort(() => Math.random() - .5).slice(0, count);
-  rndRest = shuffled;
-  buildSegs(shuffled);
-  draw(wAng);
-
-  const btn = document.getElementById('rndBtn');
-  btn.style.transition = 'transform .4s ease';
-  btn.style.transform  = 'rotate(360deg)';
-  setTimeout(() => { btn.style.transition=''; btn.style.transform=''; }, 420);
+  if (spinning&&bP!=='parked'&&bP!=='locked') return;
+  const count=Math.max(getPool().length,8);
+  rndRest=[...REST].sort(()=>Math.random()-.5).slice(0,count);
+  buildSegs(rndRest); draw(wAng);
+  const btn=document.getElementById('rndBtn');
+  btn.style.transition='transform .4s ease'; btn.style.transform='rotate(360deg)';
+  setTimeout(()=>{btn.style.transition=''; btn.style.transform='';},420);
 }
 
-/* ════════════════════════════════════════════
-   CONFETTI
-════════════════════════════════════════════ */
 function confetti() {
-  const cr   = cv.getBoundingClientRect();
-  const ccx  = cr.left + cr.width / 2;
-  const ccy  = cr.top  + cr.height / 2;
-  const cols = ['#f0c93a','#cc1000','#0e8020','#fff','#c9a84c','#44aaff','#ff6644'];
-  for (let i = 0; i < 55; i++) {
-    const p = document.createElement('div');
-    p.className = 'pt';
-    const a = Math.random()*Math.PI*2, d=80+Math.random()*220, s=4+Math.random()*10;
-    p.style.cssText = `left:${ccx}px;top:${ccy}px;width:${s}px;height:${s}px;` +
-      `background:${cols[i%cols.length]};` +
-      `--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d}px;` +
-      `animation-duration:${1+Math.random()*.8}s;animation-delay:${Math.random()*.15}s;`;
-    document.body.appendChild(p);
-    setTimeout(() => p.remove(), 2200);
+  const cr=cv.getBoundingClientRect(), ccx=cr.left+cr.width/2, ccy=cr.top+cr.height/2;
+  const cols=['#f0c93a','#cc1000','#0e8020','#fff','#c9a84c','#44aaff','#ff6644'];
+  for (let i=0;i<55;i++) {
+    const p=document.createElement('div'); p.className='pt';
+    const a=Math.random()*Math.PI*2, d=80+Math.random()*220, s=4+Math.random()*10;
+    p.style.cssText=`left:${ccx}px;top:${ccy}px;width:${s}px;height:${s}px;background:${cols[i%cols.length]};--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d}px;animation-duration:${1+Math.random()*.8}s;animation-delay:${Math.random()*.15}s;`;
+    document.body.appendChild(p); setTimeout(()=>p.remove(),2200);
   }
 }
 
-/* ════════════════════════════════════════════
-   FILTER SHEET
-════════════════════════════════════════════ */
-function openSheet()  {
-  document.getElementById('sheet').classList.add('on');
-  document.getElementById('shOv').classList.add('on');
-  document.getElementById('fBtn').classList.add('on');
-}
-function closeSheet() {
-  document.getElementById('sheet').classList.remove('on');
-  document.getElementById('shOv').classList.remove('on');
-  document.getElementById('fBtn').classList.remove('on');
-}
+function openSheet()  { document.getElementById('sheet').classList.add('on'); document.getElementById('shOv').classList.add('on'); document.getElementById('fBtn').classList.add('on'); }
+function closeSheet() { document.getElementById('sheet').classList.remove('on'); document.getElementById('shOv').classList.remove('on'); document.getElementById('fBtn').classList.remove('on'); }
 
 function togC(c) {
-  const v = c.dataset.v;
-  if (v === 'any') {
-    document.querySelectorAll('#cChips .ch').forEach(x => x.classList.remove('on'));
-    c.classList.add('on');
-    F.cuisines = ['any'];
-  } else {
+  const v=c.dataset.v;
+  if (v==='any') { document.querySelectorAll('#cChips .ch').forEach(x=>x.classList.remove('on')); c.classList.add('on'); F.cuisines=['any']; }
+  else {
     document.querySelector('#cChips [data-v="any"]').classList.remove('on');
-    F.cuisines = F.cuisines.filter(x => x !== 'any');
-    c.classList.toggle('on');
-    if (c.classList.contains('on')) F.cuisines.push(v);
-    else F.cuisines = F.cuisines.filter(x => x !== v);
-    if (!F.cuisines.length) {
-      F.cuisines = ['any'];
-      document.querySelector('#cChips [data-v="any"]').classList.add('on');
-    }
-  }
+    F.cuisines=F.cuisines.filter(x=>x!=='any'); c.classList.toggle('on');
+    if (c.classList.contains('on')) F.cuisines.push(v); else F.cuisines=F.cuisines.filter(x=>x!==v);
+    if (!F.cuisines.length) { F.cuisines=['any']; document.querySelector('#cChips [data-v="any"]').classList.add('on'); }
+  } applyF();
+}
+
+function selChip(el,gid,fk,isInt) {
+  document.querySelectorAll(`#${gid} .ch`).forEach(x=>x.classList.remove('on')); el.classList.add('on');
+  F[fk]=isInt?parseInt(el.dataset.v):el.dataset.v;
+  if (fk==='dist'&&REST!==FALLBACK_REST) { showLocStatus('📍 Updating…'); loadRestaurants().then(()=>{buildSegs(getPool());draw(wAng);updSum();updDot();}); }
+  else { applyF(); }
+}
+
+function togChip(id,key) {
+  const el=document.getElementById(id); el.classList.toggle('on');
+  if (key==='openNow') F.openNow=el.classList.contains('on');
+  else { if (el.classList.contains('on')) F.diet.push(key); else F.diet=F.diet.filter(x=>x!==key); }
   applyF();
 }
 
-// updB removed — budget now uses chips like other filters
-
-// Generic single-select chip group — instant apply
-function selChip(el, gid, fk, isInt) {
-  document.querySelectorAll(`#${gid} .ch`).forEach(x => x.classList.remove('on'));
-  el.classList.add('on');
-  F[fk] = isInt ? parseInt(el.dataset.v) : el.dataset.v;
-  // Re-fetch from API when distance changes (wider radius = more results)
-  if (fk === 'dist' && REST !== FALLBACK_REST) {
-    showLocStatus('📍 Updating…');
-    loadRestaurants().then(() => { buildSegs(getPool()); draw(wAng); updSum(); updDot(); });
-  } else {
-    applyF();
-  }
-}
-
-// Toggle chip (boolean or diet array)
-function togChip(id, key) {
-  const el = document.getElementById(id);
-  el.classList.toggle('on');
-  if (key === 'openNow') {
-    F.openNow = el.classList.contains('on');
-  } else {
-    if (el.classList.contains('on')) F.diet.push(key);
-    else F.diet = F.diet.filter(x => x !== key);
-  }
-  applyF();
-}
-
-function applyF() {
-  rndRest = null;
-  buildSegs(getPool());
-  draw(wAng);
-  updSum(); updDot();
-}
+function applyF() { rndRest=null; buildSegs(getPool()); draw(wAng); updSum(); updDot(); }
 
 function resetF() {
   F.cuisines=['any']; F.budget=2; F.dist='any'; F.rating=0; F.openNow=false; F.diet=[];
-  // Cuisine
-  document.querySelectorAll('#cChips .ch').forEach(x => x.classList.remove('on'));
-  document.querySelector('#cChips [data-v="any"]').classList.add('on');
-  // Budget
-  document.querySelectorAll('#bChips .ch').forEach(x => x.classList.remove('on'));
-  document.querySelector('#bChips [data-v="2"]').classList.add('on');
-  // Distance
-  document.querySelectorAll('#dChips .ch').forEach(x => x.classList.remove('on'));
-  document.querySelector('#dChips [data-v="any"]').classList.add('on');
-  // Rating
-  document.querySelectorAll('#rChips .ch').forEach(x => x.classList.remove('on'));
-  document.querySelector('#rChips [data-v="0"]').classList.add('on');
-  // Toggles
-  ['openChip','vegChip','veganChip','gfChip','halalChip'].forEach(id => {
-    document.getElementById(id)?.classList.remove('on');
-  });
+  document.querySelectorAll('#cChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#cChips [data-v="any"]').classList.add('on');
+  document.querySelectorAll('#bChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#bChips [data-v="2"]').classList.add('on');
+  document.querySelectorAll('#dChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#dChips [data-v="any"]').classList.add('on');
+  document.querySelectorAll('#rChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#rChips [data-v="0"]').classList.add('on');
+  ['openChip','vegChip','veganChip','gfChip','halalChip'].forEach(id=>{document.getElementById(id)?.classList.remove('on');});
   applyF();
 }
 
 function updDot() {
-  const has = F.cuisines[0]!=='any' || F.budget<4 || F.dist!=='any' || F.rating>0 || F.openNow || F.diet.length>0;
-  document.getElementById('fDot').classList.toggle('on', has);
+  const has=F.cuisines[0]!=='any'||F.budget<4||F.dist!=='any'||F.rating>0||F.openNow||F.diet.length>0;
+  document.getElementById('fDot').classList.toggle('on',has);
 }
 
 function updSum() {
-  const tags = [];
-  if (F.cuisines[0] !== 'any') F.cuisines.forEach(c => tags.push({l:c, k:'c_'+c}));
-  if (F.budget < 4)    tags.push({l:BD[F.budget].l+' budget', k:'budget'});
-  if (F.dist !== 'any') tags.push({l:'≤'+F.dist+' mi', k:'dist'});
-  if (F.rating > 0)    tags.push({l:'⭐'+F.rating+'+', k:'rating'});
-  if (F.openNow)       tags.push({l:'🟢 Open now', k:'openNow'});
-  F.diet.forEach(d => tags.push({l:d, k:'d_'+d}));
-  const s = document.getElementById('fSum');
-  s.innerHTML = tags.map(t => `<div class="ft">${t.l}<span class="fx" onclick="rmTag('${t.k}')">×</span></div>`).join('');
-  s.classList.toggle('on', tags.length > 0);
+  const tags=[];
+  if (F.cuisines[0]!=='any') F.cuisines.forEach(c=>tags.push({l:c,k:'c_'+c}));
+  if (F.budget<4) tags.push({l:BD[F.budget].l+' budget',k:'budget'});
+  if (F.dist!=='any') tags.push({l:'≤'+F.dist+' mi',k:'dist'});
+  if (F.rating>0) tags.push({l:'⭐'+F.rating+'+',k:'rating'});
+  if (F.openNow) tags.push({l:'🟢 Open now',k:'openNow'});
+  F.diet.forEach(d=>tags.push({l:d,k:'d_'+d}));
+  const s=document.getElementById('fSum');
+  s.innerHTML=tags.map(t=>`<div class="ft">${t.l}<span class="fx" onclick="rmTag('${t.k}')">×</span></div>`).join('');
+  s.classList.toggle('on',tags.length>0);
 }
 
 function rmTag(k) {
-  if (k==='budget')      { F.budget=4; document.getElementById('bSlide').value=4; updB(4); }
-  else if (k==='dist')   { F.dist='any'; document.querySelectorAll('#dChips .ch').forEach(x=>x.classList.toggle('on',x.dataset.v==='any')); }
+  if (k==='budget') { F.budget=4; document.querySelectorAll('#bChips .ch').forEach(x=>x.classList.toggle('on',x.dataset.v==='4')); }
+  else if (k==='dist') { F.dist='any'; document.querySelectorAll('#dChips .ch').forEach(x=>x.classList.toggle('on',x.dataset.v==='any')); }
   else if (k==='rating') { F.rating=0; document.querySelectorAll('#rChips .ch').forEach(x=>x.classList.toggle('on',x.dataset.v==='0')); }
-  else if (k==='openNow'){ F.openNow=false; document.getElementById('openChip')?.classList.remove('on'); }
-  else if (k.startsWith('d_')) {
-    const d=k.slice(2); F.diet=F.diet.filter(x=>x!==d);
-    document.querySelectorAll('.tr').forEach(r=>{ if(r.dataset.v===d) r.classList.remove('on'); });
-  } else if (k.startsWith('c_')) {
-    const c=k.slice(2); F.cuisines=F.cuisines.filter(x=>x!==c);
-    document.querySelector(`#cChips [data-v="${c}"]`)?.classList.remove('on');
-    if (!F.cuisines.length) { F.cuisines=['any']; document.querySelector('#cChips [data-v="any"]').classList.add('on'); }
-  }
-  rndRest=null;
-  buildSegs(getPool()); draw(wAng);
-  updSum(); updDot();
+  else if (k==='openNow') { F.openNow=false; document.getElementById('openChip')?.classList.remove('on'); }
+  else if (k.startsWith('d_')) { const d=k.slice(2); F.diet=F.diet.filter(x=>x!==d); document.querySelectorAll('.ch').forEach(r=>{if(r.dataset&&r.dataset.v===d)r.classList.remove('on');}); }
+  else if (k.startsWith('c_')) { const c=k.slice(2); F.cuisines=F.cuisines.filter(x=>x!==c); document.querySelector(`#cChips [data-v="${c}"]`)?.classList.remove('on'); if(!F.cuisines.length){F.cuisines=['any'];document.querySelector('#cChips [data-v="any"]').classList.add('on');} }
+  rndRest=null; buildSegs(getPool()); draw(wAng); updSum(); updDot();
 }
 
-/* ════════════════════════════════════════════
-   INIT
-════════════════════════════════════════════ */
-document.fonts.ready.then(async () => {
+function showLocStatus(msg) { const el=document.getElementById('rsStatus'); if(el) el.textContent=msg; }
+
+function typeEmoji(type) {
+  const t=(type||'').toLowerCase();
+  const map={'sushi_restaurant':'🍣','japanese_restaurant':'🍱','ramen_restaurant':'🍥','chinese_restaurant':'🥡','thai_restaurant':'🍜','vietnamese_restaurant':'🍲','korean_restaurant':'🫕','indian_restaurant':'🍛','pizza_restaurant':'🍕','italian_restaurant':'🍝','american_restaurant':'🍔','hamburger_restaurant':'🍔','fast_food_restaurant':'🍟','mexican_restaurant':'🌮','seafood_restaurant':'🦞','steak_house':'🥩','barbecue_restaurant':'🍖','french_restaurant':'🥐','breakfast_restaurant':'🥚','bakery':'🥐','cafe':'☕','ice_cream_shop':'🍦','sandwich_shop':'🥪'};
+  if (map[t]) return map[t];
+  if (t.includes('sushi')||t.includes('japanese')) return '🍣';
+  if (t.includes('ramen')||t.includes('noodle')) return '🍥';
+  if (t.includes('chinese')) return '🥡';
+  if (t.includes('thai')||t.includes('vietnamese')) return '🍜';
+  if (t.includes('korean')) return '🍱';
+  if (t.includes('indian')||t.includes('curry')) return '🍛';
+  if (t.includes('pizza')||t.includes('italian')) return '🍕';
+  if (t.includes('mexican')||t.includes('taco')) return '🌮';
+  if (t.includes('burger')||t.includes('american')) return '🍔';
+  if (t.includes('steak')||t.includes('bbq')) return '🥩';
+  if (t.includes('seafood')||t.includes('fish')) return '🦞';
+  if (t.includes('bakery')||t.includes('cafe')) return '🥐';
+  return '🍽️';
+}
+
+const CACHE_TTL=60*60*1000;
+function cacheKey(lat,lng,meters){const rlat=Math.round(lat*100)/100,rlng=Math.round(lng*100)/100;return `fr_${rlat}_${rlng}_${meters}`;}
+function getCached(key){try{const raw=localStorage.getItem(key);if(!raw)return null;const{ts,data}=JSON.parse(raw);if(Date.now()-ts>CACHE_TTL){localStorage.removeItem(key);return null;}return data;}catch(e){return null;}}
+function setCache(key,data){try{localStorage.setItem(key,JSON.stringify({ts:Date.now(),data}));}catch(e){}}
+
+async function loadRestaurants() {
+  return new Promise(resolve=>{
+    if (!navigator.geolocation){resolve();return;}
+    navigator.geolocation.getCurrentPosition(async pos=>{
+      try {
+        const {latitude:lat,longitude:lng}=pos.coords;
+        const miles=F.dist==='any'?2:parseFloat(F.dist), meters=Math.round(miles*1609);
+        const key=cacheKey(lat,lng,meters);
+        const cached=getCached(key);
+        if (cached){REST=cached;showLocStatus(`🎰 ${cached.length} spots nearby — spin it!`);resolve();return;}
+        const res=await fetch(`${WORKER_URL}?lat=${lat}&lng=${lng}&radius=${meters}`);
+        const data=await res.json();
+        if (Array.isArray(data)&&data.length>0){
+          const processed=data.map(r=>({...r,emoji:r.emoji||typeEmoji(r.cuisine)}));
+          setCache(key,processed); REST=processed; showLocStatus(`🎰 ${data.length} spots nearby — spin it!`);
+        } else { showLocStatus('🎰 Ready to spin!'); }
+      } catch(e){console.warn('Worker failed',e);showLocStatus('🎰 Ready to spin!');}
+      resolve();
+    },()=>{showLocStatus('🎰 Ready to spin!');resolve();},{timeout:8000});
+  });
+}
+
+setTagline();
+document.fonts.ready.then(async ()=>{
   bakeStatic();
   showLocStatus('📍 Finding restaurants near you…');
   await loadRestaurants();
   buildSegs(getPool());
   loop();
 });
-
-function showLocStatus(msg) {
-  const el = document.getElementById('rsStatus');
-  if (el) el.textContent = msg;
-}
-
-// Maps Google Places primaryType strings to emoji
-// Google returns types like: mexican_restaurant, sushi_restaurant, steak_house etc.
-function typeEmoji(type) {
-  const t = (type || '').toLowerCase();
-  // Exact / specific matches first
-  const map = {
-    // Asian
-    'sushi_restaurant':        '🍣',
-    'japanese_restaurant':     '🍱',
-    'ramen_restaurant':        '🍥',
-    'chinese_restaurant':      '🥡',
-    'dim_sum_restaurant':      '🥟',
-    'thai_restaurant':         '🍜',
-    'vietnamese_restaurant':   '🍲',
-    'korean_restaurant':       '🫕',
-    'indian_restaurant':       '🍛',
-    'middle_eastern_restaurant':'🧆',
-    'lebanese_restaurant':     '🫓',
-    'turkish_restaurant':      '🥙',
-    // Western
-    'american_restaurant':     '🍔',
-    'hamburger_restaurant':    '🍔',
-    'fast_food_restaurant':    '🍟',
-    'italian_restaurant':      '🍝',
-    'pizza_restaurant':        '🍕',
-    'french_restaurant':       '🥩',
-    'steak_house':             '🥩',
-    'barbecue_restaurant':     '🍖',
-    'mexican_restaurant':      '🌮',
-    'spanish_restaurant':      '🥘',
-    'greek_restaurant':        '🫒',
-    'mediterranean_restaurant':'🫙',
-    // Seafood
-    'seafood_restaurant':      '🦞',
-    // Other cuisines
-    'brazilian_restaurant':    '🥩',
-    'african_restaurant':      '🍲',
-    'latin_american_restaurant':'🌯',
-    'peruvian_restaurant':     '🫔',
-    // Specific food types
-    'breakfast_restaurant':    '🥚',
-    'brunch_restaurant':       '🥞',
-    'sandwich_shop':           '🥪',
-    'deli':                    '🥙',
-    'bakery':                  '🥐',
-    'cafe':                    '☕',
-    'coffee_shop':             '☕',
-    'ice_cream_shop':          '🍦',
-    'dessert_shop':            '🍰',
-    'donut_shop':              '🍩',
-    'bubble_tea_store':        '🧋',
-    'bar':                     '🍺',
-    'wine_bar':                '🍷',
-    'cocktail_bar':            '🍸',
-    'pub':                     '🍺',
-    'food_court':              '🍽️',
-    'buffet_restaurant':       '🍽️',
-    'vegetarian_restaurant':   '🥗',
-    'vegan_restaurant':        '🥦',
-  };
-  if (map[t]) return map[t];
-  // Partial matches as fallback
-  if (t.includes('sushi') || t.includes('japanese')) return '🍣';
-  if (t.includes('ramen') || t.includes('noodle'))   return '🍥';
-  if (t.includes('chinese') || t.includes('dim_sum'))return '🥡';
-  if (t.includes('thai') || t.includes('vietnamese'))return '🍜';
-  if (t.includes('korean'))                          return '🍱';
-  if (t.includes('indian') || t.includes('curry'))   return '🍛';
-  if (t.includes('middle_east') || t.includes('falafel')) return '🧆';
-  if (t.includes('pizza') || t.includes('italian'))  return '🍕';
-  if (t.includes('mexican') || t.includes('taco'))   return '🌮';
-  if (t.includes('burger') || t.includes('american'))return '🍔';
-  if (t.includes('steak') || t.includes('bbq') || t.includes('barbecue')) return '🥩';
-  if (t.includes('seafood') || t.includes('fish'))   return '🦞';
-  if (t.includes('french') || t.includes('bistro'))  return '🥐';
-  if (t.includes('spanish') || t.includes('mediterranean')) return '🫙';
-  if (t.includes('greek'))                           return '🫒';
-  if (t.includes('breakfast') || t.includes('brunch'))return '🥞';
-  if (t.includes('sandwich') || t.includes('deli'))  return '🥪';
-  if (t.includes('bakery') || t.includes('pastry'))  return '🥐';
-  if (t.includes('cafe') || t.includes('coffee'))    return '☕';
-  if (t.includes('ice_cream') || t.includes('dessert')) return '🍦';
-  if (t.includes('bar') || t.includes('pub'))        return '🍺';
-  if (t.includes('vegan') || t.includes('vegetarian')) return '🥗';
-  return '🍽️';
-}
-
-// Cache: localStorage with 1hr TTL, keyed by rounded location + radius
-const CACHE_TTL = 60 * 60 * 1000; // 1 hour in ms
-
-function cacheKey(lat, lng, meters) {
-  // Round to 2 decimal places (~1km grid) so nearby positions share cache
-  const rlat = Math.round(lat * 100) / 100;
-  const rlng = Math.round(lng * 100) / 100;
-  return `fr_${rlat}_${rlng}_${meters}`;
-}
-
-function getCached(key) {
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return null;
-    const { ts, data } = JSON.parse(raw);
-    if (Date.now() - ts > CACHE_TTL) { localStorage.removeItem(key); return null; }
-    return data;
-  } catch(e) { return null; }
-}
-
-function setCache(key, data) {
-  try {
-    localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
-  } catch(e) {} // storage full — just skip
-}
-
-async function loadRestaurants() {
-  return new Promise(resolve => {
-    if (!navigator.geolocation) { resolve(); return; }
-    navigator.geolocation.getCurrentPosition(
-      async pos => {
-        try {
-          const { latitude: lat, longitude: lng } = pos.coords;
-          const miles  = F.dist === 'any' ? 2 : parseFloat(F.dist);
-          const meters = Math.round(miles * 1609);
-          const key    = cacheKey(lat, lng, meters);
-
-          // Check localStorage cache first
-          const cached = getCached(key);
-          if (cached) {
-            REST = cached;
-            showLocStatus(`🎰 ${cached.length} spots nearby — spin it!`);
-            resolve();
-            return;
-          }
-
-          // Cache miss — fetch from Worker
-          const res  = await fetch(`${WORKER_URL}?lat=${lat}&lng=${lng}&radius=${meters}`);
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            const processed = data.map(r => ({...r, emoji: r.emoji || typeEmoji(r.cuisine)}));
-            setCache(key, processed);   // save for next time
-            REST = processed;
-            showLocStatus(`🎰 ${data.length} spots nearby — spin it!`);
-            document.getElementById('gAttr').classList.add('on');
-          } else {
-            showLocStatus('🎰 Ready to spin!');
-          }
-        } catch(e) {
-          console.warn('Worker failed, using fallback', e);
-          showLocStatus('🎰 Ready to spin!');
-        }
-        resolve();
-      },
-      () => { showLocStatus('🎰 Ready to spin!'); resolve(); },
-      { timeout: 8000 }
-    );
-  });
-}
 </script>
 </body>
 </html>
