@@ -4,27 +4,48 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Food Roulette</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@900&family=DM+Sans:wght@400;500;700&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
 /* ── Reset & Tokens ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --gold:#c9a84c; --gl:#f0c93a; --gd:#7a5010;
-  --felt:#0b2d18; --cream:#f2e8cc; --dim:#4a8060;
+  --felt:#0d3d20; --cream:#f2e8cc; --dim:#4a8060;
 }
 html,body{height:100%;}
 body{
   font-family:'DM Sans',sans-serif;min-height:100svh;
   display:flex;flex-direction:column;align-items:center;
-  background:var(--felt);color:var(--cream);overflow-x:hidden;
+  color:var(--cream);overflow-x:hidden;
+  background-color:#0d3d20;
   background-image:
-    radial-gradient(ellipse 110% 50% at 50% -5%,#1a5c35 0%,transparent 55%),
-    radial-gradient(ellipse 90% 90% at 50% 55%,transparent 20%,rgba(0,0,0,.55) 100%);
+    /* Felt fiber texture — fine diagonal weave */
+    repeating-linear-gradient(
+      47deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,.07) 2px,
+      rgba(0,0,0,.07) 3px
+    ),
+    repeating-linear-gradient(
+      -47deg,
+      transparent,
+      transparent 2px,
+      rgba(255,255,255,.03) 2px,
+      rgba(255,255,255,.03) 3px
+    ),
+    /* Bright center spotlight */
+    radial-gradient(ellipse 80% 60% at 50% 30%,#1a6b38 0%,#0d3d20 70%),
+    /* Dark vignette edges */
+    radial-gradient(ellipse 100% 100% at 50% 50%,transparent 40%,rgba(0,0,0,.6) 100%);
 }
-body::after{content:'';position:fixed;inset:12px;border:1px solid rgba(201,168,76,.14);pointer-events:none;z-index:0;}
+/* Gold border frame */
+body::after{content:'';position:fixed;inset:10px;border:1px solid rgba(201,168,76,.2);pointer-events:none;z-index:0;}
+/* Inner subtle glow on border */
+body::before{content:'';position:fixed;inset:11px;border:1px solid rgba(201,168,76,.06);pointer-events:none;z-index:0;}
 
 /* ── Animations ── */
-@keyframes winPop{0%{opacity:0;transform:translateY(10px) scale(.97)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes winPop{0%{opacity:0;transform:translateY(14px) scale(.95)}70%{opacity:1;transform:translateY(-3px) scale(1.01)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes fadeOut{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-8px)}}
 .rs-winner.fading{animation:fadeOut .22s ease forwards;}
 
@@ -33,8 +54,38 @@ body::after{content:'';position:fixed;inset:12px;border:1px solid rgba(201,168,7
 .logo-r{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .logo-l{height:1px;flex:1;background:linear-gradient(to right,transparent,rgba(201,168,76,.45),transparent);}
 .logo-t{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);font-weight:700;white-space:nowrap;}
-h1{font-family:'Cinzel',serif;font-size:clamp(1.2rem,4.5vw,2rem);font-weight:900;line-height:1;color:var(--cream);text-shadow:0 2px 16px rgba(0,0,0,.8);letter-spacing:.06em;margin-bottom:6px;}
-h1 span{color:var(--gl);}
+h1{font-family:'Cinzel',serif;font-size:clamp(1.4rem,5.5vw,2.4rem);font-weight:900;line-height:1.15;color:var(--cream);text-shadow:0 2px 20px rgba(0,0,0,.9),0 0 40px rgba(201,168,76,.2);letter-spacing:.04em;margin-bottom:6px;}
+h1 span{
+  display:block;
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(2.4rem,9vw,4.2rem);
+  font-weight:400;
+  letter-spacing:.02em;
+  color:#e03030;
+  animation:neonFlicker 4s infinite;
+  text-shadow:
+    0 0 8px rgba(220,40,40,.9),
+    0 0 20px rgba(220,40,40,.7),
+    0 0 40px rgba(220,40,40,.4),
+    0 2px 6px rgba(0,0,0,.8);
+  line-height:1.1;
+}
+
+@keyframes neonFlicker{
+  /* Full bright red — most of the time */
+  0%,17%,21%,51%,55%,100%{
+    color:#e03030;
+    text-shadow:0 0 8px rgba(220,40,40,.9),0 0 20px rgba(220,40,40,.7),0 0 40px rgba(220,40,40,.4),0 2px 6px rgba(0,0,0,.8);
+  }
+  /* Quick off flick */
+  18%,19%{color:rgba(200,30,30,.15);text-shadow:0 2px 6px rgba(0,0,0,.8);}
+  52%,53%{color:rgba(200,30,30,.15);text-shadow:0 2px 6px rgba(0,0,0,.8);}
+  /* Subtle dim */
+  30%{color:#c82020;text-shadow:0 0 5px rgba(200,30,30,.6),0 0 12px rgba(180,20,20,.4),0 2px 6px rgba(0,0,0,.8);}
+  35%{color:#e03030;text-shadow:0 0 8px rgba(220,40,40,.9),0 0 20px rgba(220,40,40,.7),0 0 40px rgba(220,40,40,.4),0 2px 6px rgba(0,0,0,.8);}
+  70%{color:#d02828;text-shadow:0 0 6px rgba(210,35,35,.7),0 0 14px rgba(180,20,20,.4),0 2px 6px rgba(0,0,0,.8);}
+  75%{color:#e03030;text-shadow:0 0 8px rgba(220,40,40,.9),0 0 20px rgba(220,40,40,.7),0 0 40px rgba(220,40,40,.4),0 2px 6px rgba(0,0,0,.8);}
+}
 .sub{font-size:.68rem;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px;}
 
 
@@ -52,7 +103,7 @@ h1 span{color:var(--gl);}
 
 /* ── Action Bar ── */
 .ab{display:flex;gap:10px;align-items:center;width:calc(100% - 24px);max-width:600px;margin:10px auto 0;position:relative;z-index:1;}
-.fb{width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;position:relative;transition:border-color .15s, opacity .3s ease;}
+.fb{width:58px;height:58px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;position:relative;transition:border-color .15s, opacity .3s ease;}
 .fb:hover{border-color:var(--gold);}
 .fb:disabled{opacity:0;pointer-events:none;}
 .fd{width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--felt);position:absolute;top:2px;right:2px;display:none;}
@@ -70,23 +121,25 @@ h1 span{color:var(--gl);}
     0 6px 0 rgba(0,0,0,.5),
     inset 0 1px 0 rgba(255,255,255,.2),
     inset 0 -2px 0 rgba(0,0,0,.3);
-  position:relative;overflow:hidden;transition:all .12s;
-  animation:sbPulse 2.5s ease-in-out infinite;
+  position:relative;overflow:hidden;
+  transition:transform .12s ease, box-shadow .12s ease, opacity .35s ease;
+  animation:sbPulse 3s ease-in-out infinite;
 }
 @keyframes sbPulse{
-  0%,100%{box-shadow:0 8px 32px rgba(201,168,76,.6),0 4px 0 #5a3c04,0 6px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(0,0,0,.2);}
-  50%{box-shadow:0 10px 44px rgba(201,168,76,.85),0 4px 0 #5a3c04,0 6px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(0,0,0,.2);}
+  0%,100%{box-shadow:0 6px 24px rgba(201,168,76,.5),0 4px 0 #1a0800,0 6px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3);}
+  50%{box-shadow:0 10px 40px rgba(201,168,76,.8),0 4px 0 #1a0800,0 6px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3);}
 }
 /* Shine sweep */
 .sb::before{
   content:'';position:absolute;top:0;left:-75%;width:50%;height:100%;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
   transform:skewX(-15deg);
-  animation:sbShine 3s ease-in-out infinite;
+  animation:sbShine 4s linear infinite;
 }
 @keyframes sbShine{
-  0%,100%{left:-75%;}
-  40%,60%{left:125%;}
+  0%{left:-75%;}
+  20%{left:125%;}
+  100%{left:125%;}
 }
 .sb::after{
   content:'';position:absolute;inset:0;
@@ -107,23 +160,19 @@ h1 span{color:var(--gl);}
   opacity:0;pointer-events:none;
 }
 .sb:disabled::before{display:none;}
-.sb{transition:all .12s, opacity .3s ease;}
 .sb-txt{position:relative;z-index:1;}
 .sb:disabled .sb-txt{opacity:.3;}
-.rb{width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all .15s, opacity .3s ease;}
+.rb{width:58px;height:58px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:all .15s, opacity .3s ease;}
 .rb:hover{border-color:var(--gold);background:rgba(201,168,76,.12);}
 .rb:disabled{opacity:0;pointer-events:none;}
 
 /* ── Result Strip ── */
 .strip{width:calc(100% - 24px);max-width:600px;margin:10px auto 14px;position:relative;z-index:1;}
-.rs-empty{display:flex;align-items:center;gap:12px;padding:16px 18px;border:1px dashed rgba(201,168,76,.18);border-radius:12px;background:rgba(0,0,0,.15);}
+.rs-empty{display:flex;align-items:center;justify-content:center;padding:14px 18px;border:1px solid rgba(201,168,76,.15);border-radius:12px;background:rgba(0,0,0,.2);text-align:center;}
 .rs-empty.hide{display:none;}
-.rs-chips{display:flex;}
-.cs{width:28px;height:28px;border-radius:50%;border:2px solid rgba(0,0,0,.3);margin-left:-5px;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;color:#fff;}
-.cs:first-child{margin-left:0;}
-.cs-r{background:#b30000;}.cs-g{background:#006622;}.cs-b{background:#0044bb;}
-.rs-empty-txt{color:var(--dim);font-size:.8rem;line-height:1.4;}
-.rs-empty-txt strong{display:block;font-family:'Cinzel',serif;font-size:.6rem;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.rs-empty-txt{color:var(--dim);}
+.rs-empty-txt strong{display:block;font-family:'Cinzel',serif;font-size:.72rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.rs-empty-txt span{font-size:.7rem;color:var(--dim);}
 /* ── Winner card ── */
 @keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
 .rs-winner{
@@ -133,13 +182,13 @@ h1 span{color:var(--gl);}
   border-radius:14px;overflow:hidden;
   box-shadow:0 0 0 1px rgba(201,168,76,.15),0 8px 40px rgba(0,0,0,.6),0 0 60px rgba(201,168,76,.08);
 }
-.rs-winner.show{display:block;animation:winPop .4s cubic-bezier(.34,1.4,.64,1) both;}
+.rs-winner.show{display:block;animation:winPop .35s cubic-bezier(.22,1,.36,1) both;}
 /* Gold shimmer bar at top */
 .rs-winner::before{
   content:'';display:block;height:3px;
   background:linear-gradient(90deg,transparent 0%,#7a5010 15%,#f0c93a 35%,#fff8c0 50%,#f0c93a 65%,#7a5010 85%,transparent 100%);
   background-size:200% auto;
-  animation:shimmer 3s linear infinite;
+  animation:shimmer 2.5s linear infinite;
 }
 .rw-in{padding:0;}
 
@@ -269,7 +318,7 @@ h1 span{color:var(--gl);}
 .footer-note{font-size:.58rem;color:var(--dim);opacity:.6;}
 
 /* ── Confetti particles ── */
-.pt{position:fixed;pointer-events:none;z-index:200;border-radius:50%;animation:pf 1.4s ease forwards;}
+.pt{position:fixed;pointer-events:none;z-index:200;border-radius:50%;animation:pf 1.2s cubic-bezier(.22,1,.36,1) forwards;}
 @keyframes pf{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.02);}}
 </style>
 </head>
@@ -277,7 +326,7 @@ h1 span{color:var(--gl);}
 
 <div class="hd">
   <div class="logo-r"><div class="logo-l"></div><div class="logo-t">✦ Food Roulette ✦</div><div class="logo-l"></div></div>
-  <h1>WHAT'S FOR <span>DINNER?</span></h1>
+  <h1>Get Ready To <span>Shove Your Face.</span></h1>
   <p class="sub">Place your bets · The wheel decides</p>
 </div>
 
@@ -298,8 +347,7 @@ h1 span{color:var(--gl);}
 
 <div class="strip">
   <div class="rs-empty" id="rsE">
-    <div class="rs-chips"><div class="cs cs-r">$</div><div class="cs cs-g">$</div><div class="cs cs-b">$</div></div>
-    <div class="rs-empty-txt"><strong>Waiting for your spin</strong>Hit the wheel and let fate decide</div>
+    <div class="rs-empty-txt"><strong id="rsStatus">Spin the wheel to find your next meal</strong><span id="rsSub">Tap the wheel or hit the button above</span></div>
   </div>
   <div class="rs-winner" id="rsW">
     <div class="rw-in">
@@ -509,7 +557,8 @@ cv.addEventListener('touchend', e => {
 }, {passive:true});
 
 // Radii (pixels) — from outside in
-const RO  = R * .984;  // outer wood edge
+const RO  = R * .960;  // outer wood edge (inner face of raised border)
+const ROB = R * .995;  // raised border outer edge
 const RWI = R * .800;  // inner wood / outer gold band
 const RGA = R * .748;  // outer pocket wall  ← ball bounces here
 const RPI = R * .490;  // inner pocket wall  ← ball bounces here
@@ -518,8 +567,11 @@ const RGC = R * .434;  // spindle collar
 const RGD = R * .394;  // spindle inner
 const RSH = R * .088;  // shaft radius
 const RDM = R * .128;  // dome radius
-const RTK = R * .850;  // ball orbit track (inside gold band)
+const RTK = R * .940;  // ball orbit track (just inside raised border, on wood surface)
 const RMD = (RGA + RPI) / 2;  // pocket midpoint — labels + settled ball
+// Effective bounce walls — inset by ~half ball radius so ball stays visually inside pocket
+const RBO = RGA - R * 0.030;  // outer bounce wall (just inside gold band)
+const RBI = RPI + R * 0.018;  // inner bounce wall (just outside spindle collar)
 
 // Pocket colours
 const RCOL = i => i === 0 ? '#0d8020' : i % 2 === 1 ? '#cc1000' : '#111111';
@@ -560,13 +612,60 @@ function bakeStatic() {
   oc.width = oc.height = SZ;
   const ox = oc.getContext('2d');
 
-  // — Outer donut: wood + gold band —
+  // — Raised outer border (darker wood rim, sits higher) —
+  ox.save();
+  ox.beginPath(); ox.arc(R,R,ROB,0,Math.PI*2,false); ox.arc(R,R,RO,0,Math.PI*2,true); ox.clip();
+
+  // Darker mahogany for raised border
+  ox.beginPath(); ox.arc(R,R,ROB,0,Math.PI*2);
+  const rbg = ox.createRadialGradient(R-R*.3,R-R*.3,R*.05,R,R,ROB);
+  rbg.addColorStop(0,'#7a2c08'); rbg.addColorStop(.3,'#5e2006');
+  rbg.addColorStop(.65,'#3c1404'); rbg.addColorStop(1,'#1a0802');
+  ox.fillStyle=rbg; ox.fill();
+
+  // Border wood grain rings
+  const bwW = ROB - RO;
+  for (let i=0;i<12;i++) {
+    const r = RO + bwW*(0.05+i/11*0.9);
+    ox.beginPath(); ox.arc(R,R,r,0,Math.PI*2);
+    const alpha = i%3===0?0.10:0.04;
+    ox.strokeStyle=i%3===0?`rgba(15,4,1,${alpha})`:`rgba(160,70,25,${alpha})`;
+    ox.lineWidth=i%3===0?1.5:0.8; ox.stroke();
+  }
+
+  // Side lighting on border
+  const bLit=ox.createRadialGradient(R-R*.4,R-R*.4,R*.05,R,R,ROB);
+  bLit.addColorStop(0,'rgba(200,120,60,0.22)');
+  bLit.addColorStop(.5,'rgba(0,0,0,0)');
+  bLit.addColorStop(1,'rgba(0,0,0,0.4)');
+  ox.beginPath(); ox.arc(R,R,ROB,0,Math.PI*2); ox.fillStyle=bLit; ox.fill();
+
+  // Gloss on top face of border
+  ox.beginPath(); ox.arc(R,R,(ROB+RO)*.5,Math.PI*1.05,Math.PI*1.6);
+  ox.strokeStyle='rgba(220,150,70,0.20)'; ox.lineWidth=(ROB-RO)*.5; ox.stroke();
+
+  ox.restore();
+
+  // Inner shadow cast by raised border onto the main wood surface
+  ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2,false); ox.arc(R,R,RO-R*.04,0,Math.PI*2,true);
+  const borderShadow=ox.createRadialGradient(R,R,RO-R*.04,R,R,RO);
+  borderShadow.addColorStop(0,'rgba(0,0,0,0)');
+  borderShadow.addColorStop(1,'rgba(0,0,0,0.45)');
+  ox.fillStyle=borderShadow; ox.fill();
+
+  // Step edge — bright highlight on inner lip of raised border (raised edge catches light)
+  ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2);
+  ox.strokeStyle='rgba(180,100,40,0.5)'; ox.lineWidth=2; ox.stroke();
+  ox.beginPath(); ox.arc(R,R,RO-1,0,Math.PI*2);
+  ox.strokeStyle='rgba(0,0,0,0.6)'; ox.lineWidth=1.5; ox.stroke();
+
+  // — Main wood donut + gold band —
   ox.save();
   ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2,false); ox.arc(R,R,RGA,0,Math.PI*2,true); ox.clip();
 
   // ── Base mahogany tone ──
   ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2);
-  const wg = ox.createRadialGradient(R,R,RWI*0.2, R,R,RO);
+  const wg = ox.createRadialGradient(R,R,RWI*0.3, R,R,RO);
   wg.addColorStop(0,  '#9b3a10');
   wg.addColorStop(.3, '#7a2c0a');
   wg.addColorStop(.6, '#5e2008');
@@ -574,17 +673,14 @@ function bakeStatic() {
   ox.fillStyle = wg; ox.fill();
 
   // ── Concentric ring grain (growth rings) ──
-  // Real wood grain runs in rings, not radial lines
   const woodW = RO - RWI;
   for (let i = 0; i < 28; i++) {
     const t   = i / 27;
     const r   = RWI + woodW * (0.02 + t * 0.96);
-    // Slight ellipse offset simulates cut-through-cylinder effect
     const ox2 = R + Math.sin(i * 1.3) * R * 0.018;
     const oy2 = R + Math.cos(i * 0.9) * R * 0.012;
     ox.beginPath();
     ox.ellipse(ox2, oy2, r, r * (0.97 + Math.sin(i*0.7)*0.02), 0, 0, Math.PI*2);
-    // Alternating dark/light grain bands
     const dark = (i % 3 === 0);
     const alpha = dark ? 0.10 + Math.sin(i)*0.04 : 0.05 + Math.sin(i*1.1)*0.02;
     ox.strokeStyle = dark
@@ -594,7 +690,7 @@ function bakeStatic() {
     ox.stroke();
   }
 
-  // ── Ray figure (medullary rays — the subtle shimmer in mahogany) ──
+  // ── Ray figure ──
   for (let f = 0; f < 18; f++) {
     const fa  = (f / 18) * Math.PI * 2 + 0.15;
     const fr  = RWI + woodW * (0.1 + Math.random() * 0.8);
@@ -608,7 +704,7 @@ function bakeStatic() {
     ox.restore();
   }
 
-  // ── Pore streaks (open-grain character of mahogany) ──
+  // ── Pore streaks ──
   for (let p = 0; p < 60; p++) {
     const pa = (p / 60) * Math.PI * 2;
     const pr = RWI + woodW * (0.05 + (p * 0.618 % 1) * 0.9);
@@ -623,7 +719,7 @@ function bakeStatic() {
     ox.restore();
   }
 
-  // ── Side lighting — warm light from upper-left ──
+  // ── Side lighting ──
   const wLit = ox.createRadialGradient(R-R*.45, R-R*.45, R*.05, R, R, RO*1.1);
   wLit.addColorStop(0,   'rgba(255,160,80,0.18)');
   wLit.addColorStop(.35, 'rgba(200,100,40,0.08)');
@@ -632,8 +728,7 @@ function bakeStatic() {
   ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2);
   ox.fillStyle = wLit; ox.fill();
 
-  // ── Varnish gloss — curved specular highlight ──
-  // Two highlights: main arc top-left, subtle rim reflection
+  // ── Varnish gloss ──
   ox.beginPath();
   ox.arc(R, R, (RO+RWI)*0.5, Math.PI*1.05, Math.PI*1.65);
   const gloss = ox.createLinearGradient(
@@ -650,7 +745,7 @@ function bakeStatic() {
   ox.lineWidth = (RO - RWI) * 0.55;
   ox.stroke();
 
-  // Thin bright lacquer edge
+  // Lacquer edges
   ox.beginPath(); ox.arc(R,R,RO-1,0,Math.PI*2);
   ox.strokeStyle='rgba(255,180,100,0.12)'; ox.lineWidth=2; ox.stroke();
   ox.beginPath(); ox.arc(R,R,RWI+1,0,Math.PI*2);
@@ -730,12 +825,9 @@ function bakeStatic() {
   ox.beginPath(); ox.arc(R,R,R*.014,0,Math.PI*2); ox.fillStyle='#1a0e00'; ox.fill();
 
   ox.restore();
-  staticImg = oc;
+  staticImg=oc;
 }
 
-/* ════════════════════════════════════════════
-   DRAW — called every frame with current wheel angle
-════════════════════════════════════════════ */
 function draw(ang) {
   cx.clearRect(0, 0, SZ, SZ);
 
@@ -813,28 +905,34 @@ function loop() {
   requestAnimationFrame(loop);
 
   if (spinning) {
-    // Wheel decelerates
-    wV *= 0.9986;
-    if (Math.abs(wV) < 0.00004) wV = 0;
+    // Smooth continuous deceleration using smoothstep blend:
+    // Fast decay when spinning hard, gradually transitions to gentle coast.
+    // No sudden gear-change — feels like a real roulette wheel coasting to rest.
+    const wvAbs   = Math.abs(wV);
+    const wvHigh  = 0.18, wvLow = 0.025;
+    const t       = Math.max(0, Math.min(1, (wvAbs - wvLow) / (wvHigh - wvLow)));
+    const smooth  = t * t * (3 - 2 * t);  // smoothstep
+    const decay   = 0.986 + (0.977 - 0.986) * smooth;  // slow→fast
+    wV *= decay;
+    if (Math.abs(wV) < 0.003) wV = 0.003;
     wAng += wV;
 
     // — Ball state machine —
     if (bP === 'orbit') {
-      // Ball races outer track counter to wheel
+      // Ball races along outer wood track, decelerating
       bVA  *= 0.9952;
       bA   += bVA;
       bRad  = RTK;
       if (Math.abs(bVA) < 0.013) { bP = 'fall'; bVR = 0; }
 
     } else if (bP === 'fall') {
-      // Ball drops inward under gravity
+      // Ball gravity-drops inward across wood toward pocket
       bVR  += 0.18;
       bRad -= bVR;
       bVA  *= 0.985;
       bA   += bVA;
-      if (bRad <= RGA) {
-        // Hit outer wall — start bouncing with fresh pixel-scale velocity
-        bRad = RGA;
+      if (bRad <= RBO) {
+        bRad = RBO;
         bVR  = -(R * 0.20 * (0.85 + Math.random() * 0.30));
         bVA += (Math.random() - 0.5) * 0.10;
         bP   = 'bounce';
@@ -842,70 +940,96 @@ function loop() {
       }
 
     } else if (bP === 'bounce') {
-      // Ball bounces wall-to-wall inside pocket zone.
-      // Pure wall damping — no gravity term — prevents fixed-point hovering.
       bounceF++;
+      const pArc = (Math.PI * 2) / segs.length;
+
+      // Angular + radial physics
       bVA  *= 0.975;
       bA   += bVA;
       bRad += bVR;
 
-      if (bRad >= RGA) {
-        bRad = RGA;
-        bVR  = -(Math.abs(bVR) * 0.74);      // outer wall: 26% energy loss
-        bVA += (Math.random() - 0.5) * 0.09; // wall deflects angular path
-      } else if (bRad <= RPI) {
-        bRad = RPI;
-        bVR  = Math.abs(bVR) * 0.72;         // inner wall: 28% energy loss
+      // Radial wall bounces — pure damping, no gravity
+      if (bRad >= RBO) {
+        bRad = RBO;
+        bVR  = -(Math.abs(bVR) * 0.74);
+        bVA += (Math.random() - 0.5) * 0.09;
+      } else if (bRad <= RBI) {
+        bRad = RBI;
+        bVR  = Math.abs(bVR) * 0.72;
         bVA += (Math.random() - 0.5) * 0.09;
       }
 
-      // Fret hit: angular deflection only, radial momentum unchanged
+      // Fret interaction — deflect when fast, hard wall when slow
       if (segs.length > 0) {
-        const arc = (Math.PI * 2) / segs.length;
-        const rel = ((bA - wAng) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-        const ci  = Math.floor(rel / arc) % segs.length;
-        const dSa = (rel - segs[ci].sa + Math.PI*2) % (Math.PI*2);
-        const dEa = (segs[ci].ea - rel + Math.PI*2) % (Math.PI*2);
-        if (Math.min(dSa, dEa) < arc * 0.05) {
-          bVA = -bVA * 0.7 + (Math.random() - 0.5) * 0.18;
+        const rel  = ((bA - wAng) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
+        const ci   = Math.floor(rel / pArc) % segs.length;
+        const dSa  = (rel - segs[ci].sa + Math.PI*2) % (Math.PI*2);
+        const dEa  = (segs[ci].ea - rel + Math.PI*2) % (Math.PI*2);
+
+        if (Math.min(dSa, dEa) < pArc * 0.05) {
+          const fretStrength = Math.min(1, Math.abs(wV) / 0.06);
+          if (fretStrength > 0.3) {
+            // Fast — chaotic deflection
+            bVA = -bVA * (0.5 + 0.2 * fretStrength) + (Math.random() - 0.5) * 0.18 * fretStrength;
+          } else {
+            // Slow — hard wall, ball stays in pocket
+            if (dSa < dEa && bVA < 0) bVA = Math.abs(bVA) * 0.35;
+            if (dEa < dSa && bVA > 0) bVA = -Math.abs(bVA) * 0.35;
+            // Angular clamp within pocket bounds + margin
+            const margin = pArc * 0.04;
+            if (dSa < margin) bA = wAng + segs[ci].sa + margin;
+            if (dEa < margin) bA = wAng + segs[ci].ea - margin;
+          }
         }
       }
 
-      // Settle when amplitude decays below threshold (pixel units for bVR)
+      // Settle
       if (bounceF >= 40 && Math.abs(bVR) < R * 0.04 && Math.abs(bVA) < 0.04) {
-        const arc = (Math.PI * 2) / segs.length;
         const rel = ((bA - wAng) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-        wIdx  = Math.floor(rel / arc) % segs.length;
+        wIdx  = Math.floor(rel / pArc) % segs.length;
         bA    = wAng + segs[wIdx].ma;
-        bRad  = RMD;
-        bVA   = 0; bVR = 0;
+        bRad  = RMD; bVA = 0; bVR = 0;
         bP    = 'locked';
-        onDone();
+        requestAnimationFrame(onDone);  // defer UI update to next frame so physics frame stays clean
       }
 
     } else if (bP === 'locked') {
-      // Ball locked in pocket, rotates with wheel as it coasts to a stop
+      // Ball rides with wheel until wheel reaches idle speed
       bA   = wAng + segs[wIdx].ma;
       bRad = RMD;
-      if (wV === 0) {
+      // Park when wheel is at or near idle speed (wV floors at 0.003)
+      if (Math.abs(wV) <= 0.0032) {
         parkedOffset = segs[wIdx].ma;
         bP       = 'parked';
         spinning  = false;
+        wV        = 0.003;
       }
     }
 
   } else {
-    // Idle: slow drift
-    wAng += 0.0008;
+    // Idle: smooth constant drift
+    wV    = 0.003;
+    wAng += wV;
   }
 
   // Render
   draw(wAng);
+  // Ball always drawn when parked or locked — stays in pocket during idle drift
   if (bP === 'parked') {
     drawBall(R + Math.cos(wAng + parkedOffset) * RMD,
              R + Math.sin(wAng + parkedOffset) * RMD);
+  } else if (bP === 'locked') {
+    drawBall(R + Math.cos(wAng + segs[wIdx].ma) * RMD,
+             R + Math.sin(wAng + segs[wIdx].ma) * RMD);
   } else if (bP !== 'idle') {
-    const cr = Math.max(RPI, Math.min(RTK + 12, bRad));
+    let cr;
+    if (bP === 'bounce') {
+      // During bounce: strictly inside pocket zone
+      cr = Math.max(RBI, Math.min(RBO, bRad));
+    } else {
+      // During orbit/fall: ball travels from raised border inward to pocket
+      cr = Math.max(RGA, Math.min(RTK, bRad));
+    }
     drawBall(R + Math.cos(bA) * cr, R + Math.sin(bA) * cr);
   }
 }
@@ -952,14 +1076,18 @@ function doSpin() {
   const arc    = (Math.PI * 2) / pool.length;
   const pMid   = (wIdx + .5) * arc;
   const tFinal = -pMid - Math.PI / 2;
-  const extra  = 5 + Math.floor(Math.random() * 4);
+  const extra  = 4 + Math.floor(Math.random() * 3);
   const total  = Math.PI*2*extra + ((tFinal - wAng) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-  wV = total * 0.0018;
+  // Normalize spin speed by canvas size so it looks same on all screen sizes
+  const sizeScale = Math.min(1, SZ / 600);
+  wV = total * 0.010 * sizeScale;
 
   // Ball launches fast, counter to wheel
   bA   = Math.random() * Math.PI * 2;
   bRad = RTK;
-  bVA  = -(0.24 + Math.random() * 0.06);
+  // Scale ball angular speed so it looks same visual speed on all screens
+  const ballScale = 600 / Math.max(SZ, 300);
+  bVA  = -(0.24 + Math.random() * 0.06) * Math.min(ballScale, 1.8);
   bVR  = 0;
   bP   = 'orbit';
 }
@@ -1077,7 +1205,7 @@ function onDone() {
 
   elRsE.classList.add('hide');
   setTimeout(() => elRsW.classList.add('show'), 80);
-  confetti();
+  setTimeout(confetti, 120);  // delay confetti slightly so card animation renders first
 }
 
 function renderHistory() {
@@ -1297,7 +1425,7 @@ document.fonts.ready.then(async () => {
 });
 
 function showLocStatus(msg) {
-  const el = document.getElementById('rsE').querySelector('strong');
+  const el = document.getElementById('rsStatus');
   if (el) el.textContent = msg;
 }
 
