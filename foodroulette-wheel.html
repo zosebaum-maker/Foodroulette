@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Food Roulette</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ── Reset & Tokens ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -52,16 +52,67 @@ h1 span{color:var(--gl);}
 
 /* ── Action Bar ── */
 .ab{display:flex;gap:10px;align-items:center;width:calc(100% - 24px);max-width:600px;margin:10px auto 0;position:relative;z-index:1;}
-.fb{width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;position:relative;transition:border-color .15s;}
+.fb{width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;position:relative;transition:border-color .15s, opacity .3s ease;}
 .fb:hover{border-color:var(--gold);}
+.fb:disabled{opacity:0;pointer-events:none;}
 .fd{width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--felt);position:absolute;top:2px;right:2px;display:none;}
 .fd.on{display:block;}
-.sb{flex:1;padding:14px;border:none;border-radius:10px;cursor:pointer;font-family:'Cinzel',serif;font-size:1rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1a0800;background:linear-gradient(145deg,var(--gl),var(--gold) 55%,var(--gd));box-shadow:0 5px 20px rgba(201,168,76,.4),0 2px 0 var(--gd);position:relative;overflow:hidden;transition:all .15s;}
-.sb::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.18),transparent 55%);}
-.sb:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 9px 28px rgba(201,168,76,.55),0 2px 0 var(--gd);}
-.sb:disabled{background:rgba(255,255,255,.07);color:rgba(255,255,255,.2);box-shadow:none;cursor:not-allowed;}
-.rb{width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all .15s;}
+.sb{
+  flex:1;padding:18px 14px;border:none;border-radius:12px;cursor:pointer;
+  font-family:'Cinzel',serif;font-size:1.05rem;font-weight:900;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.5), 0 0 20px rgba(255,220,100,.4);
+  background:linear-gradient(160deg,#2a1800 0%,#6a3c08 20%,#c9a84c 45%,#f0c93a 55%,#c9a84c 70%,#6a3c08 85%,#2a1800 100%);
+  box-shadow:
+    0 8px 32px rgba(201,168,76,.6),
+    0 4px 0 #1a0800,
+    0 6px 0 rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.2),
+    inset 0 -2px 0 rgba(0,0,0,.3);
+  position:relative;overflow:hidden;transition:all .12s;
+  animation:sbPulse 2.5s ease-in-out infinite;
+}
+@keyframes sbPulse{
+  0%,100%{box-shadow:0 8px 32px rgba(201,168,76,.6),0 4px 0 #5a3c04,0 6px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(0,0,0,.2);}
+  50%{box-shadow:0 10px 44px rgba(201,168,76,.85),0 4px 0 #5a3c04,0 6px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(0,0,0,.2);}
+}
+/* Shine sweep */
+.sb::before{
+  content:'';position:absolute;top:0;left:-75%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:skewX(-15deg);
+  animation:sbShine 3s ease-in-out infinite;
+}
+@keyframes sbShine{
+  0%,100%{left:-75%;}
+  40%,60%{left:125%;}
+}
+.sb::after{
+  content:'';position:absolute;inset:0;
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(255,255,255,.22) 0%,transparent 50%);
+  pointer-events:none;
+}
+.sb:hover:not(:disabled){
+  transform:translateY(-3px);
+  box-shadow:0 14px 48px rgba(201,168,76,.8),0 4px 0 #5a3c04,0 8px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(0,0,0,.2);
+  animation:none;
+}
+.sb:active:not(:disabled){
+  transform:translateY(2px);
+  box-shadow:0 3px 12px rgba(201,168,76,.4),0 1px 0 #5a3c04,0 2px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(0,0,0,.2);
+}
+.sb:disabled{
+  opacity:0;pointer-events:none;
+}
+.sb:disabled::before{display:none;}
+.sb{transition:all .12s, opacity .3s ease;}
+.sb-txt{position:relative;z-index:1;}
+.sb:disabled .sb-txt{opacity:.3;}
+.rb{width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all .15s, opacity .3s ease;}
 .rb:hover{border-color:var(--gold);background:rgba(201,168,76,.12);}
+.rb:disabled{opacity:0;pointer-events:none;}
 
 /* ── Result Strip ── */
 .strip{width:calc(100% - 24px);max-width:600px;margin:10px auto 14px;position:relative;z-index:1;}
@@ -241,7 +292,7 @@ h1 span{color:var(--gl);}
 
 <div class="ab">
   <button class="fb" id="fBtn" onclick="openSheet();event.stopPropagation();">⚙️<div class="fd" id="fDot"></div></button>
-  <button class="sb" id="sBtn" onclick="doSpin()">Spin the Wheel</button>
+  <button class="sb" id="sBtn" onclick="doSpin()"><span class="sb-txt">Let Fate Decide</span></button>
   <button class="rb" id="rndBtn" onclick="doRandomize()" title="Randomize">🎲</button>
 </div>
 
@@ -863,7 +914,9 @@ function loop() {
    SPIN
 ════════════════════════════════════════════ */
 // Cached DOM refs
-const elSBtn = document.getElementById('sBtn');
+const elSBtn  = document.getElementById('sBtn');
+const elFBtn  = document.getElementById('fBtn');
+const elRndBtn= document.getElementById('rndBtn');
 const elRsW  = document.getElementById('rsW');
 const elRsE  = document.getElementById('rsE');
 
@@ -888,8 +941,9 @@ function doSpin() {
   }
   elRsE.classList.remove('hide');
   ring.classList.add('spinning');
-  elSBtn.disabled    = true;
-  elSBtn.textContent = 'Spinning…';
+  elSBtn.disabled = true;
+  elFBtn.disabled = true;
+  elRndBtn.disabled = true;
 
   buildSegs(pool);
   wIdx = Math.floor(Math.random() * pool.length);
@@ -936,8 +990,10 @@ function onDone() {
   if (fired) return;
   fired = true;
   ring.classList.remove('spinning');
-  elSBtn.disabled    = false;
-  elSBtn.textContent = 'Spin the Wheel';
+  elSBtn.disabled = false;
+  elSBtn.innerHTML = '<span class="sb-txt">Let Fate Decide</span>';
+  elFBtn.disabled = false;
+  elRndBtn.disabled = false;
 
   const w = segs[wIdx];
   if (!w) return;
