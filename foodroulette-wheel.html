@@ -86,7 +86,7 @@ h1 span{
   70%{color:#d02828;text-shadow:0 0 6px rgba(210,35,35,.7),0 0 14px rgba(180,20,20,.4),0 2px 6px rgba(0,0,0,.8);}
   75%{color:#e03030;text-shadow:0 0 8px rgba(220,40,40,.9),0 0 20px rgba(220,40,40,.7),0 0 40px rgba(220,40,40,.4),0 2px 6px rgba(0,0,0,.8);}
 }
-.sub{font-size:.68rem;color:rgba(255,255,255,.75);letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px;}
+.sub{font-size:.62rem;color:rgba(255,255,255,.6);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
 
 
 
@@ -100,11 +100,22 @@ h1 span{
 .wz{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;margin-top:6px;}
 .wr{position:relative;display:flex;align-items:center;justify-content:center;}
 #wc{display:block;border-radius:50%;cursor:pointer;box-shadow:0 10px 40px rgba(0,0,0,.7);}
+@media(max-width:620px){.wz{padding:0;}.wr{width:100%;}}
 
 /* ── Action Bar ── */
-.ab{display:flex;gap:10px;align-items:center;width:calc(100% - 24px);max-width:600px;margin:10px auto 0;position:relative;z-index:1;}
-.fb{width:58px;height:58px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;position:relative;transition:border-color .15s, opacity .3s ease;}
-.fb:hover{border-color:var(--gold);}
+.ab{display:flex;gap:10px;align-items:center;width:calc(100% - 24px);max-width:600px;margin:20px auto 0;position:relative;z-index:1;}
+.fb{
+  width:44px;height:44px;border-radius:6px;
+  background:transparent;
+  border-top:1px solid rgba(201,168,76,.35);
+  border-bottom:1px solid rgba(201,168,76,.35);
+  border-left:1px solid rgba(201,168,76,.15);
+  border-right:1px solid rgba(201,168,76,.15);
+  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;position:relative;transition:all .2s ease, opacity .3s ease;
+  color:rgba(201,168,76,.7);
+}
+.fb:hover{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.6);color:var(--gold);}
 .fb:disabled{opacity:0;pointer-events:none;}
 .fd{width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--felt);position:absolute;top:2px;right:2px;display:none;}
 .fd.on{display:block;}
@@ -162,8 +173,18 @@ h1 span{
 .sb:disabled::before{display:none;}
 .sb-txt{position:relative;z-index:1;}
 .sb:disabled .sb-txt{opacity:.3;}
-.rb{width:58px;height:58px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:all .15s, opacity .3s ease;}
-.rb:hover{border-color:var(--gold);background:rgba(201,168,76,.12);}
+.rb{
+  width:44px;height:44px;border-radius:6px;
+  background:transparent;
+  border-top:1px solid rgba(201,168,76,.35);
+  border-bottom:1px solid rgba(201,168,76,.35);
+  border-left:1px solid rgba(201,168,76,.15);
+  border-right:1px solid rgba(201,168,76,.15);
+  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;transition:all .2s ease, opacity .3s ease;
+  color:rgba(201,168,76,.7);
+}
+.rb:hover{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.6);color:var(--gold);}
 .rb:disabled{opacity:0;pointer-events:none;}
 
 /* ── Result Strip — unified vp-card ── */
@@ -176,55 +197,30 @@ h1 span{
 .rs-empty-txt{width:100%;}
 
 /* ── Unified video poker style card ── */
-.vp-card{
-  /* Casino felt table */
-  background:#0d5c2a;
-  border-radius:12px;
-  border:2px solid #c9a84c;
-  overflow:hidden;
-  box-shadow:
-    0 0 0 4px #0d5c2a,
-    0 0 0 6px #c9a84c,
-    0 0 0 10px rgba(0,0,0,.5),
-    0 12px 40px rgba(0,0,0,.7);
-  font-family:'Cinzel',serif;
-  /* Felt weave texture */
-  background-image:
-    repeating-linear-gradient(47deg,transparent,transparent 2px,rgba(0,0,0,.06) 2px,rgba(0,0,0,.06) 3px),
-    repeating-linear-gradient(-47deg,transparent,transparent 2px,rgba(255,255,255,.025) 2px,rgba(255,255,255,.025) 3px),
-    radial-gradient(ellipse 100% 80% at 50% 0%,rgba(255,255,255,.06) 0%,transparent 60%),
-    linear-gradient(180deg,#0f6b30 0%,#0d5c2a 40%,#0a4d22 100%);
-}
-/* Red banner top — like the table's decorative border */
+.vp-card--spin{ /* no extra styles needed */ }
+.vp-card{ font-family:'Cinzel',serif; }
+
+/* No box — content floats on the felt */
 .vp-header{
-  background:linear-gradient(90deg,#8b0000,#cc0000 30%,#dd0000 50%,#cc0000 70%,#8b0000);
-  border-bottom:3px solid #c9a84c;
-  border-top:none;
-  padding:8px 14px;
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 14px 8px;
   position:relative;
 }
-/* Gold lines top and bottom of header */
-.vp-header::before{
-  content:'';position:absolute;bottom:-5px;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,#c9a84c 20%,#fff8c0 50%,#c9a84c 80%,transparent);
+.vp-header::after{
+  content:'';position:absolute;bottom:0;left:12px;right:12px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.35) 20%,rgba(201,168,76,.55) 50%,rgba(201,168,76,.35) 80%,transparent);
 }
 .vp-header-txt{
-  font-family:'Cinzel',serif;font-size:.72rem;font-weight:900;
-  letter-spacing:.25em;text-transform:uppercase;color:#fff;
-  text-shadow:0 1px 4px rgba(0,0,0,.6);
+  font-family:'Cinzel',serif;font-size:.78rem;font-weight:700;
+  letter-spacing:.28em;text-transform:uppercase;color:rgba(201,168,76,.9);
+  white-space:nowrap;
 }
-.vp-header-icons{font-size:.9rem;letter-spacing:3px;opacity:.9;}
-/* Body — felt surface */
+.vp-header-suit{font-size:.75rem;letter-spacing:5px;font-family:serif;white-space:nowrap;}
+.suit-b{color:rgba(30,30,30,.95);}
+.suit-r{color:rgba(220,60,60,.85);}
 .vp-body{
   background:transparent;
-  padding:16px 16px 12px;
-  position:relative;
-}
-/* Subtle gold rule lines across felt — like table layout lines */
-.vp-body::before{
-  content:'';position:absolute;left:12px;right:12px;top:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(201,168,76,.25) 20%,rgba(201,168,76,.4) 50%,rgba(201,168,76,.25) 80%,transparent);
+  padding:14px 12px 10px;
 }
 /* Spinning state — food icons row */
 .vp-spin-row{
@@ -241,24 +237,33 @@ h1 span{
 .vp-food:nth-child(4){animation-delay:.75s;}
 .vp-food:nth-child(5){animation-delay:1s;}
 @keyframes vpBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
-.vp-spin-msg{
-  text-align:center;
-  font-size:.75rem;font-weight:700;letter-spacing:.15em;
-  text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:4px;
+.vp-spin-msg{display:none;}
+.vp-spin-simple{
+  padding:16px 20px;
+  display:flex;align-items:center;gap:12px;
+}
+.vp-spin-rule{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.3));}
+.vp-spin-rule.right{background:linear-gradient(270deg,transparent,rgba(201,168,76,.3));}
+.vp-spin-diamond{color:rgba(201,168,76,.6);font-size:.5rem;flex-shrink:0;}
+.vp-spin-corner{display:none;}
+.vp-spin-center{
+  font-family:'Cinzel',serif;font-size:.6rem;font-weight:700;
+  letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(201,168,76,.8);text-align:center;white-space:nowrap;
 }
 /* Winner state — restaurant info */
 .vp-winner-emoji{
-  font-size:4rem;line-height:1;display:block;text-align:center;
-  margin-bottom:6px;
-  filter:drop-shadow(2px 2px 0 rgba(0,0,0,.12));
+  font-size:4.5rem;line-height:1;display:block;text-align:center;
+  margin-bottom:8px;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));
   animation:winnerPop .4s cubic-bezier(.34,1.6,.64,1) both;
 }
 @keyframes winnerPop{0%{transform:scale(0) rotate(-15deg);}100%{transform:scale(1) rotate(0);}}
 .vp-winner-name{
-  font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;
+  font-family:'Cinzel',serif;font-size:1.5rem;font-weight:900;
   color:#fff;text-align:center;letter-spacing:.06em;text-transform:uppercase;
-  display:block;line-height:1.1;margin-bottom:8px;
-  text-shadow:0 2px 8px rgba(0,0,0,.6);
+  display:block;line-height:1.1;margin-bottom:10px;
+  text-shadow:0 2px 20px rgba(0,0,0,.8),0 0 40px rgba(0,0,0,.4);
 }
 .vp-pills{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:6px;}
 .vp-pill{
@@ -277,26 +282,41 @@ h1 span{
 .rw-photo-attr a{color:#888;text-decoration:none;}
 /* Items */
 .vp-items{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(201,168,76,.2);}
-.vp-item{flex:1;background:rgba(0,0,0,.2);border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:8px 10px;}
+.vp-item{flex:1;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:8px 10px;}
 .vp-item-emoji{font-size:1.2rem;display:block;margin-bottom:4px;}
 .vp-item-name{font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:2px;}
 .vp-item-desc{font-size:.63rem;color:rgba(255,255,255,.5);line-height:1.3;}
 /* Contact row */
 .vp-contact{display:flex;gap:6px;margin-top:8px;}
+.vp-share-btn{
+  padding:8px 14px;border-radius:8px;font-size:.78rem;font-weight:700;
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
+  font-family:'Cinzel',serif;letter-spacing:.08em;text-transform:uppercase;
+  background:linear-gradient(135deg,#c9a84c,#f0c93a,#c9a84c);
+  color:#1a0800;
+  box-shadow:0 3px 12px rgba(201,168,76,.45),0 1px 0 rgba(255,255,255,.2) inset;
+  transition:all .15s;
+  animation:sharePulse 2.5s ease-in-out infinite;
+  width:100%;
+}
+.vp-share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(201,168,76,.65);}
+@keyframes sharePulse{
+  0%,100%{box-shadow:0 3px 12px rgba(201,168,76,.45),0 1px 0 rgba(255,255,255,.2) inset;}
+  50%{box-shadow:0 4px 18px rgba(201,168,76,.75),0 1px 0 rgba(255,255,255,.2) inset;}
+}
 .vp-contact-btn{
-  flex:1;padding:8px 12px;border-radius:8px;font-size:.78rem;font-weight:600;
-  text-decoration:none;border:1px solid rgba(201,168,76,.2);
-  background:rgba(0,0,0,.3);color:#fff;cursor:pointer;
-  transition:border-color .15s,background .15s;display:flex;align-items:center;justify-content:center;gap:5px;
+  flex:1;padding:8px 10px;border-radius:6px;font-size:.75rem;font-weight:600;
+  text-decoration:none;border:1px solid rgba(255,255,255,.1);
+  background:rgba(0,0,0,.25);color:rgba(255,255,255,.8);cursor:pointer;
+  transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;
   font-family:'DM Sans',sans-serif;
 }
-.vp-contact-btn:hover{border-color:var(--gold);background:rgba(201,168,76,.08);}
+.vp-contact-btn:hover{border-color:rgba(201,168,76,.4);color:#fff;background:rgba(0,0,0,.4);}
 /* Footer bar */
 .vp-footer{
-  padding:12px 16px 14px;
+  padding:10px 12px 14px;
   display:flex;align-items:center;justify-content:center;
-  border-top:1px solid rgba(201,168,76,.25);
-  background:rgba(0,0,0,.1);
+  border-top:1px solid rgba(201,168,76,.15);
 }
 .vp-footer-btn{
   flex:1;padding:11px;border:none;border-radius:9px;
@@ -392,7 +412,7 @@ h1 span{
   border-top:1px solid rgba(201,168,76,.15);
   text-align:center;
 }
-.footer-google{height:18px;display:block;margin:0 auto 8px;}
+.footer-google{height:22px;display:block;margin:0 auto 10px;filter:brightness(0) invert(1);opacity:.7;}
 .footer-links{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
 .footer-links a{font-size:.62rem;color:var(--dim);text-decoration:none;}
 .footer-links a:hover{color:var(--gold);}
@@ -415,39 +435,29 @@ h1 span{
 
 <div class="fs" id="fSum"></div>
 
-<div class="wz">
+<div class="wz" style="position:relative;">
   <div class="wr" id="wRing">
     <canvas id="wc" onclick="doSpin()"></canvas>
   </div>
+
 </div>
 
 <div class="ab">
-  <button class="fb" id="fBtn" onclick="openSheet();event.stopPropagation();">⚙️<div class="fd" id="fDot"></div></button>
+  <button class="fb" id="fBtn" onclick="openSheet();event.stopPropagation();">⚙<div class="fd" id="fDot"></div></button>
   <button class="sb" id="sBtn" onclick="doSpin()"><span class="sb-txt">Let Fate Decide</span></button>
   <button class="rb" id="rndBtn" onclick="doRandomize()" title="Randomize">🎲</button>
 </div>
 
 <div class="strip">
-  <div id="vpCard" class="vp-card">
+  <div id="vpCard" class="vp-card vp-card--spin">
     <!-- SPIN STATE (default) -->
     <div id="vpSpin">
-      <div class="vp-header">
-        <span class="vp-header-icons">🎰 🎲</span>
-        <span class="vp-header-txt" id="rsStatus">Spin to reveal your fate</span>
-        <span class="vp-header-icons">🎲 🎰</span>
-      </div>
-      <div class="vp-body">
-        <div class="vp-spin-row">
-          <span class="vp-food">🍕</span>
-          <span class="vp-food">🍔</span>
-          <span class="vp-food">🌮</span>
-          <span class="vp-food">🍣</span>
-          <span class="vp-food">🥩</span>
-        </div>
-        <div class="vp-spin-msg" id="rsSub">No judgment &bull; No refunds</div>
-      </div>
-      <div class="vp-footer">
-        <span style="font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;color:rgba(201,168,76,.8);letter-spacing:.3em;text-transform:uppercase;text-shadow:0 0 12px rgba(201,168,76,.3);">GOOD LUCK</span>
+      <div class="vp-spin-simple">
+        <div class="vp-spin-rule"></div>
+        <span class="vp-spin-diamond">◆</span>
+        <div class="vp-spin-center" id="rsStatus">Spin to reveal your fate</div>
+        <span class="vp-spin-diamond">◆</span>
+        <div class="vp-spin-rule right"></div>
       </div>
     </div>
     <!-- WINNER STATE (hidden until spin) -->
@@ -455,9 +465,9 @@ h1 span{
       <div class="rw-photo-wrap" id="wPhotoWrap" style="display:none"><img class="rw-photo" id="wPhoto" src="" alt=""></div>
       <div class="rw-photo-attr" id="wPhotoAttr" style="display:none"></div>
       <div class="vp-header">
-        <span class="vp-header-icons">🎰 🎲</span>
+        <span class="vp-header-suit"><span class="suit-b">♠</span> <span class="suit-r">♥</span></span>
         <span class="vp-header-txt" id="wL">Tonight's Restaurant</span>
-        <span class="vp-header-icons">🎲 🎰</span>
+        <span class="vp-header-suit"><span class="suit-r">♦</span> <span class="suit-b">♣</span></span>
       </div>
       <div class="vp-body">
         <span class="vp-winner-emoji" id="wE">🍕</span>
@@ -470,27 +480,22 @@ h1 span{
           <a class="vp-contact-btn" id="wWebsite" href="#" target="_blank" style="display:none">🌐 Website</a>
           <a class="vp-contact-btn" id="wMaps"    href="#" target="_blank" style="display:none">🗺️ Maps</a>
         </div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="vp-share-btn" id="wShare" onclick="doShare()">📤 Share the Verdict</button>
+        </div>
       </div>
-      <div class="vp-footer">
-        <a class="vp-footer-btn red" id="wLink" href="#" target="_blank">🛵 Order on DoorDash</a>
+      <div class="vp-footer" style="flex-direction:column;gap:8px;">
+        <a class="vp-footer-btn" id="wLink" href="#" target="_blank">🛵 Order on DoorDash</a>
       </div>
     </div>
   </div>
 
 
-<!-- Recent spins history -->
-<div class="hist" id="histSection" style="display:none">
-  <div class="hist-hd">
-    <div class="hist-hd-line"></div>
-    <div class="hist-hd-txt">Recent Spins</div>
-    <div class="hist-hd-line"></div>
-  </div>
-  <div class="hist-board" id="histBoard"></div>
-</div>
+
 
 <!-- Footer: Google attribution + legal links -->
 <footer class="app-footer">
-  <img src="https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-non-white3.png"
+  <img src="https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3.png"
        alt="Powered by Google" translate="no" class="footer-google">
   <div class="footer-links">
     <a href="privacy.html" target="_blank">Privacy Policy</a>
@@ -617,7 +622,6 @@ const mode = 'restaurant';
 let spinning = false;
 let rndRest  = null;
 const F = { cuisines:['any'], budget:2, dist:'any', rating:0, openNow:false, diet:[] };
-const history = [];
 let hasSpunOnce = false;
 
 const WORKER_URL = 'https://frworker.zosebaum.workers.dev';
@@ -696,7 +700,7 @@ const cv   = document.getElementById('wc');
 const cx   = cv.getContext('2d');
 const ring = document.getElementById('wRing');
 
-const SZ = Math.min(600, window.innerWidth - 8);
+const SZ = Math.min(600, window.innerWidth);
 const R  = SZ / 2;
 cv.width = cv.height = SZ;
 cv.style.width = cv.style.height = SZ + 'px';
@@ -919,7 +923,10 @@ function drawBall(bx,by) {
 ═══════════════════════════════════════════ */
 let bP='idle', bA=0, bRad=0, bVA=0, bVR=0, wV=0, fired=false, parkedOffset=0, bounceF=0;
 
+document.addEventListener('visibilitychange', () => { if (!document.hidden) requestAnimationFrame(loop); });
+
 function loop() {
+  if (document.hidden) return;
   requestAnimationFrame(loop);
   if (spinning) {
     // Smooth continuous deceleration (smoothstep blend)
@@ -1003,10 +1010,9 @@ function doSpin() {
   if (!pool.length) { alert('No restaurants match your filters!'); return; }
   spinning=true; fired=false; bP='idle'; parkedOffset=0; bounceF=0;
   // Show spin state
-  elVpWin.style.display='none'; elVpSpin.style.display='';
+  elVpWin.style.display='none'; elVpSpin.style.display=''; document.getElementById('vpCard').classList.add('vp-card--spin');
   if (hasSpunOnce) {
-    document.getElementById('rsStatus').textContent='Awaiting next spin…';
-    document.getElementById('rsSub').textContent='';
+    document.getElementById('rsStatus').textContent='Awaiting your spin';
   }
   ring.classList.add('spinning');
   elSBtn.disabled=true; elFBtn.disabled=true; elRndBtn.disabled=true;
@@ -1036,8 +1042,7 @@ const elWPhone=document.getElementById('wPhone');
 const elWWebsite=document.getElementById('wWebsite');
 const elWMaps=document.getElementById('wMaps');
 const elWItms=document.getElementById('wItems');
-const elHist=document.getElementById('histSection');
-const elHBoard=document.getElementById('histBoard');
+
 
 function onDone() {
   if (fired) return; fired=true;
@@ -1072,26 +1077,13 @@ function onDone() {
     elWItms.style.display='';
     elWItms.innerHTML=item.items.map(it=>`<div class="vp-item"><span class="vp-item-emoji">${it.emoji}</span><span class="vp-item-name">${it.name}</span><span class="vp-item-desc">${it.desc}</span></div>`).join('');
   } else { elWItms.style.display='none'; elWItms.innerHTML=''; }
-  const pCol=w.col==='#cc1000'?'red':w.col==='#0d8020'?'green':'black';
-  history.unshift({emoji:item.emoji,name:item.name,sub:`${item.cuisine}·${item.price}`,price:item.price,open:item.open,col:pCol});
-  if (history.length>5) history.pop();
-  renderHistory();
+
   hasSpunOnce=true;
-  setTimeout(()=>{ elVpSpin.style.display='none'; elVpWin.style.display=''; elVpWin.style.animation='winPop .35s cubic-bezier(.22,1,.36,1) both'; },80);
+  setTimeout(()=>{ elVpSpin.style.display='none'; elVpWin.style.display=''; elVpWin.style.animation='winPop .35s cubic-bezier(.22,1,.36,1) both'; document.getElementById('vpCard').classList.remove('vp-card--spin'); },80);
   setTimeout(confetti,120);
 }
 
-function renderHistory() {
-  if (!history.length) { elHist.style.display='none'; return; }
-  elHist.style.display='';
-  elHBoard.innerHTML=history.map((h,i)=>`
-    <div class="hist-row ${i===0?'newest':''}">
-      <div class="hist-num">${i+1}</div>
-      <div class="hist-dot ${h.col}">${h.emoji}</div>
-      <div class="hist-info"><div class="hist-name">${h.name}</div><div class="hist-sub">${h.sub}</div></div>
-      <div class="hist-badge">${h.open?'● Open':'○ Closed'}</div>
-    </div>`).join('');
-}
+
 
 function getActivePool() { return rndRest||getPool(); }
 function getPool() {
@@ -1113,6 +1105,40 @@ function doRandomize() {
   const btn=document.getElementById('rndBtn');
   btn.style.transition='transform .4s ease'; btn.style.transform='rotate(360deg)';
   setTimeout(()=>{btn.style.transition=''; btn.style.transform='';},420);
+}
+
+function doSkip() {
+  const w = segs[wIdx];
+  if (!w) return;
+  // Remove this restaurant from the active pool and respin immediately
+  const skippedName = w.item.name;
+  const pool = getActivePool().filter(r => r.name !== skippedName);
+  if (!pool.length) { alert('No more restaurants to skip to!'); return; }
+  // Store as temp pool and spin
+  rndRest = pool;
+  doSpin();
+}
+
+function doShare() {
+  const w = segs[wIdx];
+  if (!w) return;
+  const item = w.item;
+  const tagline = TAGLINES[Math.floor(Math.random() * TAGLINES.length)];
+  const text = `🎰 Fate has spoken — tonight we're going to ${item.name}.
+
+"${tagline}"
+
+Fat Ass Roulette made the call: https://zosebaum-maker.github.io/Foodroulette/foodroulette-wheel.html`;
+  if (navigator.share) {
+    navigator.share({ text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('wShare');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '✓ Copied!';
+      setTimeout(() => btn.innerHTML = orig, 2000);
+    });
+  }
 }
 
 function confetti() {
@@ -1137,7 +1163,7 @@ function togC(c) {
     F.cuisines=F.cuisines.filter(x=>x!=='any'); c.classList.toggle('on');
     if (c.classList.contains('on')) F.cuisines.push(v); else F.cuisines=F.cuisines.filter(x=>x!==v);
     if (!F.cuisines.length) { F.cuisines=['any']; document.querySelector('#cChips [data-v="any"]').classList.add('on'); }
-  } applyF();
+  } applyF(); saveFilters();
 }
 
 function selChip(el,gid,fk,isInt) {
@@ -1154,7 +1180,29 @@ function togChip(id,key) {
   applyF();
 }
 
-function applyF() { rndRest=null; buildSegs(getPool()); draw(wAng); updSum(); updDot(); }
+function applyF() { rndRest=null; buildSegs(getPool()); draw(wAng); updSum(); updDot(); saveFilters(); }
+function saveFilters() {
+  try { localStorage.setItem('fr_filters', JSON.stringify(F)); } catch(e) {}
+}
+function loadFilters() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('fr_filters'));
+    if (!saved) return;
+    if (saved.cuisines) F.cuisines = saved.cuisines;
+    if (saved.budget)   F.budget   = saved.budget;
+    if (saved.dist)     F.dist     = saved.dist;
+    if (saved.rating !== undefined) F.rating = saved.rating;
+    if (saved.openNow !== undefined) F.openNow = saved.openNow;
+    if (saved.diet)     F.diet     = saved.diet;
+    // Restore chip UI
+    document.querySelectorAll('#cChips .ch').forEach(x => x.classList.toggle('on', F.cuisines.includes(x.dataset.v) || (F.cuisines[0]==='any' && x.dataset.v==='any')));
+    document.querySelectorAll('#bChips .ch').forEach(x => x.classList.toggle('on', parseInt(x.dataset.v)===F.budget));
+    document.querySelectorAll('#dChips .ch').forEach(x => x.classList.toggle('on', x.dataset.v===F.dist));
+    document.querySelectorAll('#rChips .ch').forEach(x => x.classList.toggle('on', parseFloat(x.dataset.v)===F.rating));
+    if (F.openNow) document.getElementById('openChip')?.classList.add('on');
+    F.diet.forEach(d => { const el=document.getElementById(d+'Chip'); if(el) el.classList.add('on'); });
+  } catch(e) {}
+}
 
 function resetF() {
   F.cuisines=['any']; F.budget=2; F.dist='any'; F.rating=0; F.openNow=false; F.diet=[];
@@ -1194,7 +1242,7 @@ function rmTag(k) {
   rndRest=null; buildSegs(getPool()); draw(wAng); updSum(); updDot();
 }
 
-function showLocStatus(msg) { const el=document.getElementById('rsStatus'); if(el) el.textContent=msg; }
+function showLocStatus(msg) { const el=document.getElementById('rsStatus'); if(el) el.textContent=msg.replace(/[🎰📍]/g,'').trim(); }
 
 function typeEmoji(type) {
   const t=(type||'').toLowerCase();
@@ -1243,6 +1291,7 @@ async function loadRestaurants() {
 }
 
 setTagline();
+loadFilters();
 document.fonts.ready.then(async ()=>{
   bakeStatic();
   showLocStatus('📍 Finding restaurants near you…');
