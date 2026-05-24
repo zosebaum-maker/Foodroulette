@@ -1,0 +1,80 @@
+export default {
+  async fetch(request, env) {
+    // Allow your domain only
+    const origin = request.headers.get('Origin') || '';
+    const allowed = ['https://yourdomain.com', 'http://localhost'];
+    if (!allowed.some(o => origin.startsWith(o))) {
+      return new Response('Forbidden', { status: 403 });
+    }
+
+    const url = new URL(request.url);
+    const lat  = url.searchParams.get('lat');
+    const lng  = url.searchParams.get('lng');
+    const radius = url.searchParams.get('radius') || '2000'; // meters
+
+    if (!lat || !lng) return new Response('Missing lat/lng', { status: 400 });
+
+    // Call Google Places Nearby Search (New)
+    const gUrl = new URL('https://places.googleapis.com/v1/places:searchNearby');
+    const body = {
+      includedTypes: ['restaurant'],
+      maxResultCount: 20,
+      locationRestriction: {
+        circle: {
+          center: { latitude: parseFloat(lat), longitude: parseFloat(lng) },
+          radius: parseFloat(radius),
+        }
+      }
+    };
+
+    const resp = await fetch(gUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': env.GOOGLE_API_KEY,           // stored as secret
+        'X-Goog-FieldMask': 'places.displayName,places.rating,places.priceLevel,places.primaryTypeDisplayName,places.regularOpeningHours,places.formattedAddress,places.id',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const data = await resp.json();
+
+    // Transform to our app's format
+    const restaurants = (data.places || []).map(p => ({
+      name:    p.displayName?.text || 'Unknown',
+      short:   (p.displayName?.text || '').split(' ').slice(0,2).join(' '),
+      emoji:   cuisineEmoji(p.primaryTypeDisplayName?.text || ''),
+      cuisine: p.primaryTypeDisplayName?.text?.toLowerCase() || 'restaurant',
+      price:   ['$','$$','$$$','$$$$'][p.priceLevel - 1] || '$$',
+      pl:      p.priceLevel || 2,
+      rating:  p.rating || 4.0,
+      open:    p.regularOpeningHours?.openNow ?? true,
+      addr:    p.formattedAddress || '',
+      placeId: p.id,
+      items:   [],  // Places API doesn't have menu items
+    }));
+
+    return new Response(JSON.stringify(restaurants), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': origin,
+        'Cache-Control': 'public, max-age=3600', // cache 1 hour
+      }
+    });
+  }
+};
+
+function cuisineEmoji(type) {
+  const map = {
+    'japanese': '🍱', 'italian': '🍝', 'mexican': '🌮',
+    'chinese': '🥡', 'thai': '🍜', 'indian': '🍛',
+    'american': '🍔', 'french': '🥐', 'korean': '🍱',
+    'pizza': '🍕', 'seafood': '🦞', 'sushi': '🍣',
+    'burger': '🍔', 'sandwich': '🥪', 'mediterranean': '🫙',
+  };
+  const lower = type.toLowerCase();
+  for (const [k, v] of Object.entries(map)) {
+    if (lower.includes(k)) return v;
+  }
+  return '🍽️';
+}
