@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fat Ass Roulette</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=DM+Sans:wght@400;500;700&family=Yellowtail&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Yellowtail&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Yellowtail&display=swap" rel="stylesheet"></noscript>
 <style>
 /* ── Reset & Tokens ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -14,7 +17,7 @@
 }
 html,body{height:100%;}
 body{
-  font-family:'DM Sans',sans-serif;min-height:100svh;
+  font-family:system-ui,-apple-system,sans-serif;min-height:100svh;
   display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   color:var(--cream);overflow-x:hidden;
   background-color:#0d3d20;
@@ -99,7 +102,7 @@ h1 span{
 /* ── Wheel ── */
 .wz{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;margin-top:6px;}
 .wr{position:relative;display:flex;align-items:center;justify-content:center;}
-#wc{display:block;border-radius:50%;cursor:pointer;box-shadow:0 10px 40px rgba(0,0,0,.7);}
+#wc{display:block;border-radius:50%;cursor:pointer;box-shadow:0 10px 40px rgba(0,0,0,.7);will-change:contents;touch-action:pan-y;}
 @media(max-width:620px){.wz{padding:0;}.wr{width:100%;}}
 
 /* ── Action Bar ── */
@@ -107,15 +110,12 @@ h1 span{
 .fb{
   width:44px;height:44px;border-radius:6px;
   background:transparent;
-  border-top:1px solid rgba(201,168,76,.35);
-  border-bottom:1px solid rgba(201,168,76,.35);
-  border-left:1px solid rgba(201,168,76,.15);
-  border-right:1px solid rgba(201,168,76,.15);
+  border:none;
   cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
   font-size:1.1rem;position:relative;transition:all .2s ease, opacity .3s ease;
   color:rgba(201,168,76,.7);
 }
-.fb:hover{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.6);color:var(--gold);}
+.fb:hover{background:rgba(201,168,76,.08);color:var(--gold);}
 .fb:disabled{opacity:0;pointer-events:none;}
 .fd{width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--felt);position:absolute;top:2px;right:2px;display:none;}
 .fd.on{display:block;}
@@ -180,15 +180,12 @@ h1 span{
 .rb{
   width:44px;height:44px;border-radius:6px;
   background:transparent;
-  border-top:1px solid rgba(201,168,76,.35);
-  border-bottom:1px solid rgba(201,168,76,.35);
-  border-left:1px solid rgba(201,168,76,.15);
-  border-right:1px solid rgba(201,168,76,.15);
+  border:none;
   cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
   font-size:1.1rem;transition:all .2s ease, opacity .3s ease;
   color:rgba(201,168,76,.7);
 }
-.rb:hover{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.6);color:var(--gold);}
+.rb:hover{background:rgba(201,168,76,.08);color:var(--gold);}
 .rb:disabled{opacity:0;pointer-events:none;}
 
 /* ── Result Strip — unified vp-card ── */
@@ -273,6 +270,7 @@ h1 span{
   font-family:'Cinzel',serif;font-size:.6rem;font-weight:700;
   letter-spacing:.28em;text-transform:uppercase;
   color:rgba(201,168,76,.8);text-align:center;white-space:nowrap;
+  transition:opacity .35s ease;
 }
 /* Winner state — restaurant info */
 .vp-winner-emoji{
@@ -315,7 +313,7 @@ h1 span{
   padding:8px 12px;border-radius:6px;font-size:.75rem;font-weight:600;
   border:1px solid rgba(255,255,255,.1);cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:5px;
-  font-family:'DM Sans',sans-serif;
+  font-family:system-ui,-apple-system,sans-serif;
   background:rgba(0,0,0,.25);color:rgba(255,255,255,.8);
   transition:all .15s;width:100%;
 }
@@ -325,7 +323,7 @@ h1 span{
   text-decoration:none;border:1px solid rgba(255,255,255,.1);
   background:rgba(0,0,0,.25);color:rgba(255,255,255,.8);cursor:pointer;
   transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;
-  font-family:'DM Sans',sans-serif;
+  font-family:system-ui,-apple-system,sans-serif;
 }
 .vp-contact-btn:hover{border-color:rgba(201,168,76,.4);color:#fff;background:rgba(0,0,0,.4);}
 /* Footer bar */
@@ -338,7 +336,7 @@ h1 span{
   flex:1;padding:10px;border-radius:8px;
   background:rgba(0,0,0,.3);
   border:1px solid rgba(201,168,76,.3);
-  color:rgba(201,168,76,.85);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;
+  color:rgba(201,168,76,.85);font-family:system-ui,-apple-system,sans-serif;font-size:.82rem;font-weight:700;
   cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;
   gap:5px;transition:all .15s;
 }
@@ -370,7 +368,7 @@ h1 span{
   text-decoration:none;border:2px solid #1a1a1a;
   background:#fff;color:#1a1a1a;cursor:pointer;
   transition:all .1s;flex:1;justify-content:center;
-  font-family:'DM Sans',sans-serif;
+  font-family:system-ui,-apple-system,sans-serif;
 }
 .rw-contact-btn:hover{background:#1a1a1a;color:#fff;}
 /* Items to try */
@@ -398,7 +396,7 @@ h1 span{
 .sl{font-family:'Cinzel',serif;font-size:.5rem;text-transform:uppercase;letter-spacing:.22em;color:var(--dim);font-weight:700;margin-bottom:9px;}
 /* Chip grid */
 .cg{display:flex;flex-wrap:wrap;gap:6px;}
-.ch{padding:7px 13px;border-radius:50px;border:1px solid rgba(201,168,76,.15);background:rgba(255,255,255,.04);color:var(--dim);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;user-select:none;transition:background .1s,color .1s,border-color .1s;}
+.ch{padding:7px 13px;border-radius:50px;border:1px solid rgba(201,168,76,.15);background:rgba(255,255,255,.04);color:var(--dim);font-family:system-ui,-apple-system,sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;user-select:none;transition:background .1s,color .1s,border-color .1s;}
 .ch.on{background:var(--gold);border-color:var(--gold);color:#1a0800;}
 .sr{display:block;text-align:center;margin:14px 0 4px;font-size:.67rem;color:var(--dim);cursor:pointer;letter-spacing:.1em;text-transform:uppercase;padding-bottom:8px;}
 .sr:hover{color:var(--gold);}
@@ -572,9 +570,9 @@ h1 span{
 
   <div class="ss" style="margin-top:14px;"><div class="sl">Budget</div>
     <div class="cg" id="bChips">
-      <div class="ch"    data-v="4" onclick="selChip(this,'bChips','budget',true)">Any</div>
+      <div class="ch on" data-v="4" onclick="selChip(this,'bChips','budget',true)">Any</div>
       <div class="ch"    data-v="1" onclick="selChip(this,'bChips','budget',true)">$ Under $15</div>
-      <div class="ch on" data-v="2" onclick="selChip(this,'bChips','budget',true)">$$ ~$15–30</div>
+      <div class="ch"    data-v="2" onclick="selChip(this,'bChips','budget',true)">$$ ~$15–30</div>
       <div class="ch"    data-v="3" onclick="selChip(this,'bChips','budget',true)">$$$ ~$30–60</div>
     </div>
   </div>
@@ -601,7 +599,7 @@ h1 span{
 
   <div class="ss" style="margin-top:14px;"><div class="sl">Options</div>
     <div class="cg">
-      <div class="ch" id="openChip"  onclick="togChip('openChip','openNow')">🟢 Open Now</div>
+      <div class="ch on" id="openChip"  onclick="togChip('openChip','openNow')">🟢 Open Now</div>
       <div class="ch" id="vegChip"   onclick="togChip('vegChip','veg')">🥦 Vegetarian</div>
       <div class="ch" id="veganChip" onclick="togChip('veganChip','vegan')">🌱 Vegan</div>
       <div class="ch" id="gfChip"    onclick="togChip('gfChip','gf')">🌾 Gluten Free</div>
@@ -614,41 +612,13 @@ h1 span{
 
 <script>
 const FALLBACK_REST=[
-  {name:"Tony's Pizza",short:"Tony's",emoji:"🍕",cuisine:"pizza",price:"$$",pl:2,rating:4.6,open:true,dist:0.3,addr:"1570 Stockton St",phone:"+1 415-835-9888",website:"https://tonyspizzanapoletana.com",mapsUrl:"https://maps.google.com/?q=Tony's+Pizza+SF",photoRef:"https://picsum.photos/seed/pizza/600/320",photoAttr:null,items:[{name:"Margherita",emoji:"🍕",desc:"San Marzano tomato, mozzarella"},{name:"Funghi Tartufo",emoji:"🍕",desc:"Wild mushrooms, truffle oil"}]},
-  {name:"Burma Superstar",short:"Burma",emoji:"🍜",cuisine:"thai",price:"$$",pl:2,rating:4.4,open:true,dist:0.8,addr:"309 Clement St",phone:"+1 415-387-2147",website:"https://www.burmasuperstar.com",mapsUrl:"https://maps.google.com/?q=Burma+Superstar",photoRef:"https://picsum.photos/seed/burma/600/320",photoAttr:null,items:[{name:"Tea Leaf Salad",emoji:"🥗",desc:"Fermented tea leaves, crunchy mix"},{name:"Rainbow Salad",emoji:"🌈",desc:"12 ingredients, tamarind"}]},
-  {name:"Sushirrito",short:"Sushirrito",emoji:"🍣",cuisine:"sushi",price:"$$",pl:2,rating:4.2,open:false,dist:1.1,addr:"59 New Montgomery",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Sushirrito",photoRef:"",photoAttr:null,items:[{name:"Sumo Crunch",emoji:"🍣",desc:"Spicy tuna, tempura, avocado"},{name:"Geisha's Kiss",emoji:"🍣",desc:"Salmon, yuzu cream cheese"}]},
-  {name:"Tacolicious",short:"Tacolicious",emoji:"🌮",cuisine:"mexican",price:"$$",pl:2,rating:4.3,open:true,dist:0.6,addr:"741 Valencia St",phone:"+1 415-626-1344",website:"https://tacolicious.com",mapsUrl:"https://maps.google.com/?q=Tacolicious",photoRef:"https://picsum.photos/seed/taco/600/320",photoAttr:null,items:[{name:"Carnitas Taco",emoji:"🌮",desc:"Braised pork, salsa verde"},{name:"Fish Taco",emoji:"🌮",desc:"Beer battered, cabbage slaw"}]},
-  {name:"Nopa",short:"Nopa",emoji:"🥩",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.5,addr:"560 Divisadero St",phone:"+1 415-864-8643",website:"https://nopasf.com",mapsUrl:"https://maps.google.com/?q=Nopa+San+Francisco",photoRef:"https://picsum.photos/seed/nopa/600/320",photoAttr:null,items:[{name:"Pork Chop",emoji:"🥩",desc:"Stone fruit chutney, greens"},{name:"Burger",emoji:"🍔",desc:"Grass-fed beef, aged cheddar"}]},
-  {name:"Flour + Water",short:"Flour+Water",emoji:"🍝",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:1.4,addr:"2401 Harrison St",phone:"+1 415-826-7000",website:"https://flourandwater.com",mapsUrl:"https://maps.google.com/?q=Flour+Water",photoRef:"https://picsum.photos/seed/pasta/600/320",photoAttr:null,items:[{name:"Tagliatelle",emoji:"🍝",desc:"Lamb ragu, pecorino, herbs"},{name:"Ricotta Gnudi",emoji:"🍝",desc:"Brown butter, sage"}]},
-  {name:"Lers Ros Thai",short:"Lers Ros",emoji:"🍛",cuisine:"thai",price:"$",pl:1,rating:4.4,open:false,dist:0.7,addr:"730 Larkin St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Lers+Ros+Thai",photoRef:"",photoAttr:null,items:[{name:"Pad Kee Mao",emoji:"🍜",desc:"Drunken noodles, Thai basil"},{name:"Massaman Curry",emoji:"🍛",desc:"Braised beef, potato, peanuts"}]},
-  {name:"The Bird",short:"The Bird",emoji:"🍔",cuisine:"burger",price:"$",pl:1,rating:4.3,open:true,dist:1.2,addr:"115 New Montgomery",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=The+Bird+SF",photoRef:"",photoAttr:null,items:[{name:"Chicken Sandwich",emoji:"🍗",desc:"Buttermilk-brined, slaw"},{name:"Chicken & Waffles",emoji:"🧇",desc:"Maple sriracha"}]},
-  {name:"Daeho",short:"Daeho",emoji:"🥩",cuisine:"korean",price:"$$",pl:2,rating:4.6,open:true,dist:0.4,addr:"2355 Lombard St",phone:"+1 415-931-1028",website:"https://daehosf.com",mapsUrl:"https://maps.google.com/?q=Daeho",photoRef:"https://picsum.photos/seed/korean/600/320",photoAttr:null,items:[{name:"Galbi Jim",emoji:"🥩",desc:"Braised short ribs, radish"},{name:"Brisket",emoji:"🥩",desc:"House BBQ, banchan"}]},
-  {name:"Sotto Mare",short:"Sotto Mare",emoji:"🦞",cuisine:"italian",price:"$$",pl:2,rating:4.5,open:true,dist:0.9,addr:"552 Green St",phone:"+1 415-398-3181",website:"https://sottomaresf.com",mapsUrl:"https://maps.google.com/?q=Sotto+Mare",photoRef:"https://picsum.photos/seed/seafood/600/320",photoAttr:null,items:[{name:"Cioppino",emoji:"🦞",desc:"Dungeness crab, clams, fish"},{name:"Calamari",emoji:"🦑",desc:"Grilled, lemon, herbs"}]},
-  {name:"Tartine Bakery",short:"Tartine",emoji:"🥐",cuisine:"american",price:"$",pl:1,rating:4.8,open:true,dist:0.8,addr:"600 Guerrero St",phone:"+1 415-487-2600",website:"https://tartinebakery.com",mapsUrl:"https://maps.google.com/?q=Tartine+Bakery",photoRef:"https://picsum.photos/seed/bakery/600/320",photoAttr:null,items:[{name:"Country Loaf",emoji:"🍞",desc:"Sourdough, wood fired"},{name:"Morning Bun",emoji:"🥐",desc:"Orange zest, cinnamon"}]},
-  {name:"Zuni Café",short:"Zuni",emoji:"🍗",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:0.8,addr:"1658 Market St",phone:"+1 415-552-2522",website:"https://zunicafe.com",mapsUrl:"https://maps.google.com/?q=Zuni+Cafe",photoRef:"https://picsum.photos/seed/zuni/600/320",photoAttr:null,items:[{name:"Roast Chicken",emoji:"🍗",desc:"Brick oven, bread salad"},{name:"Burger",emoji:"🍔",desc:"Focaccia, house pickles"}]},
-  {name:"State Bird",short:"State Bird",emoji:"🐦",cuisine:"american",price:"$$$",pl:3,rating:4.7,open:true,dist:1.3,addr:"1529 Fillmore St",phone:"+1 415-795-1272",website:"https://statebirddprovisions.com",mapsUrl:"https://maps.google.com/?q=State+Bird",photoRef:"https://picsum.photos/seed/statebird/600/320",photoAttr:null,items:[{name:"State Bird",emoji:"🐦",desc:"Fried quail, pine nut"},{name:"Dungeness Pancake",emoji:"🥞",desc:"Crab, black bean sauce"}]},
-  {name:"Rich Table",short:"Rich Table",emoji:"🍽️",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:1.1,addr:"199 Gough St",phone:"+1 415-355-9085",website:"https://richtablesf.com",mapsUrl:"https://maps.google.com/?q=Rich+Table",photoRef:"https://picsum.photos/seed/richtable/600/320",photoAttr:null,items:[{name:"Sardine Chips",emoji:"🐟",desc:"Porcini, rosemary"},{name:"Pasta",emoji:"🍝",desc:"Seasonal, house made"}]},
-  {name:"Mensho Tokyo",short:"Mensho",emoji:"🍥",cuisine:"sushi",price:"$$",pl:2,rating:4.6,open:true,dist:0.6,addr:"672 Geary St",phone:"+1 415-800-8345",website:"https://mensho.tokyo",mapsUrl:"https://maps.google.com/?q=Mensho+Tokyo",photoRef:"https://picsum.photos/seed/ramen/600/320",photoAttr:null,items:[{name:"Toripaitan Ramen",emoji:"🍥",desc:"Rich chicken broth, truffle"},{name:"Lamb Tsukemen",emoji:"🍜",desc:"Dipping ramen, spiced lamb"}]},
-  {name:"PPQ Dungeness",short:"PPQ",emoji:"🦀",cuisine:"chinese",price:"$$",pl:2,rating:4.5,open:true,dist:2.1,addr:"2332 Clement St",phone:"+1 415-386-8266",website:"https://ppqdungeness.com",mapsUrl:"https://maps.google.com/?q=PPQ+Dungeness",photoRef:"",photoAttr:null,items:[{name:"Roast Crab",emoji:"🦀",desc:"Garlic noodles, ginger scallion"},{name:"Salt Pepper Shrimp",emoji:"🍤",desc:"Crispy, chili, garlic"}]},
-  {name:"Komaaj",short:"Komaaj",emoji:"🫓",cuisine:"indian",price:"$$",pl:2,rating:4.6,open:true,dist:1.8,addr:"2404 Mission St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Komaaj",photoRef:"",photoAttr:null,items:[{name:"Ghormeh Sabzi",emoji:"🍲",desc:"Herb stew, kidney beans, lamb"},{name:"Zereshk Polo",emoji:"🍚",desc:"Barberry rice, saffron chicken"}]},
-  {name:"Liholiho Yacht",short:"Liholiho",emoji:"🌺",cuisine:"american",price:"$$$",pl:3,rating:4.8,open:false,dist:0.6,addr:"871 Sutter St",phone:"+1 415-440-5446",website:"https://liholihoyachtclub.com",mapsUrl:"https://maps.google.com/?q=Liholiho+Yacht",photoRef:"",photoAttr:null,items:[{name:"Spam Fried Rice",emoji:"🍱",desc:"Kalua pork, fried egg"},{name:"Oxtail Dumplings",emoji:"🥟",desc:"Ginger, scallion"}]},
-  {name:"Dragon Beaux",short:"Dragon Beaux",emoji:"🐉",cuisine:"chinese",price:"$$$",pl:3,rating:4.5,open:true,dist:3.2,addr:"5700 Geary Blvd",phone:"+1 415-333-8899",website:"https://dragonbeaux.com",mapsUrl:"https://maps.google.com/?q=Dragon+Beaux",photoRef:"",photoAttr:null,items:[{name:"Har Gow",emoji:"🥟",desc:"Steamed shrimp dumplings"},{name:"Char Siu Bao",emoji:"🍞",desc:"BBQ pork buns"}]},
-  {name:"Nopalito",short:"Nopalito",emoji:"🌿",cuisine:"mexican",price:"$$",pl:2,rating:4.5,open:true,dist:1.0,addr:"306 Broderick St",phone:"+1 415-437-0303",website:"https://nopalitosf.com",mapsUrl:"https://maps.google.com/?q=Nopalito",photoRef:"",photoAttr:null,items:[{name:"Carnitas",emoji:"🌮",desc:"Slow roasted pork"},{name:"Enchiladas",emoji:"🫔",desc:"Mole negro, crema"}]},
-  {name:"Hog Island Oyster",short:"Hog Island",emoji:"🦪",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.4,addr:"1 Ferry Building",phone:"+1 415-391-7117",website:"https://hogislandoysters.com",mapsUrl:"https://maps.google.com/?q=Hog+Island+Oyster",photoRef:"https://picsum.photos/seed/oyster/600/320",photoAttr:null,items:[{name:"Oysters",emoji:"🦪",desc:"Tomales Bay, mignonette"},{name:"Clam Chowder",emoji:"🍲",desc:"New England, sourdough bowl"}]},
-  {name:"Izakaya Rintaro",short:"Rintaro",emoji:"🍱",cuisine:"korean",price:"$$$",pl:3,rating:4.7,open:true,dist:1.6,addr:"82 14th St",phone:"+1 415-589-7022",website:"https://izakayarintaro.com",mapsUrl:"https://maps.google.com/?q=Izakaya+Rintaro",photoRef:"",photoAttr:null,items:[{name:"Yakitori",emoji:"🍢",desc:"Binchotan grilled chicken"},{name:"Karaage",emoji:"🍗",desc:"Fried chicken, kewpie mayo"}]},
-  {name:"Z & Y Restaurant",short:"Z & Y",emoji:"🌶️",cuisine:"chinese",price:"$$",pl:2,rating:4.3,open:true,dist:0.5,addr:"655 Jackson St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Z+%26+Y+Restaurant",photoRef:"",photoAttr:null,items:[{name:"Dan Dan Noodles",emoji:"🍜",desc:"Sichuan peppercorn, pork"},{name:"Mapo Tofu",emoji:"🍲",desc:"Silken tofu, Sichuan spice"}]},
-  {name:"Bi-Rite Creamery",short:"Bi-Rite",emoji:"🍦",cuisine:"american",price:"$",pl:1,rating:4.7,open:true,dist:0.7,addr:"3692 18th St",phone:"+1 415-626-5600",website:"https://biritemarket.com",mapsUrl:"https://maps.google.com/?q=Bi-Rite+Creamery",photoRef:"",photoAttr:null,items:[{name:"Salted Caramel",emoji:"🍦",desc:"House made, sea salt"},{name:"Honey Lavender",emoji:"🍦",desc:"Local honey, lavender"}]},
-  {name:"Mister Jiu's",short:"Mister Jiu's",emoji:"🥢",cuisine:"chinese",price:"$$$",pl:3,rating:4.6,open:false,dist:0.4,addr:"28 Waverly Place",phone:"+1 415-857-9688",website:"https://misterjius.com",mapsUrl:"https://maps.google.com/?q=Mister+Jiu%27s",photoRef:"",photoAttr:null,items:[{name:"Quail & Foie Gras",emoji:"🥢",desc:"House XO, crispy rice"},{name:"Kung Pao Pastrami",emoji:"🌶️",desc:"Peanuts, dried chilies"}]},
-  {name:"Cotogna",short:"Cotogna",emoji:"🫕",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:0.5,addr:"490 Pacific Ave",phone:"+1 415-775-8508",website:"https://cotognasf.com",mapsUrl:"https://maps.google.com/?q=Cotogna",photoRef:"https://picsum.photos/seed/italian/600/320",photoAttr:null,items:[{name:"Wood-Fired Pizza",emoji:"🍕",desc:"House cured meats"},{name:"Handmade Pasta",emoji:"🍝",desc:"Daily changing"}]},
-  {name:"Akiko's",short:"Akiko's",emoji:"🎌",cuisine:"sushi",price:"$$$",pl:3,rating:4.8,open:true,dist:0.5,addr:"431 Bush St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Akiko%27s+Sushi",photoRef:"",photoAttr:null,items:[{name:"Omakase",emoji:"🍣",desc:"Chef's choice, 12 pieces nigiri"},{name:"Toro Tartare",emoji:"🐟",desc:"Bluefin, caviar, quail egg"}]},
-  {name:"The Progress",short:"The Progress",emoji:"🌽",cuisine:"american",price:"$$$",pl:3,rating:4.7,open:true,dist:1.3,addr:"1525 Fillmore St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=The+Progress+SF",photoRef:"",photoAttr:null,items:[{name:"Smoked Whitefish",emoji:"🐟",desc:"Potato chips, dill crème"},{name:"Seasonal Vegetable",emoji:"🌽",desc:"Wood fired, changing weekly"}]},
-  {name:"Rich Table",short:"Rich Table",emoji:"🍽️",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:1.1,addr:"199 Gough St",phone:"+1 415-355-9085",website:"https://richtablesf.com",mapsUrl:"https://maps.google.com/?q=Rich+Table",photoRef:"https://picsum.photos/seed/richtable/600/320",photoAttr:null,items:[{name:"Sardine Chips",emoji:"🐟",desc:"Porcini, rosemary"},{name:"Pasta",emoji:"🍝",desc:"Seasonal, house made"}]},
-  {name:"Cheung Hing",short:"Cheung Hing",emoji:"🥡",cuisine:"chinese",price:"$",pl:1,rating:4.1,open:true,dist:0.9,addr:"209 Clement St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cheung+Hing",photoRef:"https://picsum.photos/seed/chinese/600/320",photoAttr:null,items:[{name:"BBQ Pork Rice",emoji:"🍖",desc:"Char siu, steamed rice"},{name:"Wonton Soup",emoji:"🍜",desc:"Hand-folded wontons"}]},
-  {name:"Shizen",short:"Shizen",emoji:"🌱",cuisine:"sushi",price:"$$",pl:2,rating:4.6,open:true,dist:1.0,addr:"370 14th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Shizen+SF",photoRef:"",photoAttr:null,items:[{name:"Vegan Omakase",emoji:"🌱",desc:"Seasonal plant-based nigiri"},{name:"Truffle Roll",emoji:"🍣",desc:"Truffle oil, asparagus"}]},
-  {name:"Kin Khao",short:"Kin Khao",emoji:"🌸",cuisine:"thai",price:"$$",pl:2,rating:4.5,open:true,dist:0.3,addr:"55 Cyril Magnin St",phone:"+1 415-362-7456",website:"https://kinkhao.com",mapsUrl:"https://maps.google.com/?q=Kin+Khao",photoRef:"",photoAttr:null,items:[{name:"Khao Soi",emoji:"🍜",desc:"Coconut curry, crispy noodles"},{name:"Som Tum",emoji:"🥗",desc:"Green papaya, peanut"}]},
-  {name:"Plow",short:"Plow",emoji:"🥚",cuisine:"american",price:"$$",pl:2,rating:4.4,open:true,dist:2.0,addr:"1299 18th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Plow+SF",photoRef:"",photoAttr:null,items:[{name:"Ricotta Pancakes",emoji:"🥞",desc:"Seasonal fruit, maple syrup"},{name:"Eggs Baked in Cream",emoji:"🥚",desc:"House toast, chives"}]},
-  {name:"Beretta",short:"Beretta",emoji:"🫙",cuisine:"italian",price:"$$",pl:2,rating:4.3,open:true,dist:0.9,addr:"1199 Valencia St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Beretta+SF",photoRef:"",photoAttr:null,items:[{name:"Margherita",emoji:"🍕",desc:"Neapolitan, fior di latte"},{name:"Meatballs",emoji:"🍖",desc:"San Marzano, basil"}]},
-  {name:"Cassava",short:"Cassava",emoji:"🥗",cuisine:"american",price:"$$",pl:2,rating:4.5,open:true,dist:2.3,addr:"3519 Balboa St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cassava+SF",photoRef:"",photoAttr:null,items:[{name:"Breakfast Sandwich",emoji:"🥚",desc:"Focaccia, egg, aioli"},{name:"Grain Bowl",emoji:"🥗",desc:"Seasonal grains, soft egg"}]},
+  {name:"Spin to load",short:"Loading",emoji:"🍕",cuisine:"pizza",price:"$$",pl:2,rating:4.5,open:true,dist:0.5,addr:"",phone:"",website:"",mapsUrl:"",photoRef:"",photoAttr:null,items:[]},
+  {name:"Locating grub",short:"Loading",emoji:"🍔",cuisine:"american",price:"$$",pl:2,rating:4.5,open:true,dist:0.5,addr:"",phone:"",website:"",mapsUrl:"",photoRef:"",photoAttr:null,items:[]},
+  {name:"Finding spots",short:"Loading",emoji:"🍜",cuisine:"thai",price:"$$",pl:2,rating:4.5,open:true,dist:0.5,addr:"",phone:"",website:"",mapsUrl:"",photoRef:"",photoAttr:null,items:[]},
+  {name:"Almost ready",short:"Loading",emoji:"🌮",cuisine:"mexican",price:"$$",pl:2,rating:4.5,open:true,dist:0.5,addr:"",phone:"",website:"",mapsUrl:"",photoRef:"",photoAttr:null,items:[]},
+  {name:"Loading menu",short:"Loading",emoji:"🍣",cuisine:"sushi",price:"$$",pl:2,rating:4.5,open:true,dist:0.5,addr:"",phone:"",website:"",mapsUrl:"",photoRef:"",photoAttr:null,items:[]},
+  {name:"Spin to load",short:"Loading",emoji:"🍝",cuisine:"italian",price:"$$",pl:2,rating:4.5,open:true,dist:0.5,addr:"",phone:"",website:"",mapsUrl:"",photoRef:"",photoAttr:null,items:[]},
+  {name:"Locating grub",short:"Loading",emoji:"🥩",cuisine:"american",price:"$$",pl:2,rating:4.5,open:true,dist:0.5,addr:"",phone:"",website:"",mapsUrl:"",photoRef:"",photoAttr:null,items:[]},
 ];
 let REST = FALLBACK_REST;
 let locationGranted = false;
@@ -657,14 +627,13 @@ let locationGranted = false;
    APP STATE
 ═══════════════════════════════════════════ */
 const BD = {1:{l:'$',d:'Under $15'},2:{l:'$$',d:'~$15–$30'},3:{l:'$$$',d:'~$30–$60'},4:{l:'$$$$',d:'~$60+'}};
-const mode = 'restaurant';
 let spinning = false;
 let rndRest  = null;
-const F = { cuisines:['any'], budget:2, dist:'any', rating:0, openNow:false, diet:[] };
+const F = { cuisines:['any'], budget:4, dist:'any', rating:0, openNow:true, diet:[] };
 let hasSpunOnce = false;
 
 const WORKER_URL = 'https://frworker.zosebaum.workers.dev';
-const GOOGLE_CLIENT_KEY = 'AIzaSyAX6fk2Auv8z6qiAjLgz6lzFMdoAb3nrFs';
+// Photos proxied through worker — no API key exposed in client
 
 const TAGLINES = [
   "Don't you ever stop eating?",
@@ -750,16 +719,7 @@ cv.width = cv.height = SZ;
 cv.style.width = cv.style.height = SZ + 'px';
 ring.style.width = ring.style.height = SZ + 'px';
 
-let touchStartX = 0, touchStartY = 0;
-cv.addEventListener('touchstart', e => {
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
-}, {passive:true});
-cv.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  const dy = e.changedTouches[0].clientY - touchStartY;
-  if (Math.sqrt(dx*dx + dy*dy) > 30) doSpin();
-}, {passive:true});
+
 
 const RO  = R * .960;
 const ROB = R * .995;
@@ -946,7 +906,7 @@ function draw(ang) {
     cx.font=seg.eSz+'px serif'; cx.fillStyle='rgba(255,255,255,.95)';
     cx.fillText(seg.item.emoji,lx,ly-seg.eSz*.72);
     const nm=(seg.item.short||seg.item.name).substring(0,10);
-    cx.font='700 '+seg.nSz+'px "DM Sans",sans-serif';
+    cx.font='700 '+seg.nSz+'px system-ui,-apple-system,sans-serif';
     cx.lineWidth=2.5; cx.strokeStyle='rgba(0,0,0,.9)'; cx.lineJoin='round';
     cx.strokeText(nm,lx,ly+seg.eSz*.7); cx.fillStyle='#fff'; cx.fillText(nm,lx,ly+seg.eSz*.7);
     cx.restore();
@@ -969,31 +929,36 @@ let bP='idle', bA=0, bRad=0, bVA=0, bVR=0, wV=0, fired=false, parkedOffset=0, bo
 
 document.addEventListener('visibilitychange', () => { if (!document.hidden) requestAnimationFrame(loop); });
 
-function loop() {
+let lastT = 0;
+function loop(ts) {
   if (document.hidden) return;
   requestAnimationFrame(loop);
+  const now = ts || performance.now();
+  const dt = lastT ? Math.min((now - lastT) / (1000/60), 3) : 1;
+  lastT = now;
   if (spinning) {
-    // Smooth continuous deceleration (smoothstep blend)
+    // dt-scaled physics — consistent regardless of frame rate or scroll interruptions
     const wvAbs=Math.abs(wV), wvHigh=0.18, wvLow=0.025;
     const t=Math.max(0,Math.min(1,(wvAbs-wvLow)/(wvHigh-wvLow)));
     const smooth=t*t*(3-2*t);
-    const decay=0.986+(0.977-0.986)*smooth;
+    const decayPerFrame=0.986+(0.977-0.986)*smooth;
+    const decay=Math.pow(decayPerFrame, dt);
     wV*=decay;
     if (Math.abs(wV)<0.003) wV=0.003;
-    wAng+=wV;
+    wAng+=wV*dt;
 
     if (bP==='orbit') {
-      bVA*=0.9952; bA+=bVA; bRad=RTK;
+      bVA*=Math.pow(0.9952,dt); bA+=bVA*dt; bRad=RTK;
       if (Math.abs(bVA)<0.013) { bP='fall'; bVR=0; }
     } else if (bP==='fall') {
-      bVR+=0.18; bRad-=bVR; bVA*=0.985; bA+=bVA;
+      bVR+=0.18*dt; bRad-=bVR*dt; bVA*=Math.pow(0.985,dt); bA+=bVA*dt;
       if (bRad<=RBO) {
         bRad=RBO; bVR=-(R*0.20*(0.85+Math.random()*0.30)); bVA+=(Math.random()-0.5)*0.10; bP='bounce'; bounceF=0;
       }
     } else if (bP==='bounce') {
-      bounceF++;
+      bounceF+=dt;
       const pArc=(Math.PI*2)/segs.length;
-      bVA*=0.975; bA+=bVA; bRad+=bVR;
+      bVA*=Math.pow(0.975,dt); bA+=bVA*dt; bRad+=bVR*dt;
       if (bRad>=RBO) { bRad=RBO; bVR=-(Math.abs(bVR)*0.74); bVA+=(Math.random()-0.5)*0.09; }
       else if (bRad<=RBI) { bRad=RBI; bVR=Math.abs(bVR)*0.72; bVA+=(Math.random()-0.5)*0.09; }
       if (segs.length>0) {
@@ -1025,7 +990,7 @@ function loop() {
       if (Math.abs(wV)<=0.0032) { parkedOffset=segs[wIdx].ma; bP='parked'; spinning=false; wV=0.003; }
     }
   } else {
-    wV=0.003; wAng+=wV;
+    wV=0.003; wAng+=wV*dt;
   }
   draw(wAng);
   if (bP==='parked') {
@@ -1066,11 +1031,9 @@ function doSpin() {
   const arc=(Math.PI*2)/pool.length, pMid=(wIdx+.5)*arc, tFinal=-pMid-Math.PI/2;
   const extra=4+Math.floor(Math.random()*3);
   const total=Math.PI*2*extra+((tFinal-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
-  const sizeScale=Math.min(1,SZ/600);
-  wV=total*0.010*sizeScale;
+  wV=total*0.010;
   bA=Math.random()*Math.PI*2; bRad=RTK;
-  const ballScale=600/Math.max(SZ,300);
-  bVA=-(0.24+Math.random()*0.06)*Math.min(ballScale,1.8); bVR=0; bP='orbit';
+  bVA=-(0.24+Math.random()*0.06); bVR=0; bP='orbit';
 }
 
 const elWE=document.getElementById('wE');
@@ -1103,7 +1066,7 @@ function onDone() {
   elWA.textContent='📍 '+(item.addr||'');
   elWLnk.href=`https://www.doordash.com/search/store/${encodeURIComponent(item.name)}/`;
   if (item.photoRef) {
-    const photoUrl=item.photoRef.startsWith('http')?item.photoRef:`https://places.googleapis.com/v1/${item.photoRef}/media?maxHeightPx=320&maxWidthPx=600&key=${GOOGLE_CLIENT_KEY}`;
+    const photoUrl=item.photoRef.startsWith('http')?item.photoRef:`${WORKER_URL}/photo?ref=${encodeURIComponent(item.photoRef)}`;
     elWPhoto.src=photoUrl;
     elWPhoto.onload=()=>{elWPhotoW.style.display='';};
     elWPhoto.onerror=()=>{elWPhotoW.style.display='none';};
@@ -1130,8 +1093,10 @@ function onDone() {
 
 
 
-function getActivePool() { return rndRest||getPool(); }
+const WHEEL_SIZE = 35;
+
 function getPool() {
+  // Full filtered pool — every restaurant that passes user filters
   return REST.filter(r=>{
     if (F.cuisines[0]!=='any'&&!F.cuisines.includes(r.cuisine)) return false;
     if (r.pl>F.budget) return false;
@@ -1141,11 +1106,49 @@ function getPool() {
     return true;
   });
 }
+function getPoolIgnoreOpen() {
+  // Same filters but ignores openNow — used for padding when open pool is small
+  return REST.filter(r=>{
+    if (F.cuisines[0]!=='any'&&!F.cuisines.includes(r.cuisine)) return false;
+    if (r.pl>F.budget) return false;
+    if (F.dist!=='any'&&r.dist>parseFloat(F.dist)) return false;
+    if (r.rating<F.rating) return false;
+    return true;
+  });
+}
+let _wheelCache = null; // cached slice, invalidated by applyF/rmTag/loadRestaurants
+
+function getWheelSlice() {
+  if (_wheelCache) return _wheelCache;
+
+  // Before live data: show fallback for visual preview only
+  if (REST === FALLBACK_REST) return FALLBACK_REST.slice(0, WHEEL_SIZE);
+
+  // Get full filtered pool
+  const pool = getPool();
+  // If open filter kills everything, relax it
+  const source = pool.length > 0 ? pool : getPoolIgnoreOpen();
+  if (source.length === 0) return [];
+
+  // Shuffle for fairness
+  const shuffled = [...source].sort(() => Math.random() - 0.5);
+
+  // Fill to WHEEL_SIZE — pad with doubles if needed, never fake restaurants
+  let slice = shuffled.length >= WHEEL_SIZE
+    ? shuffled.slice(0, WHEEL_SIZE)
+    : (() => { const s=[...shuffled]; let i=0; while(s.length<WHEEL_SIZE){s.push(shuffled[i++%shuffled.length]);} return s; })();
+
+  _wheelCache = slice;
+  return slice;
+}
+function invalidateWheel() { _wheelCache = null; rndRest = null; }
+function getActivePool() { return rndRest || getWheelSlice(); }
 
 function doRandomize() {
   if (spinning&&bP!=='parked'&&bP!=='locked') return;
-  const count=Math.max(getPool().length,8);
-  rndRest=[...REST].sort(()=>Math.random()-.5).slice(0,count);
+  if (REST===FALLBACK_REST) return;
+  invalidateWheel(); // force fresh shuffle
+  rndRest=getWheelSlice();
   buildSegs(rndRest); draw(wAng);
   const btn=document.getElementById('rndBtn');
   btn.style.transition='transform .4s ease'; btn.style.transform='rotate(360deg)';
@@ -1157,10 +1160,19 @@ function doSkip() {
   if (!w) return;
   // Remove this restaurant from the active pool and respin immediately
   const skippedName = w.item.name;
-  const pool = getActivePool().filter(r => r.name !== skippedName);
-  if (!pool.length) { alert('No more restaurants to skip to!'); return; }
-  // Store as temp pool and spin
-  rndRest = pool;
+  // Get fresh wheel slice excluding all instances of skipped restaurant
+  const base = getPool().filter(r => r.name !== skippedName);
+  const ignoreOpen = getPoolIgnoreOpen().filter(r => r.name !== skippedName);
+  const src = base.length > 0 ? base : ignoreOpen;
+  if (!src.length) { alert('No more restaurants!'); return; }
+  // Build padded slice same way as getWheelSlice
+  const shuffled = [...src].sort(() => Math.random() - 0.5);
+  const slice = shuffled.length >= WHEEL_SIZE ? shuffled.slice(0, WHEEL_SIZE) : (() => {
+    const s = [...shuffled]; let i = 0;
+    while (s.length < WHEEL_SIZE) { s.push(shuffled[i++ % shuffled.length]); }
+    return s;
+  })();
+  rndRest = slice;
   doSpin();
 }
 
@@ -1223,14 +1235,13 @@ function togC(c) {
     F.cuisines=F.cuisines.filter(x=>x!=='any'); c.classList.toggle('on');
     if (c.classList.contains('on')) F.cuisines.push(v); else F.cuisines=F.cuisines.filter(x=>x!==v);
     if (!F.cuisines.length) { F.cuisines=['any']; document.querySelector('#cChips [data-v="any"]').classList.add('on'); }
-  } applyF(); saveFilters();
+  } applyF();
 }
 
 function selChip(el,gid,fk,isInt) {
   document.querySelectorAll(`#${gid} .ch`).forEach(x=>x.classList.remove('on')); el.classList.add('on');
   F[fk]=isInt?parseInt(el.dataset.v):el.dataset.v;
-  if (fk==='dist'&&REST!==FALLBACK_REST) { showLocStatus('📍 Updating…'); loadRestaurants().then(()=>{buildSegs(getPool());draw(wAng);updSum();updDot();}); }
-  else { applyF(); }
+  applyF();
 }
 
 function togChip(id,key) {
@@ -1240,7 +1251,7 @@ function togChip(id,key) {
   applyF();
 }
 
-function applyF() { rndRest=null; buildSegs(getPool()); draw(wAng); updSum(); updDot(); saveFilters(); }
+function applyF() { invalidateWheel(); buildSegs(getWheelSlice()); draw(wAng); updSum(); updDot(); saveFilters(); }
 function saveFilters() {
   try { localStorage.setItem('fr_filters', JSON.stringify(F)); } catch(e) {}
 }
@@ -1265,17 +1276,18 @@ function loadFilters() {
 }
 
 function resetF() {
-  F.cuisines=['any']; F.budget=2; F.dist='any'; F.rating=0; F.openNow=false; F.diet=[];
+  F.cuisines=['any']; F.budget=4; F.dist='any'; F.rating=0; F.openNow=true; F.diet=[];
   document.querySelectorAll('#cChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#cChips [data-v="any"]').classList.add('on');
-  document.querySelectorAll('#bChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#bChips [data-v="2"]').classList.add('on');
+  document.querySelectorAll('#bChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#bChips [data-v="4"]').classList.add('on');
   document.querySelectorAll('#dChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#dChips [data-v="any"]').classList.add('on');
   document.querySelectorAll('#rChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#rChips [data-v="0"]').classList.add('on');
-  ['openChip','vegChip','veganChip','gfChip','halalChip'].forEach(id=>{document.getElementById(id)?.classList.remove('on');});
+  ['vegChip','veganChip','gfChip','halalChip'].forEach(id=>{document.getElementById(id)?.classList.remove('on');});
+  document.getElementById('openChip')?.classList.add('on');
   applyF();
 }
 
 function updDot() {
-  const has=F.cuisines[0]!=='any'||F.budget<4||F.dist!=='any'||F.rating>0||F.openNow||F.diet.length>0;
+  const has=F.cuisines[0]!=='any'||F.budget<4||F.dist!=='any'||F.rating>0||F.diet.length>0;
   document.getElementById('fDot').classList.toggle('on',has);
 }
 
@@ -1299,12 +1311,31 @@ function rmTag(k) {
   else if (k==='openNow') { F.openNow=false; document.getElementById('openChip')?.classList.remove('on'); }
   else if (k.startsWith('d_')) { const d=k.slice(2); F.diet=F.diet.filter(x=>x!==d); document.querySelectorAll('.ch').forEach(r=>{if(r.dataset&&r.dataset.v===d)r.classList.remove('on');}); }
   else if (k.startsWith('c_')) { const c=k.slice(2); F.cuisines=F.cuisines.filter(x=>x!==c); document.querySelector(`#cChips [data-v="${c}"]`)?.classList.remove('on'); if(!F.cuisines.length){F.cuisines=['any'];document.querySelector('#cChips [data-v="any"]').classList.add('on');} }
-  rndRest=null; buildSegs(getPool()); draw(wAng); updSum(); updDot();
+  invalidateWheel(); buildSegs(getWheelSlice()); draw(wAng); updSum(); updDot();
 }
 
-function showLocStatus(msg) {
-  const el=document.getElementById('rsStatus');
-  if(el) el.textContent=msg.replace(/[🎰📍]/g,'').trim();
+let _dotInterval = null;
+function showLocStatus(msg, animate=false) {
+  const el = document.getElementById('rsStatus');
+  if (!el) return;
+  const clean = msg.replace(/[🎰📍]/g,'').trim();
+  // Clear any running dot animation
+  if (_dotInterval) { clearInterval(_dotInterval); _dotInterval=null; }
+  // Fade out → update → fade in
+  el.style.opacity = '0';
+  setTimeout(() => {
+    if (animate) {
+      let dots = 0;
+      el.textContent = clean;
+      _dotInterval = setInterval(() => {
+        dots = (dots + 1) % 4;
+        el.textContent = clean + '.'.repeat(dots);
+      }, 400);
+    } else {
+      el.textContent = clean;
+    }
+    el.style.opacity = '1';
+  }, 200);
 }
 
 async function doZip() {
@@ -1314,23 +1345,23 @@ async function doZip() {
     setTimeout(()=>document.getElementById('zipInput').style.borderColor='',1000);
     return;
   }
-  showLocStatus('📍 Looking up ' + zip + '…');
+  showLocStatus('Looking up ' + zip, true);
   try {
     // Geocode zip via nominatim (free, no key needed)
     const res = await fetch(`https://nominatim.openstreetmap.org/search?postalcode=${zip}&country=US&format=json&limit=1`);
     const data = await res.json();
     if (!data.length) { showLocStatus('Zip code not found'); return; }
     const lat = parseFloat(data[0].lat), lng = parseFloat(data[0].lon);
-    const miles = F.dist==='any'?2:parseFloat(F.dist);
+    const miles = 10; // always fetch full 10mi pool; distance filter applied client-side
     const meters = Math.round(miles*1609);
-    showLocStatus('📍 Finding restaurants…');
+    showLocStatus('Finding restaurants', true);
     const r2 = await fetch(`${WORKER_URL}?lat=${lat}&lng=${lng}&radius=${meters}`);
     const places = await r2.json();
     if (Array.isArray(places)&&places.length>0) {
-      REST = places.map(r=>({...r,emoji:r.emoji||typeEmoji(r.cuisine)}));
+      REST = places.map(r=>({...r}));
       locationGranted = true;
       elSBtn.classList.remove('locked');
-      buildSegs(getPool());
+      invalidateWheel(); buildSegs(getWheelSlice()); draw(wAng);
       showLocStatus(`🎰 ${places.length} spots near ${zip} — spin it!`);
       document.getElementById('zipRow').style.display='none';
     } else {
@@ -1341,24 +1372,6 @@ async function doZip() {
   }
 }
 
-function typeEmoji(type) {
-  const t=(type||'').toLowerCase();
-  const map={'sushi_restaurant':'🍣','japanese_restaurant':'🍱','ramen_restaurant':'🍥','chinese_restaurant':'🥡','thai_restaurant':'🍜','vietnamese_restaurant':'🍲','korean_restaurant':'🫕','indian_restaurant':'🍛','pizza_restaurant':'🍕','italian_restaurant':'🍝','american_restaurant':'🍔','hamburger_restaurant':'🍔','fast_food_restaurant':'🍟','mexican_restaurant':'🌮','seafood_restaurant':'🦞','steak_house':'🥩','barbecue_restaurant':'🍖','french_restaurant':'🥐','breakfast_restaurant':'🥚','bakery':'🥐','cafe':'☕','ice_cream_shop':'🍦','sandwich_shop':'🥪'};
-  if (map[t]) return map[t];
-  if (t.includes('sushi')||t.includes('japanese')) return '🍣';
-  if (t.includes('ramen')||t.includes('noodle')) return '🍥';
-  if (t.includes('chinese')) return '🥡';
-  if (t.includes('thai')||t.includes('vietnamese')) return '🍜';
-  if (t.includes('korean')) return '🍱';
-  if (t.includes('indian')||t.includes('curry')) return '🍛';
-  if (t.includes('pizza')||t.includes('italian')) return '🍕';
-  if (t.includes('mexican')||t.includes('taco')) return '🌮';
-  if (t.includes('burger')||t.includes('american')) return '🍔';
-  if (t.includes('steak')||t.includes('bbq')) return '🥩';
-  if (t.includes('seafood')||t.includes('fish')) return '🦞';
-  if (t.includes('bakery')||t.includes('cafe')) return '🥐';
-  return '🍽️';
-}
 
 const CACHE_TTL=60*60*1000;
 function cacheKey(lat,lng,meters){const rlat=Math.round(lat*100)/100,rlng=Math.round(lng*100)/100;return `fr_${rlat}_${rlng}_${meters}`;}
@@ -1371,15 +1384,15 @@ async function loadRestaurants() {
     navigator.geolocation.getCurrentPosition(async pos=>{
       try {
         const {latitude:lat,longitude:lng}=pos.coords;
-        const miles=F.dist==='any'?2:parseFloat(F.dist), meters=Math.round(miles*1609);
+        const miles=10, meters=Math.round(miles*1609); // always fetch full 10mi pool; distance filter applied client-side
         const key=cacheKey(lat,lng,meters);
         const cached=getCached(key);
-        if (cached){REST=cached;locationGranted=true;showLocStatus(`🎰 ${cached.length} spots nearby — spin it!`);resolve();return;}
+        if (cached){REST=cached;locationGranted=true;invalidateWheel();showLocStatus(`${cached.length} spots nearby — spin it!`);resolve();return;}
         const res=await fetch(`${WORKER_URL}?lat=${lat}&lng=${lng}&radius=${meters}`);
         const data=await res.json();
         if (Array.isArray(data)&&data.length>0){
-          const processed=data.map(r=>({...r,emoji:r.emoji||typeEmoji(r.cuisine)}));
-          setCache(key,processed); REST=processed; locationGranted=true; showLocStatus(`🎰 ${data.length} spots nearby — spin it!`);
+          const processed=data.map(r=>({...r}));
+          setCache(key,processed); REST=processed; locationGranted=true; invalidateWheel(); showLocStatus(`${data.length} spots near you — spin it!`);
         } else { showLocStatus('🎰 Ready to spin!'); }
       } catch(e){console.warn('Worker failed',e);showLocStatus('🎰 Ready to spin!');}
       resolve();
@@ -1392,11 +1405,12 @@ loadFilters();
 document.fonts.ready.then(async ()=>{
   elSBtn.classList.add('locked');
   bakeStatic();
-  showLocStatus('📍 Finding restaurants near you…');
-  await loadRestaurants();
-  buildSegs(getPool());
-  if (locationGranted) elSBtn.classList.remove('locked');
+  buildSegs(FALLBACK_REST.slice(0, WHEEL_SIZE));
   loop();
+  showLocStatus('Locating grub', true);
+  await loadRestaurants();
+  buildSegs(getWheelSlice());
+  if (locationGranted) elSBtn.classList.remove('locked');
 });
 </script>
 </body>
