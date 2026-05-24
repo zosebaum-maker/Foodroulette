@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fat Ass Roulette</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=DM+Sans:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=DM+Sans:wght@400;500;700&family=Yellowtail&display=swap" rel="stylesheet">
 <style>
 /* ── Reset & Tokens ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -15,7 +15,7 @@
 html,body{height:100%;}
 body{
   font-family:'DM Sans',sans-serif;min-height:100svh;
-  display:flex;flex-direction:column;align-items:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   color:var(--cream);overflow-x:hidden;
   background-color:#0d3d20;
   background-image:
@@ -57,7 +57,7 @@ body::before{content:'';position:fixed;inset:11px;border:1px solid rgba(201,168,
 h1{font-family:'Cinzel',serif;font-size:clamp(1.4rem,5.5vw,2.4rem);font-weight:900;line-height:1.15;color:var(--cream);text-shadow:0 2px 20px rgba(0,0,0,.9),0 0 40px rgba(201,168,76,.2);letter-spacing:.04em;margin-bottom:6px;}
 h1 span{
   display:block;
-  font-family:'Pacifico',cursive;
+  font-family:'Yellowtail',cursive;
   font-size:clamp(2.2rem,8.5vw,3.8rem);
   font-weight:400;
   letter-spacing:.02em;
@@ -91,7 +91,7 @@ h1 span{
 
 
 /* ── Filter Tags ── */
-.fs{display:none;flex-wrap:wrap;gap:4px;justify-content:center;padding:0 16px;margin-top:6px;position:relative;z-index:1;}
+.fs{display:none;flex-wrap:wrap;gap:4px;justify-content:center;padding:0 16px;margin-top:6px;position:relative;z-index:1;width:100%;max-width:600px;}
 .fs.on{display:flex;}
 .ft{padding:2px 8px;border-radius:12px;background:rgba(0,0,0,.35);border:1px solid rgba(201,168,76,.2);color:var(--gold);font-size:.62rem;font-weight:600;display:flex;align-items:center;gap:3px;}
 .fx{cursor:pointer;opacity:.7;}
@@ -170,6 +170,10 @@ h1 span{
 .sb:disabled{
   opacity:0;pointer-events:none;
 }
+.sb.locked{
+  opacity:.45;filter:grayscale(.6);cursor:not-allowed;animation:none;
+}
+.sb.locked::before{display:none;}
 .sb:disabled::before{display:none;}
 .sb-txt{position:relative;z-index:1;}
 .sb:disabled .sb-txt{opacity:.3;}
@@ -220,7 +224,8 @@ h1 span{
 .suit-r{color:rgba(220,60,60,.85);}
 .vp-body{
   background:transparent;
-  padding:14px 12px 10px;
+  padding:14px 16px 10px;
+  text-align:center;
 }
 /* Spinning state — food icons row */
 .vp-spin-row{
@@ -238,6 +243,24 @@ h1 span{
 .vp-food:nth-child(5){animation-delay:1s;}
 @keyframes vpBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
 .vp-spin-msg{display:none;}
+.zip-row{
+  display:flex;gap:8px;padding:8px 14px 12px;align-items:center;
+}
+.zip-input{
+  flex:1;background:rgba(0,0,0,.3);border:1px solid rgba(201,168,76,.25);
+  border-radius:6px;padding:7px 12px;color:#fff;font-family:'Cinzel',serif;
+  font-size:.7rem;letter-spacing:.1em;text-align:center;
+  outline:none;transition:border-color .15s;
+}
+.zip-input::placeholder{color:rgba(255,255,255,.3);letter-spacing:.05em;}
+.zip-input:focus{border-color:rgba(201,168,76,.6);}
+.zip-btn{
+  background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);
+  border-radius:6px;padding:7px 16px;color:rgba(201,168,76,.9);
+  font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.zip-btn:hover{background:rgba(201,168,76,.25);border-color:rgba(201,168,76,.6);}
 .vp-spin-simple{
   padding:16px 20px;
   display:flex;align-items:center;gap:12px;
@@ -281,29 +304,22 @@ h1 span{
 .rw-photo-attr{font-size:.55rem;color:#888;text-align:right;padding:2px 8px;background:#f8f8f8;border-bottom:1px solid #eee;}
 .rw-photo-attr a{color:#888;text-decoration:none;}
 /* Items */
-.vp-items{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(201,168,76,.2);}
+.vp-items{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(201,168,76,.2);justify-content:center;}
 .vp-item{flex:1;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:8px 10px;}
 .vp-item-emoji{font-size:1.2rem;display:block;margin-bottom:4px;}
 .vp-item-name{font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:2px;}
 .vp-item-desc{font-size:.63rem;color:rgba(255,255,255,.5);line-height:1.3;}
 /* Contact row */
-.vp-contact{display:flex;gap:6px;margin-top:8px;}
+.vp-contact{display:flex;gap:6px;margin-top:8px;justify-content:center;}
 .vp-share-btn{
-  padding:8px 14px;border-radius:8px;font-size:.78rem;font-weight:700;
-  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
-  font-family:'Cinzel',serif;letter-spacing:.08em;text-transform:uppercase;
-  background:linear-gradient(135deg,#c9a84c,#f0c93a,#c9a84c);
-  color:#1a0800;
-  box-shadow:0 3px 12px rgba(201,168,76,.45),0 1px 0 rgba(255,255,255,.2) inset;
-  transition:all .15s;
-  animation:sharePulse 2.5s ease-in-out infinite;
-  width:100%;
+  padding:8px 12px;border-radius:6px;font-size:.75rem;font-weight:600;
+  border:1px solid rgba(255,255,255,.1);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  font-family:'DM Sans',sans-serif;
+  background:rgba(0,0,0,.25);color:rgba(255,255,255,.8);
+  transition:all .15s;width:100%;
 }
-.vp-share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(201,168,76,.65);}
-@keyframes sharePulse{
-  0%,100%{box-shadow:0 3px 12px rgba(201,168,76,.45),0 1px 0 rgba(255,255,255,.2) inset;}
-  50%{box-shadow:0 4px 18px rgba(201,168,76,.75),0 1px 0 rgba(255,255,255,.2) inset;}
-}
+.vp-share-btn:hover{border-color:rgba(201,168,76,.4);color:#fff;background:rgba(0,0,0,.4);}
 .vp-contact-btn{
   flex:1;padding:8px 10px;border-radius:6px;font-size:.75rem;font-weight:600;
   text-decoration:none;border:1px solid rgba(255,255,255,.1);
@@ -314,19 +330,20 @@ h1 span{
 .vp-contact-btn:hover{border-color:rgba(201,168,76,.4);color:#fff;background:rgba(0,0,0,.4);}
 /* Footer bar */
 .vp-footer{
-  padding:10px 12px 14px;
+  padding:10px 16px 14px;
   display:flex;align-items:center;justify-content:center;
   border-top:1px solid rgba(201,168,76,.15);
 }
 .vp-footer-btn{
-  flex:1;padding:11px;border:none;border-radius:9px;
-  background:linear-gradient(135deg,var(--gl),var(--gold));
-  color:#1a0800;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:700;
+  flex:1;padding:10px;border-radius:8px;
+  background:rgba(0,0,0,.3);
+  border:1px solid rgba(201,168,76,.3);
+  color:rgba(201,168,76,.85);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;
   cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;
-  gap:5px;transition:transform .15s;
+  gap:5px;transition:all .15s;
 }
-.vp-footer-btn:hover{transform:translateY(-2px);}
-.vp-footer-btn.red{background:linear-gradient(135deg,var(--gl),var(--gold));color:#1a0800;}
+.vp-footer-btn:hover{background:rgba(0,0,0,.45);border-color:rgba(201,168,76,.55);color:var(--gold);}
+.vp-footer-btn.red{background:rgba(0,0,0,.3);color:rgba(201,168,76,.85);}
 
 
 /* Restaurant photo */
@@ -418,6 +435,18 @@ h1 span{
 .footer-links a:hover{color:var(--gold);}
 .footer-links span{color:var(--dim);font-size:.62rem;}
 .footer-note{font-size:.58rem;color:var(--dim);opacity:.6;}
+.footer-share{font-size:.68rem;color:rgba(255,255,255,.35);margin-bottom:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.footer-share p{margin-bottom:8px;}
+.footer-share-btn{
+  background:transparent;
+  border:1px solid rgba(201,168,76,.25);
+  border-radius:6px;padding:6px 16px;
+  color:rgba(201,168,76,.65);
+  font-family:'Cinzel',serif;font-size:.6rem;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;
+}
+.footer-share-btn:hover{border-color:rgba(201,168,76,.5);color:var(--gold);background:rgba(201,168,76,.06);}
 
 /* ── Confetti particles ── */
 .pt{position:fixed;pointer-events:none;z-index:200;border-radius:50%;animation:pf 1.2s cubic-bezier(.22,1,.36,1) forwards;}
@@ -427,7 +456,7 @@ h1 span{
 <body>
 
 <div class="hd">
-  <div class="logo-r"><div class="logo-l"></div><div class="logo-t">✦ Food Roulette ✦</div><div class="logo-l"></div></div>
+  <div class="logo-r"><div class="logo-l"></div><div class="logo-t">✦ Established 2026 ✦</div><div class="logo-l"></div></div>
   <h1>Welcome to <span>Fat Ass Roulette</span></h1>
   <p class="sub" id="tagline">Place your bets · The wheel decides</p>
 </div>
@@ -459,6 +488,11 @@ h1 span{
         <span class="vp-spin-diamond">◆</span>
         <div class="vp-spin-rule right"></div>
       </div>
+      <div class="zip-row" id="zipRow" style="display:none">
+        <input class="zip-input" id="zipInput" type="text" inputmode="numeric"
+               maxlength="5" placeholder="Enter zip code" autocomplete="postal-code" onkeydown="if(event.key==='Enter')doZip()">
+        <button class="zip-btn" onclick="doZip()">Go</button>
+      </div>
     </div>
     <!-- WINNER STATE (hidden until spin) -->
     <div id="vpWin" style="display:none">
@@ -480,7 +514,7 @@ h1 span{
           <a class="vp-contact-btn" id="wWebsite" href="#" target="_blank" style="display:none">🌐 Website</a>
           <a class="vp-contact-btn" id="wMaps"    href="#" target="_blank" style="display:none">🗺️ Maps</a>
         </div>
-        <div style="display:flex;gap:8px;margin-top:8px;">
+        <div style="display:flex;gap:8px;margin-top:8px;padding:0 16px;">
           <button class="vp-share-btn" id="wShare" onclick="doShare()">📤 Share the Verdict</button>
         </div>
       </div>
@@ -495,6 +529,10 @@ h1 span{
 
 <!-- Footer: Google attribution + legal links -->
 <footer class="app-footer">
+  <div class="footer-share">
+    <p>Know someone who can't decide where to eat?</p>
+    <button class="footer-share-btn" onclick="shareApp()">📤 Share the App</button>
+  </div>
   <img src="https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3.png"
        alt="Powered by Google" translate="no" class="footer-google">
   <div class="footer-links">
@@ -613,6 +651,7 @@ const FALLBACK_REST=[
   {name:"Cassava",short:"Cassava",emoji:"🥗",cuisine:"american",price:"$$",pl:2,rating:4.5,open:true,dist:2.3,addr:"3519 Balboa St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cassava+SF",photoRef:"",photoAttr:null,items:[{name:"Breakfast Sandwich",emoji:"🥚",desc:"Focaccia, egg, aioli"},{name:"Grain Bowl",emoji:"🥗",desc:"Seasonal grains, soft egg"}]},
 ];
 let REST = FALLBACK_REST;
+let locationGranted = false;
 
 /* ═══════════════════════════════════════════
    APP STATE
@@ -686,6 +725,11 @@ const TAGLINES = [
   "In food we trust.",
   "Your gut feeling? More food.",
   "Spin fast, eat faster.",
+  "Real restaurants. Real nearby. Real fate.",
+  "Spinning restaurants near you.",
+  "Every spot on this wheel is within reach.",
+  "All local. All real. All up to fate.",
+  "Your next meal is closer than you think.",
 ];
 
 function setTagline() {
@@ -1004,6 +1048,7 @@ const elVpSpin = document.getElementById('vpSpin');
 const elVpWin  = document.getElementById('vpWin');
 
 function doSpin() {
+  if (!locationGranted) { showLocStatus('📍 Location required to spin'); return; }
   if (spinning && bP!=='parked' && bP!=='locked') return;
   setTagline();
   const pool=getActivePool();
@@ -1141,6 +1186,21 @@ Fat Ass Roulette made the call: https://zosebaum-maker.github.io/Foodroulette/fo
   }
 }
 
+function shareApp() {
+  const url = 'https://zosebaum-maker.github.io/Foodroulette/foodroulette-wheel.html';
+  const text = `Can't decide where to eat? Let fate decide 🎰`;
+  if (navigator.share) {
+    navigator.share({ title: 'Fat Ass Roulette', text, url }).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(url).then(()=>{
+      const el = document.querySelector('.footer-share-btn');
+      const orig = el.textContent;
+      el.textContent = '✓ Link copied!';
+      setTimeout(()=>el.textContent=orig, 2000);
+    });
+  }
+}
+
 function confetti() {
   const cr=cv.getBoundingClientRect(), ccx=cr.left+cr.width/2, ccy=cr.top+cr.height/2;
   const cols=['#f0c93a','#cc1000','#0e8020','#fff','#c9a84c','#44aaff','#ff6644'];
@@ -1242,7 +1302,44 @@ function rmTag(k) {
   rndRest=null; buildSegs(getPool()); draw(wAng); updSum(); updDot();
 }
 
-function showLocStatus(msg) { const el=document.getElementById('rsStatus'); if(el) el.textContent=msg.replace(/[🎰📍]/g,'').trim(); }
+function showLocStatus(msg) {
+  const el=document.getElementById('rsStatus');
+  if(el) el.textContent=msg.replace(/[🎰📍]/g,'').trim();
+}
+
+async function doZip() {
+  const zip = document.getElementById('zipInput').value.trim();
+  if (!/^\d{5}$/.test(zip)) {
+    document.getElementById('zipInput').style.borderColor='rgba(200,50,50,.6)';
+    setTimeout(()=>document.getElementById('zipInput').style.borderColor='',1000);
+    return;
+  }
+  showLocStatus('📍 Looking up ' + zip + '…');
+  try {
+    // Geocode zip via nominatim (free, no key needed)
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?postalcode=${zip}&country=US&format=json&limit=1`);
+    const data = await res.json();
+    if (!data.length) { showLocStatus('Zip code not found'); return; }
+    const lat = parseFloat(data[0].lat), lng = parseFloat(data[0].lon);
+    const miles = F.dist==='any'?2:parseFloat(F.dist);
+    const meters = Math.round(miles*1609);
+    showLocStatus('📍 Finding restaurants…');
+    const r2 = await fetch(`${WORKER_URL}?lat=${lat}&lng=${lng}&radius=${meters}`);
+    const places = await r2.json();
+    if (Array.isArray(places)&&places.length>0) {
+      REST = places.map(r=>({...r,emoji:r.emoji||typeEmoji(r.cuisine)}));
+      locationGranted = true;
+      elSBtn.classList.remove('locked');
+      buildSegs(getPool());
+      showLocStatus(`🎰 ${places.length} spots near ${zip} — spin it!`);
+      document.getElementById('zipRow').style.display='none';
+    } else {
+      showLocStatus('No restaurants found for ' + zip);
+    }
+  } catch(e) {
+    showLocStatus('Could not look up zip code');
+  }
+}
 
 function typeEmoji(type) {
   const t=(type||'').toLowerCase();
@@ -1277,26 +1374,28 @@ async function loadRestaurants() {
         const miles=F.dist==='any'?2:parseFloat(F.dist), meters=Math.round(miles*1609);
         const key=cacheKey(lat,lng,meters);
         const cached=getCached(key);
-        if (cached){REST=cached;showLocStatus(`🎰 ${cached.length} spots nearby — spin it!`);resolve();return;}
+        if (cached){REST=cached;locationGranted=true;showLocStatus(`🎰 ${cached.length} spots nearby — spin it!`);resolve();return;}
         const res=await fetch(`${WORKER_URL}?lat=${lat}&lng=${lng}&radius=${meters}`);
         const data=await res.json();
         if (Array.isArray(data)&&data.length>0){
           const processed=data.map(r=>({...r,emoji:r.emoji||typeEmoji(r.cuisine)}));
-          setCache(key,processed); REST=processed; showLocStatus(`🎰 ${data.length} spots nearby — spin it!`);
+          setCache(key,processed); REST=processed; locationGranted=true; showLocStatus(`🎰 ${data.length} spots nearby — spin it!`);
         } else { showLocStatus('🎰 Ready to spin!'); }
       } catch(e){console.warn('Worker failed',e);showLocStatus('🎰 Ready to spin!');}
       resolve();
-    },()=>{showLocStatus('🎰 Ready to spin!');resolve();},{timeout:8000});
+    },()=>{ showLocStatus('No location — enter a zip code'); document.getElementById('zipRow').style.display='flex'; resolve();},{timeout:8000});
   });
 }
 
 setTagline();
 loadFilters();
 document.fonts.ready.then(async ()=>{
+  elSBtn.classList.add('locked');
   bakeStatic();
   showLocStatus('📍 Finding restaurants near you…');
   await loadRestaurants();
   buildSegs(getPool());
+  if (locationGranted) elSBtn.classList.remove('locked');
   loop();
 });
 </script>
