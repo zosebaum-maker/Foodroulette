@@ -4,6 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fat Ass Roulette</title>
+<meta name="description" content="Spin the wheel. Let fate pick where you eat tonight.">
+<meta property="og:type"         content="website">
+<meta property="og:url"          content="https://zosebaum-maker.github.io/Foodroulette/foodroulette-wheel.html">
+<meta property="og:title"        content="Fat Ass Roulette 🎰">
+<meta property="og:description"  content="Can't decide where to eat? Spin the wheel. Let fate decide.">
+<meta property="og:image"        content="https://zosebaum-maker.github.io/Foodroulette/preview.png">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="Fat Ass Roulette 🎰">
+<meta name="twitter:description" content="Can't decide where to eat? Spin the wheel. Let fate decide.">
+<meta name="twitter:image"       content="https://zosebaum-maker.github.io/Foodroulette/preview.png">
+<meta name="description" content="Spin the wheel. Let fate pick where you eat tonight.">
+
+<!-- Open Graph / Facebook / iMessage -->
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="https://zosebaum-maker.github.io/Foodroulette/foodroulette-wheel.html">
+<meta property="og:title"       content="Fat Ass Roulette 🎰">
+<meta property="og:description" content="Can't decide where to eat? Spin the wheel. Let fate decide.">
+<meta property="og:image"       content="https://zosebaum-maker.github.io/Foodroulette/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter / X -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="Fat Ass Roulette 🎰">
+<meta name="twitter:description" content="Can't decide where to eat? Spin the wheel. Let fate decide.">
+<meta name="twitter:image"       content="https://zosebaum-maker.github.io/Foodroulette/preview.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Yellowtail&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -43,9 +71,9 @@ body{
     radial-gradient(ellipse 100% 100% at 50% 50%,transparent 40%,rgba(0,0,0,.6) 100%);
 }
 /* Gold border frame */
-body::after{content:'';position:fixed;inset:10px;border:1px solid rgba(201,168,76,.2);pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:10px;border:1px solid rgba(201,168,76,.2);pointer-events:none;z-index:0;top:10px;bottom:auto;height:calc(100vh - 20px);}
 /* Inner subtle glow on border */
-body::before{content:'';position:fixed;inset:11px;border:1px solid rgba(201,168,76,.06);pointer-events:none;z-index:0;}
+body::before{content:'';position:fixed;inset:11px;border:1px solid rgba(201,168,76,.06);pointer-events:none;z-index:0;top:11px;bottom:auto;height:calc(100vh - 22px);}
 
 /* ── Animations ── */
 @keyframes winPop{0%{opacity:0;transform:translateY(14px) scale(.95)}70%{opacity:1;transform:translateY(-3px) scale(1.01)}100%{opacity:1;transform:translateY(0) scale(1)}}
@@ -102,7 +130,7 @@ h1 span{
 /* ── Wheel ── */
 .wz{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;margin-top:6px;}
 .wr{position:relative;display:flex;align-items:center;justify-content:center;}
-#wc{display:block;border-radius:50%;cursor:pointer;box-shadow:0 10px 40px rgba(0,0,0,.7);will-change:contents;touch-action:pan-y;}
+#wc{display:block;border-radius:50%;cursor:default;box-shadow:0 10px 40px rgba(0,0,0,.7);will-change:contents;touch-action:pan-y;image-rendering:crisp-edges;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;outline:none;}
 @media(max-width:620px){.wz{padding:0;}.wr{width:100%;}}
 
 /* ── Action Bar ── */
@@ -309,15 +337,30 @@ h1 span{
 .vp-item-desc{font-size:.63rem;color:rgba(255,255,255,.5);line-height:1.3;}
 /* Contact row */
 .vp-contact{display:flex;gap:6px;margin-top:8px;justify-content:center;}
-.vp-share-btn{
-  padding:8px 12px;border-radius:6px;font-size:.75rem;font-weight:600;
-  border:1px solid rgba(255,255,255,.1);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  font-family:system-ui,-apple-system,sans-serif;
-  background:rgba(0,0,0,.25);color:rgba(255,255,255,.8);
-  transition:all .15s;width:100%;
+@keyframes sharePulse{
+  0%,100%{opacity:1;}
+  50%{opacity:.72;}
 }
-.vp-share-btn:hover{border-color:rgba(201,168,76,.4);color:#fff;background:rgba(0,0,0,.4);}
+.vp-share-btn{
+  padding:10px 16px;border-radius:8px;font-size:.76rem;font-weight:600;
+  border:1px solid rgba(255,255,255,.15);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  font-family:system-ui,-apple-system,sans-serif;
+  background:rgba(255,255,255,.07);
+  color:rgba(255,255,255,.9);
+  transition:background .2s, border-color .2s, transform .12s;
+  width:100%;
+}
+.vp-share-btn span.share-icon{
+  display:inline-block;
+  animation:sharePulse 2s ease-in-out infinite;
+}
+.vp-share-btn:hover{
+  background:rgba(255,255,255,.13);
+  border-color:rgba(255,255,255,.3);
+  transform:translateY(-1px);
+}
+.vp-share-btn:active{transform:translateY(1px);}
 .vp-contact-btn{
   flex:1;padding:8px 10px;border-radius:6px;font-size:.75rem;font-weight:600;
   text-decoration:none;border:1px solid rgba(255,255,255,.1);
@@ -446,6 +489,30 @@ h1 span{
 }
 .footer-share-btn:hover{border-color:rgba(201,168,76,.5);color:var(--gold);background:rgba(201,168,76,.06);}
 
+/* ── Delivery buttons ── */
+.delivery-row{display:flex;gap:6px;margin-top:8px;padding:0 16px;}
+.delivery-btn{
+  flex:1;padding:9px 6px;border-radius:8px;font-size:.72rem;font-weight:700;
+  text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;
+  transition:all .15s;border:1px solid transparent;
+  font-family:system-ui,-apple-system,sans-serif;
+}
+.delivery-btn.dd{background:#ff3008;color:#fff;border-color:#cc2600;}
+.delivery-btn.dd:hover{background:#e02800;}
+.delivery-btn.ue{background:#06c167;color:#fff;border-color:#059a52;}
+.delivery-btn.ue:hover{background:#059a52;}
+.delivery-btn.gz{background:#00b2d6;color:#fff;border-color:#0092b0;}
+.delivery-btn.gz:hover{background:#0092b0;}
+
+/* ── Photo zoom-in on appear ── */
+@keyframes photoReveal{0%{transform:scale(1.08);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.rw-photo.revealed{animation:photoReveal .5s cubic-bezier(.22,1,.36,1) both;}
+
+/* ── Spin-again card exit ── */
+@keyframes cardExit{0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-12px) scale(.97);}}
+.vp-card.exiting{animation:cardExit .18s ease forwards;pointer-events:none;}
+
+
 /* ── Confetti particles ── */
 .pt{position:fixed;pointer-events:none;z-index:200;border-radius:50%;animation:pf 1.2s cubic-bezier(.22,1,.36,1) forwards;}
 @keyframes pf{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.02);}}
@@ -464,7 +531,7 @@ h1 span{
 
 <div class="wz" style="position:relative;">
   <div class="wr" id="wRing">
-    <canvas id="wc" onclick="doSpin()"></canvas>
+    <canvas id="wc"></canvas>
   </div>
 
 </div>
@@ -513,11 +580,13 @@ h1 span{
           <a class="vp-contact-btn" id="wMaps"    href="#" target="_blank" style="display:none">🗺️ Maps</a>
         </div>
         <div style="display:flex;gap:8px;margin-top:8px;padding:0 16px;">
-          <button class="vp-share-btn" id="wShare" onclick="doShare()">📤 Share the Verdict</button>
+          <button class="vp-share-btn" id="wShare" onclick="doShare()"><span class="share-icon">📤</span> Share the Verdict</button>
         </div>
       </div>
-      <div class="vp-footer" style="flex-direction:column;gap:8px;">
-        <a class="vp-footer-btn" id="wLink" href="#" target="_blank">🛵 Order on DoorDash</a>
+      <div class="delivery-row" id="deliveryRow">
+        <a class="delivery-btn dd" id="wDoorDash" href="#" target="_blank">🛵 DoorDash</a>
+        <a class="delivery-btn ue" id="wUberEats" href="#" target="_blank">🚗 Uber Eats</a>
+        <a class="delivery-btn gz" id="wGrubhub"  href="#" target="_blank">🍔 Grubhub</a>
       </div>
     </div>
   </div>
@@ -747,6 +816,7 @@ let wIdx = 0;
 
 function buildSegs(pool) {
   const n   = pool.length;
+  if (n === 0) { segs = []; return; }
   const arc = (Math.PI * 2) / n;
   const eSz = n <= 8 ? 24 : n <= 14 ? 20 : n <= 20 ? 16 : n <= 28 ? 13 : 11;
   const nSz = n <= 8 ? 13 : n <= 14 ? 11 : n <= 20 ?  9 : n <= 28 ?  8 :  7;
@@ -878,6 +948,11 @@ function bakeStatic() {
   staticImg = oc;
 }
 
+// Pre-cache gradient — created once, reused every frame
+const _outerShadow = cx.createRadialGradient(R,R,RGA*0.88,R,R,RGA);
+_outerShadow.addColorStop(0,'rgba(0,0,0,0.0)');
+_outerShadow.addColorStop(1,'rgba(0,0,0,0.22)');
+
 function draw(ang) {
   cx.clearRect(0,0,SZ,SZ);
   cx.beginPath(); cx.arc(R,R,RGA,0,Math.PI*2); cx.fillStyle='#060606'; cx.fill();
@@ -886,9 +961,7 @@ function draw(ang) {
     cx.beginPath(); cx.moveTo(R,R); cx.arc(R,R,RGA,sa,ea); cx.closePath();
     cx.fillStyle=seg.col; cx.fill();
   });
-  const outerShadow=cx.createRadialGradient(R,R,RGA*0.88,R,R,RGA);
-  outerShadow.addColorStop(0,'rgba(0,0,0,0.0)'); outerShadow.addColorStop(1,'rgba(0,0,0,0.22)');
-  cx.beginPath(); cx.arc(R,R,RGA,0,Math.PI*2); cx.fillStyle=outerShadow; cx.fill();
+  cx.beginPath(); cx.arc(R,R,RGA,0,Math.PI*2); cx.fillStyle=_outerShadow; cx.fill();
   segs.forEach(seg => {
     const sa=seg.sa+ang;
     const ix=R+Math.cos(sa)*RPI, iy=R+Math.sin(sa)*RPI;
@@ -925,7 +998,7 @@ function drawBall(bx,by) {
 /* ═══════════════════════════════════════════
    PHYSICS STATE
 ═══════════════════════════════════════════ */
-let bP='idle', bA=0, bRad=0, bVA=0, bVR=0, wV=0, fired=false, parkedOffset=0, bounceF=0;
+let bP='idle', bA=0, bRad=0, bVA=0, bVR=0, wV=0.003, fired=false, parkedOffset=0, bounceF=0;
 
 document.addEventListener('visibilitychange', () => { if (!document.hidden) requestAnimationFrame(loop); });
 
@@ -990,7 +1063,9 @@ function loop(ts) {
       if (Math.abs(wV)<=0.0032) { parkedOffset=segs[wIdx].ma; bP='parked'; spinning=false; wV=0.003; }
     }
   } else {
-    wV=0.003; wAng+=wV*dt;
+    // Idle — constant smooth drift, no jitter
+    const IDLE_SPEED = 0.003;
+    wAng += IDLE_SPEED * dt;
   }
   draw(wAng);
   if (bP==='parked') {
@@ -1018,22 +1093,33 @@ function doSpin() {
   setTagline();
   const pool=getActivePool();
   if (!pool.length) { alert('No restaurants match your filters!'); return; }
-  spinning=true; fired=false; bP='idle'; parkedOffset=0; bounceF=0;
-  // Show spin state
-  elVpWin.style.display='none'; elVpSpin.style.display=''; document.getElementById('vpCard').classList.add('vp-card--spin');
+
+  const startSpin = () => {
+    spinning=true; fired=false; bP='idle'; parkedOffset=0; bounceF=0;
+    elVpWin.style.display='none'; elVpSpin.style.display=''; document.getElementById('vpCard').classList.add('vp-card--spin');
   if (hasSpunOnce) {
     document.getElementById('rsStatus').textContent='Awaiting your spin';
   }
-  ring.classList.add('spinning');
-  elSBtn.disabled=true; elFBtn.disabled=true; elRndBtn.disabled=true;
-  buildSegs(pool);
-  wIdx=Math.floor(Math.random()*pool.length);
-  const arc=(Math.PI*2)/pool.length, pMid=(wIdx+.5)*arc, tFinal=-pMid-Math.PI/2;
-  const extra=4+Math.floor(Math.random()*3);
-  const total=Math.PI*2*extra+((tFinal-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
-  wV=total*0.010;
-  bA=Math.random()*Math.PI*2; bRad=RTK;
-  bVA=-(0.24+Math.random()*0.06); bVR=0; bP='orbit';
+    ring.classList.add('spinning');
+    elSBtn.disabled=true; elFBtn.disabled=true; elRndBtn.disabled=true;
+    buildSegs(pool);
+    wIdx=Math.floor(Math.random()*pool.length);
+    const arc=(Math.PI*2)/pool.length, pMid=(wIdx+.5)*arc, tFinal=-pMid-Math.PI/2;
+    const extra=4+Math.floor(Math.random()*3);
+    const total=Math.PI*2*extra+((tFinal-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+    wV=total*0.010;
+    bA=Math.random()*Math.PI*2; bRad=RTK;
+    bVA=-(0.24+Math.random()*0.06); bVR=0; bP='orbit';
+  };
+
+  // If winner card is showing, animate it out first
+  const card = document.getElementById('vpCard');
+  if (elVpWin.style.display !== 'none') {
+    card.classList.add('exiting');
+    setTimeout(() => { card.classList.remove('exiting'); startSpin(); }, 180);
+  } else {
+    startSpin();
+  }
 }
 
 const elWE=document.getElementById('wE');
@@ -1041,7 +1127,6 @@ const elWL=document.getElementById('wL');
 const elWN=document.getElementById('wN');
 const elWP=document.getElementById('wP');
 const elWA=document.getElementById('wA');
-const elWLnk=document.getElementById('wLink');
 const elWPhoto=document.getElementById('wPhoto');
 const elWPhotoAt=document.getElementById('wPhotoAttr');
 const elWPhotoW=document.getElementById('wPhotoWrap');
@@ -1062,13 +1147,18 @@ function onDone() {
   elWE.textContent=item.emoji;
   elWL.textContent="Tonight's Restaurant";
   elWN.textContent=item.name;
-  elWP.innerHTML=`<span class="vp-pill cuisine">${item.cuisine}</span><span class="vp-pill price">${item.price}</span><span class="vp-pill rating">⭐${item.rating}</span><span class="vp-pill open">${item.open?'● Open':'○ Closed'}</span>`;
+  const distStr = item.dist ? (item.dist < 0.1 ? 'nearby' : item.dist.toFixed(1)+' mi') : '';
+  elWP.innerHTML=`<span class="vp-pill cuisine">${item.cuisine}</span><span class="vp-pill price">${item.price}</span><span class="vp-pill rating">⭐${item.rating}</span><span class="vp-pill open">${item.open?'● Open':'○ Closed'}</span>${distStr?`<span class="vp-pill rating">📍 ${distStr}</span>`:''}`;
   elWA.textContent='📍 '+(item.addr||'');
-  elWLnk.href=`https://www.doordash.com/search/store/${encodeURIComponent(item.name)}/`;
+  const enc = encodeURIComponent(item.name);
+  document.getElementById('wDoorDash').href = `https://www.doordash.com/search/store/${enc}/`;
+  document.getElementById('wUberEats').href = `https://www.ubereats.com/search?q=${enc}`;
+  document.getElementById('wGrubhub').href  = `https://www.grubhub.com/search?queryText=${enc}`;
   if (item.photoRef) {
     const photoUrl=item.photoRef.startsWith('http')?item.photoRef:`${WORKER_URL}/photo?ref=${encodeURIComponent(item.photoRef)}`;
     elWPhoto.src=photoUrl;
-    elWPhoto.onload=()=>{elWPhotoW.style.display='';};
+    elWPhoto.classList.remove('revealed');
+    elWPhoto.onload=()=>{ elWPhotoW.style.display=''; requestAnimationFrame(()=>elWPhoto.classList.add('revealed')); };
     elWPhoto.onerror=()=>{elWPhotoW.style.display='none';};
     if (item.photoAttr&&item.photoAttr.name) { elWPhotoAt.style.display=''; elWPhotoAt.innerHTML=`Photo: <a href="${item.photoAttr.uri||'#'}" target="_blank">${item.photoAttr.name}</a> · Google Maps`; }
     else if (!item.photoRef.startsWith('http')) { elWPhotoAt.style.display=''; elWPhotoAt.innerHTML=`Photo via <a href="https://maps.google.com" target="_blank">Google Maps</a>`; }
@@ -1147,7 +1237,8 @@ function getActivePool() { return rndRest || getWheelSlice(); }
 function doRandomize() {
   if (spinning&&bP!=='parked'&&bP!=='locked') return;
   if (REST===FALLBACK_REST) return;
-  invalidateWheel(); // force fresh shuffle
+  clearLocationCache();
+  invalidateWheel();
   rndRest=getWheelSlice();
   buildSegs(rndRest); draw(wAng);
   const btn=document.getElementById('rndBtn');
@@ -1215,12 +1306,21 @@ function shareApp() {
 
 function confetti() {
   const cr=cv.getBoundingClientRect(), ccx=cr.left+cr.width/2, ccy=cr.top+cr.height/2;
+  const shapes=['🍕','🌮','🍔','🍣','🍜','🌶️','🥩','🍦','🍖','🥗','🍟','🥐'];
   const cols=['#f0c93a','#cc1000','#0e8020','#fff','#c9a84c','#44aaff','#ff6644'];
-  for (let i=0;i<55;i++) {
-    const p=document.createElement('div'); p.className='pt';
-    const a=Math.random()*Math.PI*2, d=80+Math.random()*220, s=4+Math.random()*10;
-    p.style.cssText=`left:${ccx}px;top:${ccy}px;width:${s}px;height:${s}px;background:${cols[i%cols.length]};--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d}px;animation-duration:${1+Math.random()*.8}s;animation-delay:${Math.random()*.15}s;`;
-    document.body.appendChild(p); setTimeout(()=>p.remove(),2200);
+  for (let i=0;i<48;i++) {
+    const isEmoji = i < 16; // first 16 are food emoji, rest are dots
+    const p=document.createElement('div');
+    const a=Math.random()*Math.PI*2, d=60+Math.random()*240;
+    if (isEmoji) {
+      p.style.cssText=`position:fixed;pointer-events:none;z-index:200;font-size:${14+Math.random()*10}px;left:${ccx}px;top:${ccy}px;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d}px;animation:pf ${1+Math.random()*.8}s cubic-bezier(.22,1,.36,1) forwards;animation-delay:${Math.random()*.12}s;`;
+      p.textContent = shapes[i % shapes.length];
+    } else {
+      p.className='pt';
+      const s=4+Math.random()*8;
+      p.style.cssText=`left:${ccx}px;top:${ccy}px;width:${s}px;height:${s}px;background:${cols[i%cols.length]};--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d}px;animation-duration:${1+Math.random()*.8}s;animation-delay:${Math.random()*.15}s;`;
+    }
+    document.body.appendChild(p); setTimeout(()=>p.remove(),2400);
   }
 }
 
@@ -1377,6 +1477,18 @@ const CACHE_TTL=60*60*1000;
 function cacheKey(lat,lng,meters){const rlat=Math.round(lat*100)/100,rlng=Math.round(lng*100)/100;return `fr_${rlat}_${rlng}_${meters}`;}
 function getCached(key){try{const raw=localStorage.getItem(key);if(!raw)return null;const{ts,data}=JSON.parse(raw);if(Date.now()-ts>CACHE_TTL){localStorage.removeItem(key);return null;}return data;}catch(e){return null;}}
 function setCache(key,data){try{localStorage.setItem(key,JSON.stringify({ts:Date.now(),data}));}catch(e){}}
+
+// Clear location cache so randomize fetches fresh data
+function clearLocationCache() {
+  try {
+    Object.keys(localStorage).filter(k=>k.startsWith('fr_')).forEach(k=>{
+      if (!k.includes('filters')) localStorage.removeItem(k);
+    });
+  } catch(e) {}
+}
+
+
+
 
 async function loadRestaurants() {
   return new Promise(resolve=>{
