@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Tokens ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#c9a84c; --gl:#f0c93a; --gd:#7a5010;
+  --felt:#0b2d18; --cream:#f2e8cc; --dim:#4a8060;
+}
+html,body{height:100%;}
+body{
+  font-family:'DM Sans',sans-serif;min-height:100svh;
+  display:flex;flex-direction:column;align-items:center;
+  background:var(--felt);color:var(--cream);overflow-x:hidden;
+  background-image:
+    radial-gradient(ellipse 110% 50% at 50% -5%,#1a5c35 0%,transparent 55%),
+    radial-gradient(ellipse 90% 90% at 50% 55%,transparent 20%,rgba(0,0,0,.55) 100%);
+}
+body::after{content:'';position:fixed;inset:12px;border:1px solid rgba(201,168,76,.14);pointer-events:none;z-index:0;}
+
+/* ── Animations ── */
+@keyframes winPop{0%{opacity:0;transform:translateY(10px) scale(.97)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fadeOut{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-8px)}}
+.rs-winner.fading{animation:fadeOut .22s ease forwards;}
+
+/* ── Header ── */
+.hd{padding:20px 16px 0;text-align:center;position:relative;z-index:1;}
+.logo-r{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.logo-l{height:1px;flex:1;background:linear-gradient(to right,transparent,rgba(201,168,76,.45),transparent);}
+.logo-t{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);font-weight:700;white-space:nowrap;}
+h1{font-family:'Cinzel',serif;font-size:clamp(1.2rem,4.5vw,2rem);font-weight:900;line-height:1;color:var(--cream);text-shadow:0 2px 16px rgba(0,0,0,.8);letter-spacing:.06em;margin-bottom:6px;}
+h1 span{color:var(--gl);}
+.sub{font-size:.68rem;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px;}
+
+/* ── Mode Toggle ── */
+.mode{display:flex;background:rgba(0,0,0,.5);border:1px solid rgba(201,168,76,.18);border-radius:8px;padding:3px;margin:12px auto 0;width:calc(100% - 32px);max-width:280px;position:relative;z-index:1;}
+.mb{flex:1;padding:8px 4px;border-radius:6px;border:none;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;cursor:pointer;transition:all .2s;background:transparent;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:1px;}
+.mb .ic{font-size:.9rem;}
+.mb.on{background:linear-gradient(135deg,var(--gl),var(--gold));color:#1a0800;box-shadow:0 2px 10px rgba(201,168,76,.4);}
+
+/* ── Filter Tags ── */
+.fs{display:none;flex-wrap:wrap;gap:4px;justify-content:center;padding:0 16px;margin-top:6px;position:relative;z-index:1;}
+.fs.on{display:flex;}
+.ft{padding:2px 8px;border-radius:12px;background:rgba(0,0,0,.35);border:1px solid rgba(201,168,76,.2);color:var(--gold);font-size:.62rem;font-weight:600;display:flex;align-items:center;gap:3px;}
+.fx{cursor:pointer;opacity:.7;}
+
+/* ── Wheel ── */
+.wz{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;margin-top:6px;}
+.wr{position:relative;display:flex;align-items:center;justify-content:center;}
+#wc{display:block;border-radius:50%;cursor:pointer;box-shadow:0 10px 40px rgba(0,0,0,.7);}
+
+/* ── Action Bar ── */
+.ab{display:flex;gap:10px;align-items:center;width:calc(100% - 24px);max-width:600px;margin:10px auto 0;position:relative;z-index:1;}
+.fb{width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;position:relative;transition:border-color .15s;}
+.fb:hover{border-color:var(--gold);}
+.fd{width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--felt);position:absolute;top:2px;right:2px;display:none;}
+.fd.on{display:block;}
+.sb{flex:1;padding:14px;border:none;border-radius:10px;cursor:pointer;font-family:'Cinzel',serif;font-size:1rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1a0800;background:linear-gradient(145deg,var(--gl),var(--gold) 55%,var(--gd));box-shadow:0 5px 20px rgba(201,168,76,.4),0 2px 0 var(--gd);position:relative;overflow:hidden;transition:all .15s;}
+.sb::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.18),transparent 55%);}
+.sb:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 9px 28px rgba(201,168,76,.55),0 2px 0 var(--gd);}
+.sb:disabled{background:rgba(255,255,255,.07);color:rgba(255,255,255,.2);box-shadow:none;cursor:not-allowed;}
+.rb{width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(201,168,76,.2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all .15s;}
+.rb:hover{border-color:var(--gold);background:rgba(201,168,76,.12);}
+
+/* ── Result Strip ── */
+.strip{width:calc(100% - 24px);max-width:600px;margin:10px auto 14px;position:relative;z-index:1;}
+.rs-empty{display:flex;align-items:center;gap:12px;padding:16px 18px;border:1px dashed rgba(201,168,76,.18);border-radius:12px;background:rgba(0,0,0,.15);}
+.rs-empty.hide{display:none;}
+.rs-chips{display:flex;}
+.cs{width:28px;height:28px;border-radius:50%;border:2px solid rgba(0,0,0,.3);margin-left:-5px;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;color:#fff;}
+.cs:first-child{margin-left:0;}
+.cs-r{background:#b30000;}.cs-g{background:#006622;}.cs-b{background:#0044bb;}
+.rs-empty-txt{color:var(--dim);font-size:.8rem;line-height:1.4;}
+.rs-empty-txt strong{display:block;font-family:'Cinzel',serif;font-size:.6rem;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+/* ── Winner card ── */
+@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+.rs-winner{
+  display:none;
+  background:linear-gradient(160deg,#030f05 0%,#061508 50%,#020c04 100%);
+  border:1px solid rgba(201,168,76,.5);
+  border-radius:14px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(201,168,76,.15),0 8px 40px rgba(0,0,0,.6),0 0 60px rgba(201,168,76,.08);
+}
+.rs-winner.show{display:block;animation:winPop .4s cubic-bezier(.34,1.4,.64,1) both;}
+/* Gold shimmer bar at top */
+.rs-winner::before{
+  content:'';display:block;height:3px;
+  background:linear-gradient(90deg,transparent 0%,#7a5010 15%,#f0c93a 35%,#fff8c0 50%,#f0c93a 65%,#7a5010 85%,transparent 100%);
+  background-size:200% auto;
+  animation:shimmer 3s linear infinite;
+}
+.rw-in{padding:0;}
+
+/* Hero emoji + name section */
+.rw-hero{
+  text-align:center;
+  padding:22px 16px 16px;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,76,.12) 0%,transparent 70%);
+  border-bottom:1px solid rgba(201,168,76,.1);
+}
+.rw-emoji{
+  font-size:4rem;line-height:1;
+  display:block;margin-bottom:10px;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));
+}
+.rw-label{
+  font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.35em;
+  color:var(--gold);text-transform:uppercase;margin-bottom:8px;font-weight:700;
+  opacity:.8;
+}
+.rw-name{
+  font-family:'Cinzel',serif;font-size:1.45rem;font-weight:900;
+  color:#fff;line-height:1.1;margin-bottom:10px;
+  text-shadow:0 2px 20px rgba(201,168,76,.3);
+}
+.rw-desc{font-size:.76rem;color:var(--dim);font-style:italic;margin-bottom:8px;display:none;line-height:1.4;}
+.rw-pills{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:2px;}
+.pill{font-size:.65rem;padding:3px 10px;border-radius:20px;font-weight:600;}
+.p-c{background:rgba(0,0,0,.5);color:#88c878;border:1px solid rgba(80,160,60,.3);}
+.p-p{background:rgba(0,0,0,.5);color:#88c878;border:1px solid rgba(80,160,60,.25);}
+.p-r{background:rgba(0,0,0,.5);color:#e8c86a;border:1px solid rgba(201,168,76,.3);}
+.p-o{background:rgba(0,50,15,.6);color:#55c878;border:1px solid rgba(50,160,80,.3);}
+.rw-addr{font-size:.68rem;color:var(--dim);margin-top:6px;}
+
+/* Body section below hero */
+.rw-body{padding:14px 16px 16px;}
+.rw-info{flex:1;min-width:0;}
+.rw-top{display:flex;gap:12px;align-items:center;margin-bottom:12px;}
+
+/* Restaurant photo */
+.rw-photo{
+  width:100%;height:160px;object-fit:cover;display:block;
+  border-bottom:1px solid rgba(201,168,76,.12);
+}
+.rw-photo-wrap{position:relative;overflow:hidden;max-height:160px;}
+.rw-photo-wrap::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 50%,rgba(2,8,3,.85) 100%);
+}
+
+/* Contact row */
+.rw-contact{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.rw-contact-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:8px 12px;border-radius:8px;font-size:.78rem;font-weight:600;
+  text-decoration:none;border:1px solid rgba(201,168,76,.2);
+  background:rgba(0,0,0,.3);color:var(--cream);cursor:pointer;
+  transition:border-color .15s,background .15s;flex:1;justify-content:center;
+}
+.rw-contact-btn:hover{border-color:var(--gold);background:rgba(201,168,76,.08);}
+/* Items to try */
+.rw-items{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(201,168,76,.12);}
+.rw-item{flex:1;background:rgba(0,0,0,.25);border:1px solid rgba(201,168,76,.1);border-radius:8px;padding:8px 10px;}
+.rw-item-emoji{font-size:1.2rem;margin-bottom:4px;}
+.rw-item-name{font-size:.72rem;font-weight:700;color:var(--cream);margin-bottom:2px;}
+.rw-item-desc{font-size:.63rem;color:var(--dim);line-height:1.3;}
+.rw-acts{display:flex;gap:8px;}
+.btn-dd{flex:1;padding:11px;border:none;border-radius:9px;background:linear-gradient(135deg,var(--gl),var(--gold));color:#1a0800;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;transition:transform .15s;}
+.btn-dd:hover{transform:translateY(-2px);}
+
+/* ── Filter Sheet ── */
+.so{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
+.so.on{opacity:1;pointer-events:all;}
+.sh{position:fixed;bottom:0;left:0;right:0;background:#061008;border-top:1px solid rgba(201,168,76,.2);border-radius:18px 18px 0 0;padding:0 0 env(safe-area-inset-bottom,20px);z-index:101;transform:translateY(100%);transition:transform .22s cubic-bezier(.32,.72,0,1);}
+.sh.on{transform:translateY(0);}
+.sh-h{display:flex;justify-content:center;padding:10px 0 6px;}
+.sh-b{width:36px;height:4px;background:rgba(201,168,76,.25);border-radius:2px;}
+.sh-hd{display:flex;justify-content:space-between;align-items:center;padding:2px 18px 12px;border-bottom:1px solid rgba(201,168,76,.1);}
+.sh-ti{font-family:'Cinzel',serif;font-size:1.05rem;color:var(--cream);font-weight:700;}
+.sh-x{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(201,168,76,.15);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+/* Filter sections */
+.ss{padding:14px 18px 0;}
+.sl{font-family:'Cinzel',serif;font-size:.5rem;text-transform:uppercase;letter-spacing:.22em;color:var(--dim);font-weight:700;margin-bottom:9px;}
+/* Chip grid — used for cuisine, budget, distance, rating, open, dietary */
+.cg{display:flex;flex-wrap:wrap;gap:6px;}
+.ch{padding:7px 13px;border-radius:50px;border:1px solid rgba(201,168,76,.15);background:rgba(255,255,255,.04);color:var(--dim);font-size:.78rem;font-weight:600;cursor:pointer;user-select:none;transition:background .1s,color .1s,border-color .1s;}
+.ch.on{background:var(--gold);border-color:var(--gold);color:#1a0800;}
+.sr{display:block;text-align:center;margin:14px 0 4px;font-size:.67rem;color:var(--dim);cursor:pointer;letter-spacing:.1em;text-transform:uppercase;padding-bottom:8px;}
+.sr:hover{color:var(--gold);}
+
+/* ── History — classic casino tote board ── */
+.hist{width:calc(100% - 24px);max-width:600px;margin:0 auto 16px;position:relative;z-index:1;}
+.hist-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.hist-hd-line{height:1px;flex:1;background:rgba(201,168,76,.15);}
+.hist-hd-txt{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);white-space:nowrap;}
+.hist-board{background:rgba(0,0,0,.6);border:1px solid rgba(201,168,76,.18);border-radius:10px;overflow:hidden;}
+.hist-board::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.3),transparent);}
+.hist-row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);transition:opacity .3s;}
+.hist-row:last-child{border-bottom:none;}
+.hist-num{font-family:'Cinzel',serif;font-size:.6rem;color:var(--dim);width:16px;text-align:right;flex-shrink:0;}
+.hist-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;border:2px solid rgba(0,0,0,.3);}
+.hist-dot.red{background:#9a0000;}.hist-dot.black{background:#1a1a1a;border-color:#333;}.hist-dot.green{background:#006622;}
+.hist-info{flex:1;min-width:0;}
+.hist-name{font-size:.78rem;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-sub{font-size:.62rem;color:var(--dim);}
+.hist-badge{font-size:.6rem;padding:2px 7px;border-radius:8px;background:rgba(0,0,0,.4);border:1px solid rgba(201,168,76,.15);color:var(--dim);white-space:nowrap;flex-shrink:0;}
+.hist-row.newest .hist-name{color:var(--gl);}
+.hist-row.newest .hist-badge{border-color:rgba(201,168,76,.4);color:var(--gold);}
+
+/* ── Confetti particles ── */
+.pt{position:fixed;pointer-events:none;z-index:200;border-radius:50%;animation:pf 1.4s ease forwards;}
+@keyframes pf{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.02);}}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div class="logo-r"><div class="logo-l"></div><div class="logo-t">✦ Food Roulette ✦</div><div class="logo-l"></div></div>
+  <h1>WHAT'S FOR <span>DINNER?</span></h1>
+  <p class="sub">Place your bets · The wheel decides</p>
+</div>
+
+<div class="mode">
+  <button class="mb on" id="btnR" onclick="setMode('restaurant')"><span class="ic">🏪</span>Restaurant</button>
+  <button class="mb"    id="btnM" onclick="setMode('meal')"><span class="ic">🍽️</span>Specific Meal</button>
+</div>
+<div class="fs" id="fSum"></div>
+
+<div class="wz">
+  <div class="wr" id="wRing">
+    <canvas id="wc" onclick="doSpin()"></canvas>
+  </div>
+</div>
+
+<div class="ab">
+  <button class="fb" id="fBtn" onclick="openSheet();event.stopPropagation();">⚙️<div class="fd" id="fDot"></div></button>
+  <button class="sb" id="sBtn" onclick="doSpin()">Spin the Wheel</button>
+  <button class="rb" id="rndBtn" onclick="doRandomize()" title="Randomize">🎲</button>
+</div>
+
+<div class="strip">
+  <div class="rs-empty" id="rsE">
+    <div class="rs-chips"><div class="cs cs-r">$</div><div class="cs cs-g">$</div><div class="cs cs-b">$</div></div>
+    <div class="rs-empty-txt"><strong>Waiting for your spin</strong>Hit the wheel and let fate decide</div>
+  </div>
+  <div class="rs-winner" id="rsW">
+    <div class="rw-in">
+      <!-- Photo (hidden until live data provides one) -->
+      <div class="rw-photo-wrap" id="wPhotoWrap" style="display:none">
+        <img class="rw-photo" id="wPhoto" src="" alt="">
+      </div>
+      <!-- Hero: emoji + name centered -->
+      <div class="rw-hero">
+        <span class="rw-emoji" id="wE">🍕</span>
+        <div class="rw-label" id="wL">Tonight's Restaurant</div>
+        <div class="rw-name"  id="wN">—</div>
+        <div class="rw-desc"  id="wD"></div>
+        <div class="rw-pills" id="wP"></div>
+        <div class="rw-addr"  id="wA"></div>
+      </div>
+      <!-- Body: items + actions -->
+      <div class="rw-body">
+        <div class="rw-items" id="wItems"></div>
+        <!-- Contact row: phone + website + maps -->
+        <div class="rw-contact" id="wContact" style="display:none">
+          <a class="rw-contact-btn" id="wPhone"   href="#" style="display:none">📞 Call</a>
+          <a class="rw-contact-btn" id="wWebsite" href="#" target="_blank" style="display:none">🌐 Website</a>
+          <a class="rw-contact-btn" id="wMaps"    href="#" target="_blank" style="display:none">🗺️ Maps</a>
+        </div>
+        <a class="btn-dd" id="wLink" href="#" target="_blank" style="margin-top:10px;display:flex;">🛵 Order on DoorDash</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Spin history — last 5 results -->
+<div class="hist" id="histSection" style="display:none">
+  <div class="hist-hd">
+    <div class="hist-hd-line"></div>
+    <div class="hist-hd-txt">Recent Spins</div>
+    <div class="hist-hd-line"></div>
+  </div>
+  <div class="hist-board" id="histBoard"></div>
+</div>
+
+<!-- Filter sheet overlay -->
+<div class="so" id="shOv" onclick="closeSheet()"></div>
+<div class="sh" id="sheet">
+  <div class="sh-h"><div class="sh-b"></div></div>
+  <div class="sh-hd">
+    <div class="sh-ti">Filters</div>
+    <button class="sh-x" onclick="closeSheet()">✕</button>
+  </div>
+
+  <div class="ss"><div class="sl">Cuisine</div>
+    <div class="cg" id="cChips">
+      <div class="ch on" data-v="any"      onclick="togC(this)">🎲 Any</div>
+      <div class="ch"    data-v="pizza"    onclick="togC(this)">🍕 Pizza</div>
+      <div class="ch"    data-v="burger"   onclick="togC(this)">🍔 Burgers</div>
+      <div class="ch"    data-v="sushi"    onclick="togC(this)">🍣 Sushi</div>
+      <div class="ch"    data-v="mexican"  onclick="togC(this)">🌮 Mexican</div>
+      <div class="ch"    data-v="chinese"  onclick="togC(this)">🥡 Chinese</div>
+      <div class="ch"    data-v="thai"     onclick="togC(this)">🍜 Thai</div>
+      <div class="ch"    data-v="indian"   onclick="togC(this)">🍛 Indian</div>
+      <div class="ch"    data-v="italian"  onclick="togC(this)">🍝 Italian</div>
+      <div class="ch"    data-v="korean"   onclick="togC(this)">🍱 Korean</div>
+      <div class="ch"    data-v="american" onclick="togC(this)">🥩 American</div>
+    </div>
+  </div>
+
+  <div class="ss" style="margin-top:14px;"><div class="sl">Budget</div>
+    <div class="cg" id="bChips">
+      <div class="ch"    data-v="4" onclick="selChip(this,'bChips','budget',true)">Any</div>
+      <div class="ch"    data-v="1" onclick="selChip(this,'bChips','budget',true)">$ Under $15</div>
+      <div class="ch on" data-v="2" onclick="selChip(this,'bChips','budget',true)">$$ ~$15–30</div>
+      <div class="ch"    data-v="3" onclick="selChip(this,'bChips','budget',true)">$$$ ~$30–60</div>
+    </div>
+  </div>
+
+  <div class="ss" style="margin-top:14px;"><div class="sl">Distance</div>
+    <div class="cg" id="dChips">
+      <div class="ch on" data-v="any" onclick="selChip(this,'dChips','dist')">Any</div>
+      <div class="ch"    data-v="0.5" onclick="selChip(this,'dChips','dist')">½ mi</div>
+      <div class="ch"    data-v="1"   onclick="selChip(this,'dChips','dist')">1 mi</div>
+      <div class="ch"    data-v="2"   onclick="selChip(this,'dChips','dist')">2 mi</div>
+      <div class="ch"    data-v="5"   onclick="selChip(this,'dChips','dist')">5 mi</div>
+      <div class="ch"    data-v="10"  onclick="selChip(this,'dChips','dist')">10 mi</div>
+    </div>
+  </div>
+
+  <div class="ss" style="margin-top:14px;"><div class="sl">Rating</div>
+    <div class="cg" id="rChips">
+      <div class="ch on" data-v="0"   onclick="selChip(this,'rChips','rating')">Any</div>
+      <div class="ch"    data-v="3.5" onclick="selChip(this,'rChips','rating')">3.5+ ⭐</div>
+      <div class="ch"    data-v="4.0" onclick="selChip(this,'rChips','rating')">4.0+ ⭐</div>
+      <div class="ch"    data-v="4.5" onclick="selChip(this,'rChips','rating')">4.5+ ⭐</div>
+    </div>
+  </div>
+
+  <div class="ss" style="margin-top:14px;"><div class="sl">Options</div>
+    <div class="cg">
+      <div class="ch" id="openChip"  onclick="togChip('openChip','openNow')">🟢 Open Now</div>
+      <div class="ch" id="vegChip"   onclick="togChip('vegChip','veg')">🥦 Vegetarian</div>
+      <div class="ch" id="veganChip" onclick="togChip('veganChip','vegan')">🌱 Vegan</div>
+      <div class="ch" id="gfChip"    onclick="togChip('gfChip','gf')">🌾 Gluten Free</div>
+      <div class="ch" id="halalChip" onclick="togChip('halalChip','halal')">☪️ Halal</div>
+    </div>
+  </div>
+
+  <span class="sr" onclick="resetF()">Reset all filters</span>
+</div>
+
+<script>
+const FALLBACK_REST=[
+  {name:"Tony's Pizza",short:"Tony's",emoji:"🍕",cuisine:"pizza",price:"$$",pl:2,rating:4.6,open:true,dist:0.3,addr:"1570 Stockton St",phone:"+1 415-835-9888",website:"https://tonyspizzanapoletana.com",mapsUrl:"https://maps.google.com/?q=Tony's+Pizza+Napoletana+SF",photoRef:"",items:[{name:"Margherita",emoji:"🍕",desc:"San Marzano tomato, mozzarella"},{name:"Funghi Tartufo",emoji:"🍕",desc:"Wild mushrooms, truffle oil"}]},
+  {name:"Burma Superstar",short:"Burma",emoji:"🍜",cuisine:"thai",price:"$$",pl:2,rating:4.4,open:true,dist:0.8,addr:"309 Clement St",phone:"+1 415-387-2147",website:"https://www.burmasuperstar.com",mapsUrl:"https://maps.google.com/?q=Burma+Superstar",photoRef:"",items:[{name:"Tea Leaf Salad",emoji:"🥗",desc:"Fermented tea leaves, crunchy mix"},{name:"Rainbow Salad",emoji:"🌈",desc:"12 ingredients, tamarind"}]},
+  {name:"Sushirrito",short:"Sushirrito",emoji:"🍣",cuisine:"sushi",price:"$$",pl:2,rating:4.2,open:false,dist:1.1,addr:"59 New Montgomery",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Sushirrito",photoRef:"",items:[{name:"Sumo Crunch",emoji:"🍣",desc:"Spicy tuna, tempura, avocado"},{name:"Geisha's Kiss",emoji:"🍣",desc:"Salmon, yuzu cream cheese"}]},
+  {name:"Tacolicious",short:"Tacolicious",emoji:"🌮",cuisine:"mexican",price:"$$",pl:2,rating:4.3,open:true,dist:0.6,addr:"741 Valencia St",phone:"+1 415-626-1344",website:"https://tacolicious.com",mapsUrl:"https://maps.google.com/?q=Tacolicious",photoRef:"",items:[{name:"Carnitas Taco",emoji:"🌮",desc:"Braised pork, salsa verde"},{name:"Fish Taco",emoji:"🌮",desc:"Beer battered, cabbage slaw"}]},
+  {name:"Nopa",short:"Nopa",emoji:"🥩",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.5,addr:"560 Divisadero St",phone:"+1 415-864-8643",website:"https://nopasf.com",mapsUrl:"https://maps.google.com/?q=Nopa+San+Francisco",photoRef:"",items:[{name:"Pork Chop",emoji:"🥩",desc:"Stone fruit chutney, greens"},{name:"Burger",emoji:"🍔",desc:"Grass-fed beef, aged cheddar"}]},
+  {name:"Cheung Hing",short:"Cheung Hing",emoji:"🥡",cuisine:"chinese",price:"$",pl:1,rating:4.1,open:true,dist:0.9,addr:"209 Clement St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cheung+Hing",photoRef:"",items:[{name:"BBQ Pork Rice",emoji:"🍖",desc:"Char siu, steamed rice"},{name:"Wonton Soup",emoji:"🍜",desc:"Hand-folded wontons"}]},
+  {name:"Lers Ros Thai",short:"Lers Ros",emoji:"🍛",cuisine:"thai",price:"$",pl:1,rating:4.4,open:false,dist:0.7,addr:"730 Larkin St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Lers+Ros+Thai",photoRef:"",items:[{name:"Pad Kee Mao",emoji:"🍜",desc:"Drunken noodles, Thai basil"},{name:"Massaman Curry",emoji:"🍛",desc:"Braised beef, potato, peanuts"}]},
+  {name:"The Bird",short:"The Bird",emoji:"🍔",cuisine:"burger",price:"$",pl:1,rating:4.3,open:true,dist:1.2,addr:"115 New Montgomery",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=The+Bird",photoRef:"",items:[{name:"Chicken Sandwich",emoji:"🍗",desc:"Buttermilk-brined, slaw"},{name:"Chicken & Waffles",emoji:"🧇",desc:"Maple sriracha"}]},
+  {name:"Flour + Water",short:"Flour+Water",emoji:"🍝",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:1.4,addr:"2401 Harrison St",phone:"+1 415-826-7000",website:"https://flourandwater.com",mapsUrl:"https://maps.google.com/?q=Flour+++Water",photoRef:"",items:[{name:"Tagliatelle",emoji:"🍝",desc:"Lamb ragu, pecorino, herbs"},{name:"Ricotta Gnudi",emoji:"🍝",desc:"Brown butter, sage"}]},
+  {name:"PPQ Dungeness",short:"PPQ",emoji:"🦀",cuisine:"chinese",price:"$$",pl:2,rating:4.5,open:true,dist:2.1,addr:"2332 Clement St",phone:"+1 415-386-8266",website:"https://ppqdungeness.com",mapsUrl:"https://maps.google.com/?q=PPQ+Dungeness",photoRef:"",items:[{name:"Roast Crab",emoji:"🦀",desc:"Garlic noodles, ginger scallion"},{name:"Salt Pepper Shrimp",emoji:"🍤",desc:"Crispy, chili, garlic"}]},
+  {name:"Komaaj",short:"Komaaj",emoji:"🫓",cuisine:"indian",price:"$$",pl:2,rating:4.6,open:true,dist:1.8,addr:"2404 Mission St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Komaaj",photoRef:"",items:[{name:"Ghormeh Sabzi",emoji:"🍲",desc:"Herb stew, kidney beans, lamb"},{name:"Zereshk Polo",emoji:"🍚",desc:"Barberry rice, saffron chicken"}]},
+  {name:"Liholiho Yacht",short:"Liholiho",emoji:"🌺",cuisine:"american",price:"$$$",pl:3,rating:4.8,open:false,dist:0.6,addr:"871 Sutter St",phone:"+1 415-440-5446",website:"https://liholihoyachtclub.com",mapsUrl:"https://maps.google.com/?q=Liholiho+Yacht",photoRef:"",items:[{name:"Spam Fried Rice",emoji:"🍱",desc:"Kalua pork, fried egg"},{name:"Oxtail Dumplings",emoji:"🥟",desc:"Ginger, scallion"}]},
+  {name:"Dragon Beaux",short:"Dragon Beaux",emoji:"🐉",cuisine:"chinese",price:"$$$",pl:3,rating:4.5,open:true,dist:3.2,addr:"5700 Geary Blvd",phone:"+1 415-333-8899",website:"https://dragonbeaux.com",mapsUrl:"https://maps.google.com/?q=Dragon+Beaux",photoRef:"",items:[{name:"Har Gow",emoji:"🥟",desc:"Steamed shrimp dumplings"},{name:"Char Siu Bao",emoji:"🍞",desc:"BBQ pork buns"}]},
+  {name:"Daeho",short:"Daeho",emoji:"🥩",cuisine:"korean",price:"$$",pl:2,rating:4.6,open:true,dist:0.4,addr:"2355 Lombard St",phone:"+1 415-931-1028",website:"https://daehosf.com",mapsUrl:"https://maps.google.com/?q=Daeho",photoRef:"",items:[{name:"Galbi Jim",emoji:"🥩",desc:"Braised short ribs, radish"},{name:"Brisket",emoji:"🥩",desc:"House BBQ, banchan"}]},
+  {name:"Sotto Mare",short:"Sotto Mare",emoji:"🦞",cuisine:"italian",price:"$$",pl:2,rating:4.5,open:true,dist:0.9,addr:"552 Green St",phone:"+1 415-398-3181",website:"https://sottomaresf.com",mapsUrl:"https://maps.google.com/?q=Sotto+Mare",photoRef:"",items:[{name:"Cioppino",emoji:"🦞",desc:"Dungeness crab, clams, fish"},{name:"Calamari",emoji:"🦑",desc:"Grilled, lemon, herbs"}]},
+  {name:"Rich Table",short:"Rich Table",emoji:"🍽️",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:1.1,addr:"199 Gough St",phone:"+1 415-355-9085",website:"https://richtablesf.com",mapsUrl:"https://maps.google.com/?q=Rich+Table",photoRef:"",items:[{name:"Sardine Chips",emoji:"🐟",desc:"Porcini, rosemary"},{name:"Pasta",emoji:"🍝",desc:"Seasonal, house made"}]},
+  {name:"Bi-Rite Creamery",short:"Bi-Rite",emoji:"🍦",cuisine:"american",price:"$",pl:1,rating:4.7,open:true,dist:0.7,addr:"3692 18th St",phone:"+1 415-626-5600",website:"https://biritemarket.com",mapsUrl:"https://maps.google.com/?q=Bi-Rite+Creamery",photoRef:"",items:[{name:"Salted Caramel",emoji:"🍦",desc:"House made, sea salt"},{name:"Honey Lavender",emoji:"🍦",desc:"Local honey, lavender"}]},
+  {name:"Z & Y Restaurant",short:"Z & Y",emoji:"🌶️",cuisine:"chinese",price:"$$",pl:2,rating:4.3,open:true,dist:0.5,addr:"655 Jackson St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Z+&+Y+Restaurant",photoRef:"",items:[{name:"Dan Dan Noodles",emoji:"🍜",desc:"Sichuan peppercorn, pork"},{name:"Mapo Tofu",emoji:"🍲",desc:"Silken tofu, Sichuan spice"}]},
+  {name:"Tartine Bakery",short:"Tartine",emoji:"🥐",cuisine:"american",price:"$",pl:1,rating:4.8,open:true,dist:0.8,addr:"600 Guerrero St",phone:"+1 415-487-2600",website:"https://tartinebakery.com",mapsUrl:"https://maps.google.com/?q=Tartine+Bakery+San+Francisco",photoRef:"",items:[{name:"Country Loaf",emoji:"🍞",desc:"Sourdough, wood fired"},{name:"Morning Bun",emoji:"🥐",desc:"Orange zest, cinnamon"}]},
+  {name:"Mensho Tokyo",short:"Mensho",emoji:"🍥",cuisine:"sushi",price:"$$",pl:2,rating:4.6,open:true,dist:0.6,addr:"672 Geary St",phone:"+1 415-800-8345",website:"https://mensho.tokyo",mapsUrl:"https://maps.google.com/?q=Mensho+Tokyo",photoRef:"",items:[{name:"Toripaitan Ramen",emoji:"🍥",desc:"Rich chicken broth, truffle"},{name:"Lamb Tsukemen",emoji:"🍜",desc:"Dipping ramen, spiced lamb"}]},
+  {name:"State Bird",short:"State Bird",emoji:"🐦",cuisine:"american",price:"$$$",pl:3,rating:4.7,open:true,dist:1.3,addr:"1529 Fillmore St",phone:"+1 415-795-1272",website:"https://statebirddprovisions.com",mapsUrl:"https://maps.google.com/?q=State+Bird",photoRef:"",items:[{name:"State Bird",emoji:"🐦",desc:"Fried quail, pine nut"},{name:"Dungeness Pancake",emoji:"🥞",desc:"Crab, black bean sauce"}]},
+  {name:"Zuni Café",short:"Zuni",emoji:"🍗",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:0.8,addr:"1658 Market St",phone:"+1 415-552-2522",website:"https://zunicafe.com",mapsUrl:"https://maps.google.com/?q=Zuni+Café",photoRef:"",items:[{name:"Roast Chicken",emoji:"🍗",desc:"Brick oven, bread salad"},{name:"Burger",emoji:"🍔",desc:"Focaccia, house pickles"}]},
+  {name:"Nopalito",short:"Nopalito",emoji:"🌿",cuisine:"mexican",price:"$$",pl:2,rating:4.5,open:true,dist:1.0,addr:"306 Broderick St",phone:"+1 415-437-0303",website:"https://nopalitosf.com",mapsUrl:"https://maps.google.com/?q=Nopalito",photoRef:"",items:[{name:"Carnitas",emoji:"🌮",desc:"Slow roasted pork"},{name:"Enchiladas",emoji:"🫔",desc:"Mole negro, crema"}]},
+  {name:"Hog Island Oyster",short:"Hog Island",emoji:"🦪",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.4,addr:"1 Ferry Building",phone:"+1 415-391-7117",website:"https://hogislandoysters.com",mapsUrl:"https://maps.google.com/?q=Hog+Island+Oyster",photoRef:"",items:[{name:"Oysters",emoji:"🦪",desc:"Tomales Bay, mignonette"},{name:"Clam Chowder",emoji:"🍲",desc:"New England, sourdough bowl"}]},
+  {name:"Izakaya Rintaro",short:"Rintaro",emoji:"🍱",cuisine:"korean",price:"$$$",pl:3,rating:4.7,open:true,dist:1.6,addr:"82 14th St",phone:"+1 415-589-7022",website:"https://izakayarintaro.com",mapsUrl:"https://maps.google.com/?q=Izakaya+Rintaro",photoRef:"",items:[{name:"Yakitori",emoji:"🍢",desc:"Binchotan grilled chicken"},{name:"Karaage",emoji:"🍗",desc:"Fried chicken, kewpie mayo"}]},
+  {name:"Beretta",short:"Beretta",emoji:"🫙",cuisine:"italian",price:"$$",pl:2,rating:4.3,open:true,dist:0.9,addr:"1199 Valencia St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Beretta",photoRef:"",items:[{name:"Margherita",emoji:"🍕",desc:"Neapolitan, fior di latte"},{name:"Meatballs",emoji:"🍖",desc:"San Marzano, basil"}]},
+  {name:"Plow",short:"Plow",emoji:"🥚",cuisine:"american",price:"$$",pl:2,rating:4.4,open:true,dist:2.0,addr:"1299 18th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Plow",photoRef:"",items:[{name:"Ricotta Pancakes",emoji:"🥞",desc:"Seasonal fruit, maple syrup"},{name:"Eggs Baked in Cream",emoji:"🥚",desc:"House toast, chives"}]},
+  {name:"Kin Khao",short:"Kin Khao",emoji:"🌸",cuisine:"thai",price:"$$",pl:2,rating:4.5,open:true,dist:0.3,addr:"55 Cyril Magnin St",phone:"+1 415-362-7456",website:"https://kinkhao.com",mapsUrl:"https://maps.google.com/?q=Kin+Khao",photoRef:"",items:[{name:"Khao Soi",emoji:"🍜",desc:"Coconut curry, crispy noodles"},{name:"Som Tum",emoji:"🥗",desc:"Green papaya, peanut"}]},
+  {name:"Mister Jiu's",short:"Mister Jiu's",emoji:"🥢",cuisine:"chinese",price:"$$$",pl:3,rating:4.6,open:false,dist:0.4,addr:"28 Waverly Place",phone:"+1 415-857-9688",website:"https://misterjius.com",mapsUrl:"https://maps.google.com/?q=Mister+Jiu's",photoRef:"",items:[{name:"Quail & Foie Gras",emoji:"🥢",desc:"House XO, crispy rice"},{name:"Kung Pao Pastrami",emoji:"🌶️",desc:"Peanuts, dried chilies"}]},
+  {name:"Cotogna",short:"Cotogna",emoji:"🫕",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:0.5,addr:"490 Pacific Ave",phone:"+1 415-775-8508",website:"https://cotognasf.com",mapsUrl:"https://maps.google.com/?q=Cotogna",photoRef:"",items:[{name:"Wood-Fired Pizza",emoji:"🍕",desc:"House cured meats"},{name:"Handmade Pasta",emoji:"🍝",desc:"Daily changing"}]},
+  {name:"Soba Ichi",short:"Soba Ichi",emoji:"🍜",cuisine:"sushi",price:"$$",pl:2,rating:4.5,open:true,dist:2.8,addr:"2218 Broadway, Oakland",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Soba+Ichi",photoRef:"",items:[{name:"Zaru Soba",emoji:"🍜",desc:"Cold buckwheat, dipping broth"},{name:"Tempura Set",emoji:"🍤",desc:"Seasonal vegetables"}]},
+  {name:"Shizen",short:"Shizen",emoji:"🌱",cuisine:"sushi",price:"$$",pl:2,rating:4.6,open:true,dist:1.0,addr:"370 14th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Shizen",photoRef:"",items:[{name:"Vegan Omakase",emoji:"🌱",desc:"Seasonal plant-based nigiri"},{name:"Truffle Roll",emoji:"🍣",desc:"Truffle oil, asparagus"}]},
+  {name:"La Ciccia",short:"La Ciccia",emoji:"🐟",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:false,dist:2.2,addr:"291 30th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=La+Ciccia",photoRef:"",items:[{name:"Spaghetti Bottarga",emoji:"🐟",desc:"Sardinian mullet roe"},{name:"Roast Suckling Pig",emoji:"🐷",desc:"Myrtle, fennel, sea salt"}]},
+  {name:"Cockscomb",short:"Cockscomb",emoji:"🍖",cuisine:"american",price:"$$$",pl:3,rating:4.4,open:true,dist:0.7,addr:"564 4th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cockscomb",photoRef:"",items:[{name:"Whole Roast Pig",emoji:"🐷",desc:"For the table, house sauces"},{name:"Foie Gras Torchon",emoji:"🦆",desc:"Brioche, fig jam"}]},
+  {name:"Akiko's",short:"Akiko's",emoji:"🎌",cuisine:"sushi",price:"$$$",pl:3,rating:4.8,open:true,dist:0.5,addr:"431 Bush St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Akiko's",photoRef:"",items:[{name:"Omakase",emoji:"🍣",desc:"Chef's choice, 12 pieces nigiri"},{name:"Toro Tartare",emoji:"🐟",desc:"Bluefin, caviar, quail egg"}]},
+  {name:"Cassava",short:"Cassava",emoji:"🥗",cuisine:"american",price:"$$",pl:2,rating:4.5,open:true,dist:2.3,addr:"3519 Balboa St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cassava",photoRef:"",items:[{name:"Breakfast Sandwich",emoji:"🥚",desc:"Focaccia, egg, aioli"},{name:"Grain Bowl",emoji:"🥗",desc:"Seasonal grains, soft egg"}]},
+  {name:"The Progress",short:"The Progress",emoji:"🌽",cuisine:"american",price:"$$$",pl:3,rating:4.7,open:true,dist:1.3,addr:"1525 Fillmore St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=The+Progress",photoRef:"",items:[{name:"Smoked Whitefish",emoji:"🐟",desc:"Potato chips, dill crème"},{name:"Seasonal Vegetable",emoji:"🌽",desc:"Wood fired, changing weekly"}]},
+];
+let REST = FALLBACK_REST; // populated from API or fallback
+
+/* ════════════════════════════════════════════
+   APP STATE
+════════════════════════════════════════════ */
+const BD = {1:{l:'$',d:'Under $15'},2:{l:'$$',d:'~$15–$30'},3:{l:'$$$',d:'~$30–$60'},4:{l:'$$$$',d:'~$60+'}};
+let mode     = 'restaurant';
+let spinning = false;
+let rndRest  = null;   // shuffled restaurant pool
+let rndMeal  = null;   // shuffled meal pool
+const F = { cuisines:['any'], budget:2, dist:'any', rating:0, openNow:false, diet:[] };
+const history = []; // last 5 results: {emoji, name, sub, price, open, col}
+
+const WORKER_URL = 'https://frworker.zosebaum.workers.dev';
+// Public API key used ONLY for photo image URLs (restricted to this domain)
+// Photo URLs are fetched by the browser directly — they're not sensitive if referrer-restricted
+const GOOGLE_CLIENT_KEY = 'AIzaSyAX6fk2Auv8z6qiAjLgz6lzFMdoAb3nrFs';
+
+/* ════════════════════════════════════════════
+   CANVAS + RADII
+   All bRad / bVR values are in PIXEL units.
+   bVA is in radians/frame.
+════════════════════════════════════════════ */
+const cv   = document.getElementById('wc');
+const cx   = cv.getContext('2d');
+const ring = document.getElementById('wRing');
+
+const SZ = Math.min(600, window.innerWidth - 8);
+const R  = SZ / 2;
+cv.width = cv.height = SZ;
+cv.style.width = cv.style.height = SZ + 'px';
+ring.style.width = ring.style.height = SZ + 'px';
+
+// Touch swipe on canvas → spin (swipe in any direction)
+let touchStartX = 0, touchStartY = 0;
+cv.addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, {passive:true});
+cv.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  if (dist > 30) doSpin();   // swipe = spin
+}, {passive:true});
+
+// Radii (pixels) — from outside in
+const RO  = R * .984;  // outer wood edge
+const RWI = R * .800;  // inner wood / outer gold band
+const RGA = R * .748;  // outer pocket wall  ← ball bounces here
+const RPI = R * .490;  // inner pocket wall  ← ball bounces here
+const RBL = R * .440;  // bowl outer edge
+const RGC = R * .434;  // spindle collar
+const RGD = R * .394;  // spindle inner
+const RSH = R * .088;  // shaft radius
+const RDM = R * .128;  // dome radius
+const RTK = R * .850;  // ball orbit track (inside gold band)
+const RMD = (RGA + RPI) / 2;  // pocket midpoint — labels + settled ball
+
+// Pocket colours
+const RCOL = i => i === 0 ? '#0d8020' : i % 2 === 1 ? '#cc1000' : '#111111';
+
+/* ════════════════════════════════════════════
+   SEGMENTS
+════════════════════════════════════════════ */
+let segs = [];
+let wAng = 0;   // wheel angle (radians)
+let wIdx = 0;   // winning pocket index
+
+function buildSegs(pool) {
+  const n   = pool.length;
+  const arc = (Math.PI * 2) / n;
+  const eSz = n <= 8 ? 24 : n <= 14 ? 20 : n <= 20 ? 16 : n <= 28 ? 13 : 11;
+  const nSz = n <= 8 ? 13 : n <= 14 ? 11 : n <= 20 ?  9 : n <= 28 ?  8 :  7;
+  segs = pool.map((item, i) => ({
+    item, i,
+    sa: i * arc,       // start angle
+    ea: (i+1) * arc,   // end angle
+    ma: (i+.5) * arc,  // mid angle (label position)
+    eSz, nSz,
+    col: RCOL(i),
+  }));
+}
+
+/* ════════════════════════════════════════════
+   STATIC IMAGE (baked once, never redrawn)
+   Covers outer donut (wood + gold band) and
+   inner disc (bowl + spindle + dome).
+   Pocket zone RPI→RGA is left transparent so
+   the rotating coloured wedges show through.
+════════════════════════════════════════════ */
+let staticImg = null;
+
+function bakeStatic() {
+  const oc = document.createElement('canvas');
+  oc.width = oc.height = SZ;
+  const ox = oc.getContext('2d');
+
+  // — Outer donut: wood + gold band —
+  ox.save();
+  ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2,false); ox.arc(R,R,RGA,0,Math.PI*2,true); ox.clip();
+
+  // ── Base mahogany tone ──
+  ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2);
+  const wg = ox.createRadialGradient(R,R,RWI*0.2, R,R,RO);
+  wg.addColorStop(0,  '#9b3a10');
+  wg.addColorStop(.3, '#7a2c0a');
+  wg.addColorStop(.6, '#5e2008');
+  wg.addColorStop(1,  '#2e0e02');
+  ox.fillStyle = wg; ox.fill();
+
+  // ── Concentric ring grain (growth rings) ──
+  // Real wood grain runs in rings, not radial lines
+  const woodW = RO - RWI;
+  for (let i = 0; i < 28; i++) {
+    const t   = i / 27;
+    const r   = RWI + woodW * (0.02 + t * 0.96);
+    // Slight ellipse offset simulates cut-through-cylinder effect
+    const ox2 = R + Math.sin(i * 1.3) * R * 0.018;
+    const oy2 = R + Math.cos(i * 0.9) * R * 0.012;
+    ox.beginPath();
+    ox.ellipse(ox2, oy2, r, r * (0.97 + Math.sin(i*0.7)*0.02), 0, 0, Math.PI*2);
+    // Alternating dark/light grain bands
+    const dark = (i % 3 === 0);
+    const alpha = dark ? 0.10 + Math.sin(i)*0.04 : 0.05 + Math.sin(i*1.1)*0.02;
+    ox.strokeStyle = dark
+      ? `rgba(20,6,2,${alpha})`
+      : `rgba(180,80,30,${alpha * 0.7})`;
+    ox.lineWidth = dark ? 1.8 : 1.1;
+    ox.stroke();
+  }
+
+  // ── Ray figure (medullary rays — the subtle shimmer in mahogany) ──
+  for (let f = 0; f < 18; f++) {
+    const fa  = (f / 18) * Math.PI * 2 + 0.15;
+    const fr  = RWI + woodW * (0.1 + Math.random() * 0.8);
+    const fw  = woodW * (0.08 + Math.random() * 0.12);
+    ox.save();
+    ox.translate(R, R); ox.rotate(fa);
+    ox.beginPath();
+    ox.ellipse(fr + fw/2, 0, fw/2, R*0.008, 0, 0, Math.PI*2);
+    ox.fillStyle = 'rgba(210,120,60,0.06)';
+    ox.fill();
+    ox.restore();
+  }
+
+  // ── Pore streaks (open-grain character of mahogany) ──
+  for (let p = 0; p < 60; p++) {
+    const pa = (p / 60) * Math.PI * 2;
+    const pr = RWI + woodW * (0.05 + (p * 0.618 % 1) * 0.9);
+    const pLen = R * (0.025 + Math.random() * 0.04);
+    ox.save();
+    ox.translate(R, R); ox.rotate(pa);
+    ox.beginPath();
+    ox.moveTo(pr, -0.5); ox.lineTo(pr + pLen, -0.5);
+    ox.strokeStyle = 'rgba(15,4,1,0.12)';
+    ox.lineWidth = 0.8 + Math.random() * 0.6;
+    ox.stroke();
+    ox.restore();
+  }
+
+  // ── Side lighting — warm light from upper-left ──
+  const wLit = ox.createRadialGradient(R-R*.45, R-R*.45, R*.05, R, R, RO*1.1);
+  wLit.addColorStop(0,   'rgba(255,160,80,0.18)');
+  wLit.addColorStop(.35, 'rgba(200,100,40,0.08)');
+  wLit.addColorStop(.7,  'rgba(0,0,0,0)');
+  wLit.addColorStop(1,   'rgba(0,0,0,0.22)');
+  ox.beginPath(); ox.arc(R,R,RO,0,Math.PI*2);
+  ox.fillStyle = wLit; ox.fill();
+
+  // ── Varnish gloss — curved specular highlight ──
+  // Two highlights: main arc top-left, subtle rim reflection
+  ox.beginPath();
+  ox.arc(R, R, (RO+RWI)*0.5, Math.PI*1.05, Math.PI*1.65);
+  const gloss = ox.createLinearGradient(
+    R + Math.cos(Math.PI*1.35)*(RO+RWI)*0.5,
+    R + Math.sin(Math.PI*1.35)*(RO+RWI)*0.5,
+    R + Math.cos(Math.PI*1.35)*RWI,
+    R + Math.sin(Math.PI*1.35)*RWI
+  );
+  gloss.addColorStop(0,   'rgba(255,220,160,0.0)');
+  gloss.addColorStop(.4,  'rgba(255,220,160,0.22)');
+  gloss.addColorStop(.6,  'rgba(255,230,180,0.14)');
+  gloss.addColorStop(1,   'rgba(255,220,160,0.0)');
+  ox.strokeStyle = gloss;
+  ox.lineWidth = (RO - RWI) * 0.55;
+  ox.stroke();
+
+  // Thin bright lacquer edge
+  ox.beginPath(); ox.arc(R,R,RO-1,0,Math.PI*2);
+  ox.strokeStyle='rgba(255,180,100,0.12)'; ox.lineWidth=2; ox.stroke();
+  ox.beginPath(); ox.arc(R,R,RWI+1,0,Math.PI*2);
+  ox.strokeStyle='rgba(0,0,0,0.35)'; ox.lineWidth=2; ox.stroke();
+
+  // Gold band (RWI → RGA)
+  ox.beginPath(); ox.arc(R,R,RWI,0,Math.PI*2,false); ox.arc(R,R,RGA,0,Math.PI*2,true);
+  const gg = ox.createLinearGradient(R-RWI,R,R+RWI,R);
+  gg.addColorStop(0,'#2a1800'); gg.addColorStop(.1,'#8a6010'); gg.addColorStop(.25,'#d4a020');
+  gg.addColorStop(.38,'#f5d040'); gg.addColorStop(.5,'#fff0a0'); gg.addColorStop(.62,'#f5d040');
+  gg.addColorStop(.75,'#d4a020'); gg.addColorStop(.9,'#8a6010'); gg.addColorStop(1,'#2a1800');
+  ox.fillStyle = gg; ox.fill();
+
+  // Track dots
+  const dotR = (RGA + RWI) / 2;
+  for (let d = 0; d < 60; d++) {
+    const a = (d/60)*Math.PI*2;
+    ox.beginPath(); ox.arc(R+Math.cos(a)*dotR, R+Math.sin(a)*dotR, R*.009, 0, Math.PI*2);
+    ox.fillStyle = d%3===0 ? 'rgba(255,255,180,.35)' : 'rgba(255,235,150,.18)'; ox.fill();
+  }
+  ox.restore();
+
+  // — Inner disc: gold ring + bowl + spindle + dome —
+  ox.save();
+  ox.beginPath(); ox.arc(R,R,RPI,0,Math.PI*2); ox.clip();
+
+  // Gold separator ring
+  ox.beginPath(); ox.arc(R,R,RPI,0,Math.PI*2);
+  const gc = ox.createLinearGradient(R-RPI,R,R+RPI,R);
+  gc.addColorStop(0,'#3a2200'); gc.addColorStop(.25,'#c8940a');
+  gc.addColorStop(.5,'#f0c030'); gc.addColorStop(.75,'#c8940a'); gc.addColorStop(1,'#3a2200');
+  ox.fillStyle = gc; ox.fill();
+
+  // Bowl
+  ox.beginPath(); ox.arc(R,R,RBL,0,Math.PI*2);
+  const bG = ox.createRadialGradient(R-R*.07,R-R*.07,R*.02,R,R,RBL);
+  bG.addColorStop(0,'#6a3214'); bG.addColorStop(.3,'#4e2209');
+  bG.addColorStop(.65,'#301404'); bG.addColorStop(1,'#180802');
+  ox.fillStyle = bG; ox.fill(); ox.strokeStyle='rgba(201,168,76,.4)'; ox.lineWidth=1.5; ox.stroke();
+
+  // Spindle collar
+  ox.beginPath(); ox.arc(R,R,RGC,0,Math.PI*2);
+  const sg = ox.createRadialGradient(R-R*.03,R-R*.03,R*.01,R,R,RGC);
+  sg.addColorStop(0,'#c8a030'); sg.addColorStop(.3,'#8a6012');
+  sg.addColorStop(.7,'#5a3c08'); sg.addColorStop(1,'#1a1000');
+  ox.fillStyle = sg; ox.fill(); ox.strokeStyle='rgba(255,220,80,.7)'; ox.lineWidth=2; ox.stroke();
+
+  // Spindle inner ring
+  ox.beginPath(); ox.arc(R,R,RGD,0,Math.PI*2);
+  const sg2 = ox.createLinearGradient(R-RGD,R,R+RGD,R);
+  sg2.addColorStop(0,'#3a2000'); sg2.addColorStop(.2,'#c8940a');
+  sg2.addColorStop(.5,'#f5d040'); sg2.addColorStop(.8,'#c8940a'); sg2.addColorStop(1,'#3a2000');
+  ox.fillStyle = sg2; ox.fill();
+
+  // Shaft
+  ox.beginPath(); ox.arc(R,R,RSH+3,0,Math.PI*2); ox.fillStyle='#1a0e00'; ox.fill();
+  const shG = ox.createLinearGradient(R-RSH,R,R+RSH,R);
+  shG.addColorStop(0,'#3a2000'); shG.addColorStop(.15,'#c8940a'); shG.addColorStop(.35,'#f5d040');
+  shG.addColorStop(.5,'#fff0a0'); shG.addColorStop(.65,'#f5d040'); shG.addColorStop(.85,'#c8940a'); shG.addColorStop(1,'#3a2000');
+  ox.beginPath(); ox.arc(R,R,RSH,0,Math.PI*2); ox.fillStyle=shG; ox.fill();
+  for (let i=0; i<5; i++) {
+    const ry = R-RSH+RSH*.25+i*RSH*.3;
+    ox.beginPath(); ox.ellipse(R,ry,RSH*.9,RSH*.12,0,0,Math.PI*2);
+    ox.fillStyle='rgba(255,240,120,.25)'; ox.fill();
+  }
+
+  // Dome
+  ox.beginPath(); ox.arc(R,R,RDM*1.1,0,Math.PI*2);
+  ox.strokeStyle='rgba(255,210,60,.5)'; ox.lineWidth=1.5; ox.stroke();
+  ox.beginPath(); ox.arc(R,R,RDM,0,Math.PI*2);
+  const dG = ox.createRadialGradient(R-R*.04,R-R*.045,R*.004,R,R,RDM);
+  dG.addColorStop(0,'#ffffff'); dG.addColorStop(.12,'#fff0a0'); dG.addColorStop(.3,'#f8d038');
+  dG.addColorStop(.5,'#d4a010'); dG.addColorStop(.72,'#9a7008'); dG.addColorStop(.9,'#5a3c04'); dG.addColorStop(1,'#2e1c02');
+  ox.fillStyle=dG; ox.fill(); ox.strokeStyle='rgba(255,230,80,.6)'; ox.lineWidth=1.5; ox.stroke();
+  ox.beginPath(); ox.ellipse(R-R*.035,R-R*.04,R*.05,R*.035,Math.PI*-.4,0,Math.PI*2);
+  ox.fillStyle='rgba(255,255,255,.55)'; ox.fill();
+  ox.beginPath(); ox.arc(R,R,R*.014,0,Math.PI*2); ox.fillStyle='#1a0e00'; ox.fill();
+
+  ox.restore();
+  staticImg = oc;
+}
+
+/* ════════════════════════════════════════════
+   DRAW — called every frame with current wheel angle
+════════════════════════════════════════════ */
+function draw(ang) {
+  cx.clearRect(0, 0, SZ, SZ);
+
+  // Black pocket base
+  cx.beginPath(); cx.arc(R,R,RGA,0,Math.PI*2); cx.fillStyle='#060606'; cx.fill();
+
+  // Coloured pocket wedges (rotate with ang)
+  segs.forEach(seg => {
+    const sa = seg.sa + ang, ea = seg.ea + ang;
+    cx.beginPath(); cx.moveTo(R,R); cx.arc(R,R,RGA,sa,ea); cx.closePath();
+    cx.fillStyle = seg.col; cx.fill();
+    cx.strokeStyle='rgba(0,0,0,.7)'; cx.lineWidth=1.2; cx.stroke();
+  });
+
+  // Static image (wood rim, gold band, bowl, dome — pocket zone transparent)
+  if (staticImg) cx.drawImage(staticImg, 0, 0);
+
+  // Labels — drawn upright in screen space (not rotated)
+  cx.textAlign='center'; cx.textBaseline='middle';
+  segs.forEach(seg => {
+    const ma = seg.ma + ang;
+    const lx = R + Math.cos(ma)*RMD;
+    const ly = R + Math.sin(ma)*RMD;
+    if (lx < 0 || lx > SZ || ly < 0 || ly > SZ) return;
+    cx.save();
+    cx.beginPath(); cx.moveTo(R,R); cx.arc(R,R,RGA,seg.sa+ang,seg.ea+ang); cx.closePath(); cx.clip();
+    cx.font = seg.eSz + 'px serif';
+    cx.fillStyle = 'rgba(255,255,255,.95)';
+    cx.fillText(seg.item.emoji, lx, ly - seg.eSz*.72);
+    const nm = (seg.item.short || seg.item.name).substring(0, 10);
+    cx.font = '700 ' + seg.nSz + 'px "DM Sans",sans-serif';
+    cx.lineWidth=2.5; cx.strokeStyle='rgba(0,0,0,.9)'; cx.lineJoin='round';
+    cx.strokeText(nm, lx, ly + seg.eSz*.7);
+    cx.fillStyle='#fff'; cx.fillText(nm, lx, ly + seg.eSz*.7);
+    cx.restore();
+  });
+}
+
+/* ════════════════════════════════════════════
+   BALL RENDER
+════════════════════════════════════════════ */
+function drawBall(bx, by) {
+  const br = R * .052;
+  // Shadow
+  cx.beginPath(); cx.arc(bx+2,by+3,br,0,Math.PI*2); cx.fillStyle='rgba(0,0,0,.55)'; cx.fill();
+  // Shiny sphere
+  const bg = cx.createRadialGradient(bx-br*.35,by-br*.38,br*.04,bx,by,br);
+  bg.addColorStop(0,'#ffffff'); bg.addColorStop(.5,'#e2e2e2'); bg.addColorStop(1,'#999');
+  cx.beginPath(); cx.arc(bx,by,br,0,Math.PI*2); cx.fillStyle=bg; cx.fill();
+  // Specular
+  cx.beginPath(); cx.arc(bx-br*.3,by-br*.35,br*.28,0,Math.PI*2);
+  cx.fillStyle='rgba(255,255,255,.9)'; cx.fill();
+}
+
+/* ════════════════════════════════════════════
+   PHYSICS STATE
+   bRad / bVR are in PIXEL units.
+   bA / bVA are in RADIANS.
+   States: idle → orbit → fall → bounce → locked → parked
+════════════════════════════════════════════ */
+let bP          = 'idle'; // ball phase
+let bA          = 0;      // ball absolute angle (rad)
+let bRad        = 0;      // ball radius (px)
+let bVA         = 0;      // angular velocity (rad/frame)
+let bVR         = 0;      // radial velocity (px/frame, +ve = outward)
+let wV          = 0;      // wheel angular velocity (rad/frame)
+let fired       = false;  // onDone guard
+let parkedOffset= 0;      // pocket angle at park time
+let bounceF     = 0;      // frames spent in bounce phase
+
+/* ════════════════════════════════════════════
+   MAIN LOOP
+════════════════════════════════════════════ */
+function loop() {
+  requestAnimationFrame(loop);
+
+  if (spinning) {
+    // Wheel decelerates
+    wV *= 0.9986;
+    if (Math.abs(wV) < 0.00004) wV = 0;
+    wAng += wV;
+
+    // — Ball state machine —
+    if (bP === 'orbit') {
+      // Ball races outer track counter to wheel
+      bVA  *= 0.9952;
+      bA   += bVA;
+      bRad  = RTK;
+      if (Math.abs(bVA) < 0.013) { bP = 'fall'; bVR = 0; }
+
+    } else if (bP === 'fall') {
+      // Ball drops inward under gravity
+      bVR  += 0.18;
+      bRad -= bVR;
+      bVA  *= 0.985;
+      bA   += bVA;
+      if (bRad <= RGA) {
+        // Hit outer wall — start bouncing with fresh pixel-scale velocity
+        bRad = RGA;
+        bVR  = -(R * 0.20 * (0.85 + Math.random() * 0.30));
+        bVA += (Math.random() - 0.5) * 0.10;
+        bP   = 'bounce';
+        bounceF = 0;
+      }
+
+    } else if (bP === 'bounce') {
+      // Ball bounces wall-to-wall inside pocket zone.
+      // Pure wall damping — no gravity term — prevents fixed-point hovering.
+      bounceF++;
+      bVA  *= 0.975;
+      bA   += bVA;
+      bRad += bVR;
+
+      if (bRad >= RGA) {
+        bRad = RGA;
+        bVR  = -(Math.abs(bVR) * 0.74);      // outer wall: 26% energy loss
+        bVA += (Math.random() - 0.5) * 0.09; // wall deflects angular path
+      } else if (bRad <= RPI) {
+        bRad = RPI;
+        bVR  = Math.abs(bVR) * 0.72;         // inner wall: 28% energy loss
+        bVA += (Math.random() - 0.5) * 0.09;
+      }
+
+      // Fret hit: angular deflection only, radial momentum unchanged
+      if (segs.length > 0) {
+        const arc = (Math.PI * 2) / segs.length;
+        const rel = ((bA - wAng) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
+        const ci  = Math.floor(rel / arc) % segs.length;
+        const dSa = (rel - segs[ci].sa + Math.PI*2) % (Math.PI*2);
+        const dEa = (segs[ci].ea - rel + Math.PI*2) % (Math.PI*2);
+        if (Math.min(dSa, dEa) < arc * 0.05) {
+          bVA = -bVA * 0.7 + (Math.random() - 0.5) * 0.18;
+        }
+      }
+
+      // Settle when amplitude decays below threshold (pixel units for bVR)
+      if (bounceF >= 40 && Math.abs(bVR) < R * 0.04 && Math.abs(bVA) < 0.04) {
+        const arc = (Math.PI * 2) / segs.length;
+        const rel = ((bA - wAng) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
+        wIdx  = Math.floor(rel / arc) % segs.length;
+        bA    = wAng + segs[wIdx].ma;
+        bRad  = RMD;
+        bVA   = 0; bVR = 0;
+        bP    = 'locked';
+        onDone();
+      }
+
+    } else if (bP === 'locked') {
+      // Ball locked in pocket, rotates with wheel as it coasts to a stop
+      bA   = wAng + segs[wIdx].ma;
+      bRad = RMD;
+      if (wV === 0) {
+        parkedOffset = segs[wIdx].ma;
+        bP       = 'parked';
+        spinning  = false;
+      }
+    }
+
+  } else {
+    // Idle: slow drift
+    wAng += 0.0008;
+  }
+
+  // Render
+  draw(wAng);
+  if (bP === 'parked') {
+    drawBall(R + Math.cos(wAng + parkedOffset) * RMD,
+             R + Math.sin(wAng + parkedOffset) * RMD);
+  } else if (bP !== 'idle') {
+    const cr = Math.max(RPI, Math.min(RTK + 12, bRad));
+    drawBall(R + Math.cos(bA) * cr, R + Math.sin(bA) * cr);
+  }
+}
+
+/* ════════════════════════════════════════════
+   SPIN
+════════════════════════════════════════════ */
+// Cached DOM refs
+const elSBtn = document.getElementById('sBtn');
+const elRsW  = document.getElementById('rsW');
+const elRsE  = document.getElementById('rsE');
+
+function doSpin() {
+  if (spinning && bP !== 'parked' && bP !== 'locked') return;
+  const pool = getActivePool();
+  if (!pool.length) { alert('No restaurants match your filters!'); return; }
+
+  // Reset state
+  spinning      = true;
+  fired         = false;
+  bP            = 'idle';
+  parkedOffset  = 0;
+  bounceF       = 0;
+
+  // Fade out result card if visible, then hide
+  if (elRsW.classList.contains('show')) {
+    elRsW.classList.add('fading');
+    setTimeout(() => { elRsW.classList.remove('show','fading'); }, 220);
+  } else {
+    elRsW.classList.remove('show');
+  }
+  elRsE.classList.remove('hide');
+  ring.classList.add('spinning');
+  elSBtn.disabled    = true;
+  elSBtn.textContent = 'Spinning…';
+
+  buildSegs(pool);
+  wIdx = Math.floor(Math.random() * pool.length);
+
+  // Wheel velocity — enough rotations to feel satisfying
+  const arc    = (Math.PI * 2) / pool.length;
+  const pMid   = (wIdx + .5) * arc;
+  const tFinal = -pMid - Math.PI / 2;
+  const extra  = 5 + Math.floor(Math.random() * 4);
+  const total  = Math.PI*2*extra + ((tFinal - wAng) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
+  wV = total * 0.0018;
+
+  // Ball launches fast, counter to wheel
+  bA   = Math.random() * Math.PI * 2;
+  bRad = RTK;
+  bVA  = -(0.24 + Math.random() * 0.06);
+  bVR  = 0;
+  bP   = 'orbit';
+}
+
+/* ════════════════════════════════════════════
+   ON DONE — show result card
+════════════════════════════════════════════ */
+// Cached DOM refs
+const elWE   = document.getElementById('wE');
+const elWL   = document.getElementById('wL');
+const elWN   = document.getElementById('wN');
+const elWD   = document.getElementById('wD');
+const elWP   = document.getElementById('wP');
+const elWA   = document.getElementById('wA');
+const elWLnk     = document.getElementById('wLink');
+const elWPhoto   = document.getElementById('wPhoto');
+const elWPhotoW  = document.getElementById('wPhotoWrap');
+const elWContact = document.getElementById('wContact');
+const elWPhone   = document.getElementById('wPhone');
+const elWWebsite = document.getElementById('wWebsite');
+const elWMaps    = document.getElementById('wMaps');
+const elWItms = document.getElementById('wItems');
+const elHist  = document.getElementById('histSection');
+const elHBoard= document.getElementById('histBoard');
+
+function onDone() {
+  if (fired) return;
+  fired = true;
+  ring.classList.remove('spinning');
+  elSBtn.disabled    = false;
+  elSBtn.textContent = 'Spin the Wheel';
+
+  const w = segs[wIdx];
+  if (!w) return;
+  const item = w.item;
+
+  elWE.textContent = item.emoji;
+  if (mode === 'meal') {
+    elWL.textContent    = "Tonight's Meal";
+    elWN.textContent    = item.name;
+    elWD.style.display  = 'block';
+    elWD.textContent    = item.desc || '';
+    elWP.innerHTML = `<span class="pill p-c">from ${item._r||''}</span><span class="pill p-p">${item.price}</span><span class="pill p-r">⭐${item.rating}</span><span class="pill p-o">${item.open?'● Open':'○ Closed'}</span>`;
+    elWLnk.href = `https://www.doordash.com/search/store/${encodeURIComponent(item._r || item.name)}/`;
+  } else {
+    elWL.textContent    = "Tonight's Restaurant";
+    elWN.textContent    = item.name;
+    elWD.style.display  = 'none';
+    elWP.innerHTML = `<span class="pill p-c">${item.cuisine}</span><span class="pill p-p">${item.price}</span><span class="pill p-r">⭐${item.rating}</span><span class="pill p-o">${item.open?'● Open':'○ Closed'}</span>`;
+    elWLnk.href = `https://www.doordash.com/search/store/${encodeURIComponent(item.name)}/`;
+  }
+  elWA.textContent = '📍 ' + (item.addr || '');
+
+  // Photo — built from photoRef using Places photo URL format
+  if (item.photoRef) {
+    const photoUrl = `https://places.googleapis.com/v1/${item.photoRef}/media?maxHeightPx=320&maxWidthPx=600&key=${GOOGLE_CLIENT_KEY}`;
+    elWPhoto.src = photoUrl;
+    elWPhoto.onload  = () => { elWPhotoW.style.display = ''; };
+    elWPhoto.onerror = () => { elWPhotoW.style.display = 'none'; };
+  } else {
+    elWPhotoW.style.display = 'none';
+  }
+
+  // Contact links
+  let hasContact = false;
+  if (item.phone) {
+    elWPhone.href = `tel:${item.phone}`;
+    elWPhone.style.display = 'flex'; hasContact = true;
+  } else { elWPhone.style.display = 'none'; }
+
+  if (item.website) {
+    elWWebsite.href = item.website;
+    elWWebsite.style.display = 'flex'; hasContact = true;
+  } else { elWWebsite.style.display = 'none'; }
+
+  if (item.mapsUrl) {
+    elWMaps.href = item.mapsUrl;
+    elWMaps.style.display = 'flex'; hasContact = true;
+  } else { elWMaps.style.display = 'none'; }
+
+  elWContact.style.display = hasContact ? 'flex' : 'none';
+
+  // Items to try (restaurant mode shows both items, meal mode hides)
+  if (mode === 'restaurant' && item.items && item.items.length) {
+    elWItms.style.display = '';
+    elWItms.innerHTML = item.items.map(it =>
+      `<div class="rw-item">
+        <div class="rw-item-emoji">${it.emoji}</div>
+        <div class="rw-item-name">${it.name}</div>
+        <div class="rw-item-desc">${it.desc}</div>
+      </div>`
+    ).join('');
+  } else {
+    elWItms.style.display = 'none';
+    elWItms.innerHTML = '';
+  }
+
+  // Add to history
+  const restName = mode === 'meal' ? (item._r || item.name) : item.name;
+  const restItem = REST.find(r => r.name === restName) || item;
+  const col = restItem.items ? (RCOL(segs.indexOf(w)) === '#cc1000' ? 'red' : RCOL(segs.indexOf(w)) === '#0d8020' ? 'green' : 'black') : 'black';
+  // Use pocket colour for casino dot
+  const pCol = w.col === '#cc1000' ? 'red' : w.col === '#0d8020' ? 'green' : 'black';
+  history.unshift({ emoji: item.emoji, name: mode==='meal'?`${item.name} @ ${item._r||''}`:item.name, sub: `${item.cuisine||item.price} · ${item.price}`, price:item.price, open:item.open, col:pCol });
+  if (history.length > 5) history.pop();
+  renderHistory();
+
+  elRsE.classList.add('hide');
+  setTimeout(() => elRsW.classList.add('show'), 80);
+  confetti();
+}
+
+function renderHistory() {
+  if (!history.length) { elHist.style.display='none'; return; }
+  elHist.style.display = '';
+  elHBoard.innerHTML = history.map((h, i) => `
+    <div class="hist-row ${i===0?'newest':''}">
+      <div class="hist-num">${i+1}</div>
+      <div class="hist-dot ${h.col}">${h.emoji}</div>
+      <div class="hist-info">
+        <div class="hist-name">${h.name}</div>
+        <div class="hist-sub">${h.sub}</div>
+      </div>
+      <div class="hist-badge">${h.open?'● Open':'○ Closed'}</div>
+    </div>`).join('');
+}
+
+/* ════════════════════════════════════════════
+   MODE + POOL
+════════════════════════════════════════════ */
+function setMode(m) {
+  if (spinning && bP !== 'parked' && bP !== 'locked') return;
+  mode = m;
+  document.getElementById('btnR').className = 'mb' + (m === 'restaurant' ? ' on' : '');
+  document.getElementById('btnM').className = 'mb' + (m === 'meal'       ? ' on' : '');
+  elSBtn.textContent = m === 'meal' ? 'Spin for a Meal' : 'Spin the Wheel';
+  // Fade out result card if visible, then hide
+  if (elRsW.classList.contains('show')) {
+    elRsW.classList.add('fading');
+    setTimeout(() => { elRsW.classList.remove('show','fading'); }, 220);
+  } else {
+    elRsW.classList.remove('show');
+  }
+  elRsE.classList.remove('hide');
+  buildSegs(getActivePool());
+  draw(wAng);
+}
+
+function getActivePool() {
+  if (mode === 'restaurant' && rndRest) return rndRest;
+  if (mode === 'meal'       && rndMeal) return rndMeal;
+  return getPool();
+}
+
+function getPool() {
+  const base = REST.filter(r => {
+    if (F.cuisines[0] !== 'any' && !F.cuisines.includes(r.cuisine)) return false;
+    if (r.pl > F.budget)                                             return false;
+    if (F.dist !== 'any' && r.dist > parseFloat(F.dist))           return false;
+    if (r.rating < F.rating)                                         return false;
+    if (F.openNow && !r.open)                                        return false;
+    return true;
+  });
+  if (mode === 'meal') return base.map(r => ({
+    ...r.items[0], _r: r.name,
+    price: r.price, pl: r.pl, rating: r.rating, open: r.open, addr: r.addr,
+    short: r.items[0].name.split(' ').slice(0,3).join(' '),
+  }));
+  return base;
+}
+
+/* ════════════════════════════════════════════
+   RANDOMIZE
+════════════════════════════════════════════ */
+function doRandomize() {
+  if (spinning && bP !== 'parked' && bP !== 'locked') return;
+
+  // Draw a fresh random subset from the FULL REST array each time —
+  // bypasses filters so every press gives genuinely new restaurants.
+  const count = Math.max(getPool().length, 8);
+  let pool;
+  if (mode === 'meal') {
+    pool = REST.map(r => ({
+      ...r.items[0], _r:r.name, price:r.price, pl:r.pl,
+      rating:r.rating, open:r.open, addr:r.addr,
+      short:r.items[0].name.split(' ').slice(0,3).join(' '),
+    }));
+  } else {
+    pool = [...REST];
+  }
+  const shuffled = pool.sort(() => Math.random() - .5).slice(0, count);
+
+  if (mode === 'restaurant') rndRest = shuffled;
+  else                        rndMeal = shuffled;
+  buildSegs(shuffled);
+  draw(wAng);
+
+  const btn = document.getElementById('rndBtn');
+  btn.style.transition = 'transform .4s ease';
+  btn.style.transform  = 'rotate(360deg)';
+  setTimeout(() => { btn.style.transition=''; btn.style.transform=''; }, 420);
+}
+
+/* ════════════════════════════════════════════
+   CONFETTI
+════════════════════════════════════════════ */
+function confetti() {
+  const cr   = cv.getBoundingClientRect();
+  const ccx  = cr.left + cr.width / 2;
+  const ccy  = cr.top  + cr.height / 2;
+  const cols = ['#f0c93a','#cc1000','#0e8020','#fff','#c9a84c','#44aaff','#ff6644'];
+  for (let i = 0; i < 55; i++) {
+    const p = document.createElement('div');
+    p.className = 'pt';
+    const a = Math.random()*Math.PI*2, d=80+Math.random()*220, s=4+Math.random()*10;
+    p.style.cssText = `left:${ccx}px;top:${ccy}px;width:${s}px;height:${s}px;` +
+      `background:${cols[i%cols.length]};` +
+      `--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d}px;` +
+      `animation-duration:${1+Math.random()*.8}s;animation-delay:${Math.random()*.15}s;`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 2200);
+  }
+}
+
+/* ════════════════════════════════════════════
+   FILTER SHEET
+════════════════════════════════════════════ */
+function openSheet()  {
+  document.getElementById('sheet').classList.add('on');
+  document.getElementById('shOv').classList.add('on');
+  document.getElementById('fBtn').classList.add('on');
+}
+function closeSheet() {
+  document.getElementById('sheet').classList.remove('on');
+  document.getElementById('shOv').classList.remove('on');
+  document.getElementById('fBtn').classList.remove('on');
+}
+
+function togC(c) {
+  const v = c.dataset.v;
+  if (v === 'any') {
+    document.querySelectorAll('#cChips .ch').forEach(x => x.classList.remove('on'));
+    c.classList.add('on');
+    F.cuisines = ['any'];
+  } else {
+    document.querySelector('#cChips [data-v="any"]').classList.remove('on');
+    F.cuisines = F.cuisines.filter(x => x !== 'any');
+    c.classList.toggle('on');
+    if (c.classList.contains('on')) F.cuisines.push(v);
+    else F.cuisines = F.cuisines.filter(x => x !== v);
+    if (!F.cuisines.length) {
+      F.cuisines = ['any'];
+      document.querySelector('#cChips [data-v="any"]').classList.add('on');
+    }
+  }
+  applyF();
+}
+
+// updB removed — budget now uses chips like other filters
+
+// Generic single-select chip group — instant apply
+function selChip(el, gid, fk, isInt) {
+  document.querySelectorAll(`#${gid} .ch`).forEach(x => x.classList.remove('on'));
+  el.classList.add('on');
+  F[fk] = isInt ? parseInt(el.dataset.v) : el.dataset.v;
+  // Re-fetch from API when distance changes (wider radius = more results)
+  if (fk === 'dist' && REST !== FALLBACK_REST) {
+    showLocStatus('📍 Updating…');
+    loadRestaurants().then(() => { buildSegs(getPool()); draw(wAng); updSum(); updDot(); });
+  } else {
+    applyF();
+  }
+}
+
+// Toggle chip (boolean or diet array)
+function togChip(id, key) {
+  const el = document.getElementById(id);
+  el.classList.toggle('on');
+  if (key === 'openNow') {
+    F.openNow = el.classList.contains('on');
+  } else {
+    if (el.classList.contains('on')) F.diet.push(key);
+    else F.diet = F.diet.filter(x => x !== key);
+  }
+  applyF();
+}
+
+function applyF() {
+  rndRest = null; rndMeal = null;
+  buildSegs(getPool());
+  draw(wAng);
+  updSum(); updDot();
+}
+
+function resetF() {
+  F.cuisines=['any']; F.budget=2; F.dist='any'; F.rating=0; F.openNow=false; F.diet=[];
+  // Cuisine
+  document.querySelectorAll('#cChips .ch').forEach(x => x.classList.remove('on'));
+  document.querySelector('#cChips [data-v="any"]').classList.add('on');
+  // Budget
+  document.querySelectorAll('#bChips .ch').forEach(x => x.classList.remove('on'));
+  document.querySelector('#bChips [data-v="2"]').classList.add('on');
+  // Distance
+  document.querySelectorAll('#dChips .ch').forEach(x => x.classList.remove('on'));
+  document.querySelector('#dChips [data-v="any"]').classList.add('on');
+  // Rating
+  document.querySelectorAll('#rChips .ch').forEach(x => x.classList.remove('on'));
+  document.querySelector('#rChips [data-v="0"]').classList.add('on');
+  // Toggles
+  ['openChip','vegChip','veganChip','gfChip','halalChip'].forEach(id => {
+    document.getElementById(id)?.classList.remove('on');
+  });
+  applyF();
+}
+
+function updDot() {
+  const has = F.cuisines[0]!=='any' || F.budget<4 || F.dist!=='any' || F.rating>0 || F.openNow || F.diet.length>0;
+  document.getElementById('fDot').classList.toggle('on', has);
+}
+
+function updSum() {
+  const tags = [];
+  if (F.cuisines[0] !== 'any') F.cuisines.forEach(c => tags.push({l:c, k:'c_'+c}));
+  if (F.budget < 4)    tags.push({l:BD[F.budget].l+' budget', k:'budget'});
+  if (F.dist !== 'any') tags.push({l:'≤'+F.dist+' mi', k:'dist'});
+  if (F.rating > 0)    tags.push({l:'⭐'+F.rating+'+', k:'rating'});
+  if (F.openNow)       tags.push({l:'🟢 Open now', k:'openNow'});
+  F.diet.forEach(d => tags.push({l:d, k:'d_'+d}));
+  const s = document.getElementById('fSum');
+  s.innerHTML = tags.map(t => `<div class="ft">${t.l}<span class="fx" onclick="rmTag('${t.k}')">×</span></div>`).join('');
+  s.classList.toggle('on', tags.length > 0);
+}
+
+function rmTag(k) {
+  if (k==='budget')      { F.budget=4; document.getElementById('bSlide').value=4; updB(4); }
+  else if (k==='dist')   { F.dist='any'; document.querySelectorAll('#dChips .ch').forEach(x=>x.classList.toggle('on',x.dataset.v==='any')); }
+  else if (k==='rating') { F.rating=0; document.querySelectorAll('#rChips .ch').forEach(x=>x.classList.toggle('on',x.dataset.v==='0')); }
+  else if (k==='openNow'){ F.openNow=false; document.getElementById('openChip')?.classList.remove('on'); }
+  else if (k.startsWith('d_')) {
+    const d=k.slice(2); F.diet=F.diet.filter(x=>x!==d);
+    document.querySelectorAll('.tr').forEach(r=>{ if(r.dataset.v===d) r.classList.remove('on'); });
+  } else if (k.startsWith('c_')) {
+    const c=k.slice(2); F.cuisines=F.cuisines.filter(x=>x!==c);
+    document.querySelector(`#cChips [data-v="${c}"]`)?.classList.remove('on');
+    if (!F.cuisines.length) { F.cuisines=['any']; document.querySelector('#cChips [data-v="any"]').classList.add('on'); }
+  }
+  rndRest=null; rndMeal=null;
+  buildSegs(getPool()); draw(wAng);
+  updSum(); updDot();
+}
+
+/* ════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════ */
+document.fonts.ready.then(async () => {
+  bakeStatic();
+  showLocStatus('📍 Finding restaurants near you…');
+  await loadRestaurants();
+  buildSegs(getPool());
+  loop();
+});
+
+function showLocStatus(msg) {
+  const el = document.getElementById('rsE').querySelector('strong');
+  if (el) el.textContent = msg;
+}
+
+// Maps Google Places primaryType strings to emoji
+// Google returns types like: mexican_restaurant, sushi_restaurant, steak_house etc.
+function typeEmoji(type) {
+  const t = (type || '').toLowerCase();
+  // Exact / specific matches first
+  const map = {
+    // Asian
+    'sushi_restaurant':        '🍣',
+    'japanese_restaurant':     '🍱',
+    'ramen_restaurant':        '🍥',
+    'chinese_restaurant':      '🥡',
+    'dim_sum_restaurant':      '🥟',
+    'thai_restaurant':         '🍜',
+    'vietnamese_restaurant':   '🍲',
+    'korean_restaurant':       '🫕',
+    'indian_restaurant':       '🍛',
+    'middle_eastern_restaurant':'🧆',
+    'lebanese_restaurant':     '🫓',
+    'turkish_restaurant':      '🥙',
+    // Western
+    'american_restaurant':     '🍔',
+    'hamburger_restaurant':    '🍔',
+    'fast_food_restaurant':    '🍟',
+    'italian_restaurant':      '🍝',
+    'pizza_restaurant':        '🍕',
+    'french_restaurant':       '🥩',
+    'steak_house':             '🥩',
+    'barbecue_restaurant':     '🍖',
+    'mexican_restaurant':      '🌮',
+    'spanish_restaurant':      '🥘',
+    'greek_restaurant':        '🫒',
+    'mediterranean_restaurant':'🫙',
+    // Seafood
+    'seafood_restaurant':      '🦞',
+    // Other cuisines
+    'brazilian_restaurant':    '🥩',
+    'african_restaurant':      '🍲',
+    'latin_american_restaurant':'🌯',
+    'peruvian_restaurant':     '🫔',
+    // Specific food types
+    'breakfast_restaurant':    '🥚',
+    'brunch_restaurant':       '🥞',
+    'sandwich_shop':           '🥪',
+    'deli':                    '🥙',
+    'bakery':                  '🥐',
+    'cafe':                    '☕',
+    'coffee_shop':             '☕',
+    'ice_cream_shop':          '🍦',
+    'dessert_shop':            '🍰',
+    'donut_shop':              '🍩',
+    'bubble_tea_store':        '🧋',
+    'bar':                     '🍺',
+    'wine_bar':                '🍷',
+    'cocktail_bar':            '🍸',
+    'pub':                     '🍺',
+    'food_court':              '🍽️',
+    'buffet_restaurant':       '🍽️',
+    'vegetarian_restaurant':   '🥗',
+    'vegan_restaurant':        '🥦',
+  };
+  if (map[t]) return map[t];
+  // Partial matches as fallback
+  if (t.includes('sushi') || t.includes('japanese')) return '🍣';
+  if (t.includes('ramen') || t.includes('noodle'))   return '🍥';
+  if (t.includes('chinese') || t.includes('dim_sum'))return '🥡';
+  if (t.includes('thai') || t.includes('vietnamese'))return '🍜';
+  if (t.includes('korean'))                          return '🍱';
+  if (t.includes('indian') || t.includes('curry'))   return '🍛';
+  if (t.includes('middle_east') || t.includes('falafel')) return '🧆';
+  if (t.includes('pizza') || t.includes('italian'))  return '🍕';
+  if (t.includes('mexican') || t.includes('taco'))   return '🌮';
+  if (t.includes('burger') || t.includes('american'))return '🍔';
+  if (t.includes('steak') || t.includes('bbq') || t.includes('barbecue')) return '🥩';
+  if (t.includes('seafood') || t.includes('fish'))   return '🦞';
+  if (t.includes('french') || t.includes('bistro'))  return '🥐';
+  if (t.includes('spanish') || t.includes('mediterranean')) return '🫙';
+  if (t.includes('greek'))                           return '🫒';
+  if (t.includes('breakfast') || t.includes('brunch'))return '🥞';
+  if (t.includes('sandwich') || t.includes('deli'))  return '🥪';
+  if (t.includes('bakery') || t.includes('pastry'))  return '🥐';
+  if (t.includes('cafe') || t.includes('coffee'))    return '☕';
+  if (t.includes('ice_cream') || t.includes('dessert')) return '🍦';
+  if (t.includes('bar') || t.includes('pub'))        return '🍺';
+  if (t.includes('vegan') || t.includes('vegetarian')) return '🥗';
+  return '🍽️';
+}
+
+// Cache: localStorage with 1hr TTL, keyed by rounded location + radius
+const CACHE_TTL = 60 * 60 * 1000; // 1 hour in ms
+
+function cacheKey(lat, lng, meters) {
+  // Round to 2 decimal places (~1km grid) so nearby positions share cache
+  const rlat = Math.round(lat * 100) / 100;
+  const rlng = Math.round(lng * 100) / 100;
+  return `fr_${rlat}_${rlng}_${meters}`;
+}
+
+function getCached(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const { ts, data } = JSON.parse(raw);
+    if (Date.now() - ts > CACHE_TTL) { localStorage.removeItem(key); return null; }
+    return data;
+  } catch(e) { return null; }
+}
+
+function setCache(key, data) {
+  try {
+    localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
+  } catch(e) {} // storage full — just skip
+}
+
+async function loadRestaurants() {
+  return new Promise(resolve => {
+    if (!navigator.geolocation) { resolve(); return; }
+    navigator.geolocation.getCurrentPosition(
+      async pos => {
+        try {
+          const { latitude: lat, longitude: lng } = pos.coords;
+          const miles  = F.dist === 'any' ? 2 : parseFloat(F.dist);
+          const meters = Math.round(miles * 1609);
+          const key    = cacheKey(lat, lng, meters);
+
+          // Check localStorage cache first
+          const cached = getCached(key);
+          if (cached) {
+            REST = cached;
+            showLocStatus(`🎰 ${cached.length} spots nearby — spin it!`);
+            resolve();
+            return;
+          }
+
+          // Cache miss — fetch from Worker
+          const res  = await fetch(`${WORKER_URL}?lat=${lat}&lng=${lng}&radius=${meters}`);
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            const processed = data.map(r => ({...r, emoji: r.emoji || typeEmoji(r.cuisine)}));
+            setCache(key, processed);   // save for next time
+            REST = processed;
+            showLocStatus(`🎰 ${data.length} spots nearby — spin it!`);
+          } else {
+            showLocStatus('🎰 Ready to spin!');
+          }
+        } catch(e) {
+          console.warn('Worker failed, using fallback', e);
+          showLocStatus('🎰 Ready to spin!');
+        }
+        resolve();
+      },
+      () => { showLocStatus('🎰 Ready to spin!'); resolve(); },
+      { timeout: 8000 }
+    );
+  });
+}
+</script>
+</body>
+</html>
