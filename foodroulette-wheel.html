@@ -221,9 +221,6 @@ h1 span{
 @keyframes fadeOut{0%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px)}}
 .strip{width:calc(100% - 24px);max-width:600px;margin:22px auto 14px;position:relative;z-index:1;}
 .vp-card{animation:none;}
-.rs-empty{display:flex;align-items:center;justify-content:center;padding:0;border:none;background:none;}
-.rs-empty.hide{display:none;}
-.rs-empty-txt{width:100%;}
 
 /* ── Unified video poker style card ── */
 .vp-card--spin{ /* no extra styles needed */ }
@@ -384,45 +381,9 @@ h1 span{
   gap:5px;transition:all .15s;
 }
 .vp-footer-btn:hover{background:rgba(0,0,0,.45);border-color:rgba(201,168,76,.55);color:var(--gold);}
-.vp-footer-btn.red{background:rgba(0,0,0,.3);color:rgba(201,168,76,.85);}
 
 
-/* Restaurant photo */
-.rw-photo{
-  width:100%;height:160px;object-fit:cover;display:block;
-}
-.rw-photo-wrap{position:relative;overflow:hidden;max-height:160px;}
-.rw-photo-wrap::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom,transparent 50%,rgba(2,8,3,.85) 100%);
-}
-.rw-photo-attr{
-  font-size:.55rem;color:var(--dim);text-align:right;
-  padding:3px 8px;background:rgba(0,0,0,.4);
-}
-.rw-photo-attr a{color:var(--dim);text-decoration:none;}
-.rw-photo-attr a:hover{color:var(--gold);}
 
-/* Contact row */
-.rw-contact{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
-.rw-contact-btn{
-  display:flex;align-items:center;gap:5px;
-  padding:8px 12px;border-radius:4px;font-size:.78rem;font-weight:700;
-  text-decoration:none;border:2px solid #1a1a1a;
-  background:#fff;color:#1a1a1a;cursor:pointer;
-  transition:all .1s;flex:1;justify-content:center;
-  font-family:system-ui,-apple-system,sans-serif;
-}
-.rw-contact-btn:hover{background:#1a1a1a;color:#fff;}
-/* Items to try */
-.rw-items{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:2px solid #1a1a1a;}
-.rw-item{flex:1;background:#f5f5f5;border:2px solid #1a1a1a;border-radius:6px;padding:8px 10px;}
-.rw-item-emoji{font-size:1.2rem;margin-bottom:4px;}
-.rw-item-name{font-size:.72rem;font-weight:700;color:#1a1a1a;margin-bottom:2px;font-family:'Cinzel',serif;text-transform:uppercase;letter-spacing:.05em;}
-.rw-item-desc{font-size:.63rem;color:#666;line-height:1.3;}
-.rw-acts{display:flex;gap:8px;}
-.btn-dd{flex:1;padding:11px;border:3px solid #1a1a1a;border-radius:6px;background:#c0392b;color:#fff;font-family:'Cinzel',serif;font-size:.78rem;font-weight:900;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .1s;letter-spacing:.08em;text-transform:uppercase;box-shadow:3px 3px 0 #1a1a1a;}
-.btn-dd:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #1a1a1a;}
 
 /* ── Filter Sheet ── */
 .so{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
@@ -623,32 +584,7 @@ h1 span{
     <button class="sh-x" onclick="closeSheet()">✕</button>
   </div>
 
-  <div class="ss"><div class="sl">Cuisine</div>
-    <div class="cg" id="cChips">
-      <div class="ch on" data-v="any"          onclick="togC(this)">🎲 Any</div>
-      <div class="ch"    data-v="american"      onclick="togC(this)">🥩 American</div>
-      <div class="ch"    data-v="pizza"         onclick="togC(this)">🍕 Pizza</div>
-      <div class="ch"    data-v="burger"        onclick="togC(this)">🍔 Burgers</div>
-      <div class="ch"    data-v="mexican"       onclick="togC(this)">🌮 Mexican</div>
-      <div class="ch"    data-v="italian"       onclick="togC(this)">🍝 Italian</div>
-      <div class="ch"    data-v="chinese"       onclick="togC(this)">🥡 Chinese</div>
-      <div class="ch"    data-v="sushi"         onclick="togC(this)">🍣 Sushi</div>
-      <div class="ch"    data-v="japanese"      onclick="togC(this)">🍱 Japanese</div>
-      <div class="ch"    data-v="korean"        onclick="togC(this)">🥢 Korean</div>
-      <div class="ch"    data-v="thai"          onclick="togC(this)">🌶️ Thai</div>
-      <div class="ch"    data-v="vietnamese"    onclick="togC(this)">🍲 Vietnamese</div>
-      <div class="ch"    data-v="indian"        onclick="togC(this)">🍛 Indian</div>
-      <div class="ch"    data-v="mediterranean" onclick="togC(this)">🫒 Mediterranean</div>
-      <div class="ch"    data-v="greek"         onclick="togC(this)">🫒 Greek</div>
-      <div class="ch"    data-v="bbq"           onclick="togC(this)">🍖 BBQ</div>
-      <div class="ch"    data-v="seafood"       onclick="togC(this)">🦞 Seafood</div>
-      <div class="ch"    data-v="breakfast"     onclick="togC(this)">🥚 Breakfast</div>
-      <div class="ch"    data-v="sandwich"      onclick="togC(this)">🥪 Sandwiches</div>
-      <div class="ch"    data-v="wings"         onclick="togC(this)">🍗 Wings</div>
-    </div>
-  </div>
-
-  <div class="ss" style="margin-top:14px;"><div class="sl">Budget</div>
+  <div class="ss"><div class="sl">Budget</div>
     <div class="cg" id="bChips">
       <div class="ch on" data-v="4" onclick="selChip(this,'bChips','budget',true)">Any</div>
       <div class="ch"    data-v="1" onclick="selChip(this,'bChips','budget',true)">$ Under $15</div>
@@ -708,7 +644,7 @@ let locationGranted = false;
 const BD = {1:{l:'$',d:'Under $15'},2:{l:'$$',d:'~$15–$30'},3:{l:'$$$',d:'~$30–$60'},4:{l:'$$$$',d:'~$60+'}};
 let spinning = false;
 let rndRest  = null;
-const F = { cuisines:['any'], budget:4, dist:'any', rating:0, openNow:true, diet:[], hasPhone:false, hasWebsite:false, topRated:false };
+const F = { budget:4, dist:'any', rating:0, openNow:true, hasPhone:false, hasWebsite:false, topRated:false };
 let hasSpunOnce = false;
 
 const WORKER_URL = 'https://frworker.zosebaum.workers.dev';
@@ -1195,22 +1131,11 @@ function onDone() {
 
 const WHEEL_SIZE = 35;
 
-// Burger↔American and Sushi↔Japanese overlap in Google's data
-const CUISINE_ALIASES = {
-  burger:  ['burger','american'],
-  american:['american','burger'],
-  sushi:   ['sushi','japanese'],
-  japanese:['japanese','sushi'],
-};
-function cuisineMatches(rc) {
-  if (F.cuisines[0]==='any') return true;
-  return F.cuisines.some(c=>(CUISINE_ALIASES[c]||[c]).includes(rc));
-}
+
 
 function getPool() {
   // Full filtered pool — every restaurant that passes user filters
   return REST.filter(r=>{
-    if (!cuisineMatches(r.cuisine)) return false;
     if (r.pl>F.budget) return false;
     if (F.dist!=='any'&&r.dist>parseFloat(F.dist)) return false;
     if (r.rating<F.rating) return false;
@@ -1224,7 +1149,6 @@ function getPool() {
 function getPoolIgnoreOpen() {
   // Same filters but ignores openNow — used for padding when open pool is small
   return REST.filter(r=>{
-    if (!cuisineMatches(r.cuisine)) return false;
     if (r.pl>F.budget) return false;
     if (F.dist!=='any'&&r.dist>parseFloat(F.dist)) return false;
     if (r.rating<F.rating) return false;
@@ -1262,7 +1186,6 @@ function getActivePool() { return rndRest || getWheelSlice(); }
 function doRandomize() {
   if (spinning&&bP!=='parked'&&bP!=='locked') return;
   if (REST===FALLBACK_REST) return;
-  clearLocationCache();
   invalidateWheel();
   rndRest=getWheelSlice();
   buildSegs(rndRest); draw(wAng);
@@ -1271,26 +1194,6 @@ function doRandomize() {
   setTimeout(()=>{btn.style.transition=''; btn.style.transform='';},420);
 }
 
-function doSkip() {
-  const w = segs[wIdx];
-  if (!w) return;
-  // Remove this restaurant from the active pool and respin immediately
-  const skippedName = w.item.name;
-  // Get fresh wheel slice excluding all instances of skipped restaurant
-  const base = getPool().filter(r => r.name !== skippedName);
-  const ignoreOpen = getPoolIgnoreOpen().filter(r => r.name !== skippedName);
-  const src = base.length > 0 ? base : ignoreOpen;
-  if (!src.length) { alert('No more restaurants!'); return; }
-  // Build padded slice same way as getWheelSlice
-  const shuffled = [...src].sort(() => Math.random() - 0.5);
-  const slice = shuffled.length >= WHEEL_SIZE ? shuffled.slice(0, WHEEL_SIZE) : (() => {
-    const s = [...shuffled]; let i = 0;
-    while (s.length < WHEEL_SIZE) { s.push(shuffled[i++ % shuffled.length]); }
-    return s;
-  })();
-  rndRest = slice;
-  doSpin();
-}
 
 function doShare() {
   const w = segs[wIdx];
@@ -1352,17 +1255,6 @@ function confetti() {
 function openSheet()  { document.getElementById('sheet').classList.add('on'); document.getElementById('shOv').classList.add('on'); document.getElementById('fBtn').classList.add('on'); }
 function closeSheet() { document.getElementById('sheet').classList.remove('on'); document.getElementById('shOv').classList.remove('on'); document.getElementById('fBtn').classList.remove('on'); }
 
-function togC(c) {
-  const v=c.dataset.v;
-  if (v==='any') { document.querySelectorAll('#cChips .ch').forEach(x=>x.classList.remove('on')); c.classList.add('on'); F.cuisines=['any']; }
-  else {
-    document.querySelector('#cChips [data-v="any"]').classList.remove('on');
-    F.cuisines=F.cuisines.filter(x=>x!=='any'); c.classList.toggle('on');
-    if (c.classList.contains('on')) F.cuisines.push(v); else F.cuisines=F.cuisines.filter(x=>x!==v);
-    if (!F.cuisines.length) { F.cuisines=['any']; document.querySelector('#cChips [data-v="any"]').classList.add('on'); }
-  } applyF();
-}
-
 function selChip(el,gid,fk,isInt) {
   document.querySelectorAll(`#${gid} .ch`).forEach(x=>x.classList.remove('on')); el.classList.add('on');
   F[fk]=isInt?parseInt(el.dataset.v):el.dataset.v;
@@ -1376,7 +1268,6 @@ function togChip(id,key) {
   else if (key==='hasPhone')   F.hasPhone=on;
   else if (key==='hasWebsite') F.hasWebsite=on;
   else if (key==='topRated')   F.topRated=on;
-  else { if(on) F.diet.push(key); else F.diet=F.diet.filter(x=>x!==key); }
   applyF();
 }
 
@@ -1388,25 +1279,20 @@ function loadFilters() {
   try {
     const saved = JSON.parse(localStorage.getItem('fr_filters'));
     if (!saved) return;
-    if (saved.cuisines) F.cuisines = saved.cuisines;
     if (saved.budget)   F.budget   = saved.budget;
     if (saved.dist)     F.dist     = saved.dist;
     if (saved.rating !== undefined) F.rating = saved.rating;
     if (saved.openNow !== undefined) F.openNow = saved.openNow;
-    if (saved.diet)     F.diet     = saved.diet;
     // Restore chip UI
-    document.querySelectorAll('#cChips .ch').forEach(x => x.classList.toggle('on', F.cuisines.includes(x.dataset.v) || (F.cuisines[0]==='any' && x.dataset.v==='any')));
     document.querySelectorAll('#bChips .ch').forEach(x => x.classList.toggle('on', parseInt(x.dataset.v)===F.budget));
     document.querySelectorAll('#dChips .ch').forEach(x => x.classList.toggle('on', x.dataset.v===F.dist));
     document.querySelectorAll('#rChips .ch').forEach(x => x.classList.toggle('on', parseFloat(x.dataset.v)===F.rating));
     if (F.openNow) document.getElementById('openChip')?.classList.add('on');
-    F.diet.forEach(d => { const el=document.getElementById(d+'Chip'); if(el) el.classList.add('on'); });
   } catch(e) {}
 }
 
 function resetF() {
-  F.cuisines=['any']; F.budget=4; F.dist='any'; F.rating=0; F.openNow=true; F.diet=[];
-  document.querySelectorAll('#cChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#cChips [data-v="any"]').classList.add('on');
+  F.budget=4; F.dist='any'; F.rating=0; F.openNow=true;
   document.querySelectorAll('#bChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#bChips [data-v="4"]').classList.add('on');
   document.querySelectorAll('#dChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#dChips [data-v="any"]').classList.add('on');
   document.querySelectorAll('#rChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#rChips [data-v="0"]').classList.add('on');
@@ -1423,7 +1309,6 @@ function updDot() {
 
 function updSum() {
   const tags=[];
-  if (F.cuisines[0]!=='any') F.cuisines.forEach(c=>tags.push({l:c,k:'c_'+c}));
   if (F.budget<4) tags.push({l:BD[F.budget].l+' budget',k:'budget'});
   if (F.dist!=='any') tags.push({l:'≤'+F.dist+' mi',k:'dist'});
   if (F.rating>0) tags.push({l:'⭐'+F.rating+'+',k:'rating'});
@@ -1431,7 +1316,6 @@ function updSum() {
   if (F.hasPhone)   tags.push({l:'📞 Has phone',  k:'hasPhone'});
   if (F.hasWebsite) tags.push({l:'🌐 Has website', k:'hasWebsite'});
   if (F.topRated)   tags.push({l:'⭐ Top rated',   k:'topRated'});
-  F.diet.forEach(d=>tags.push({l:d,k:'d_'+d}));
   const s=document.getElementById('fSum');
   s.innerHTML=tags.map(t=>`<div class="ft">${t.l}<span class="fx" onclick="rmTag('${t.k}')">×</span></div>`).join('');
   s.classList.toggle('on',tags.length>0);
@@ -1445,8 +1329,6 @@ function rmTag(k) {
   else if (k==='hasPhone')   { F.hasPhone=false;   document.getElementById('phoneChip')?.classList.remove('on'); }
   else if (k==='hasWebsite') { F.hasWebsite=false; document.getElementById('websiteChip')?.classList.remove('on'); }
   else if (k==='topRated')   { F.topRated=false;   document.getElementById('topRatedChip')?.classList.remove('on'); }
-  else if (k.startsWith('d_')) { const d=k.slice(2); F.diet=F.diet.filter(x=>x!==d); document.querySelectorAll('.ch').forEach(r=>{if(r.dataset&&r.dataset.v===d)r.classList.remove('on');}); }
-  else if (k.startsWith('c_')) { const c=k.slice(2); F.cuisines=F.cuisines.filter(x=>x!==c); document.querySelector(`#cChips [data-v="${c}"]`)?.classList.remove('on'); if(!F.cuisines.length){F.cuisines=['any'];document.querySelector('#cChips [data-v="any"]').classList.add('on');} }
   invalidateWheel(); buildSegs(getWheelSlice()); draw(wAng); updSum(); updDot();
 }
 
@@ -1514,14 +1396,6 @@ function cacheKey(lat,lng,meters){const rlat=Math.round(lat*100)/100,rlng=Math.r
 function getCached(key){try{const raw=localStorage.getItem(key);if(!raw)return null;const{ts,data}=JSON.parse(raw);if(Date.now()-ts>CACHE_TTL){localStorage.removeItem(key);return null;}return data;}catch(e){return null;}}
 function setCache(key,data){try{localStorage.setItem(key,JSON.stringify({ts:Date.now(),data}));}catch(e){}}
 
-// Clear location cache so randomize fetches fresh data
-function clearLocationCache() {
-  try {
-    Object.keys(localStorage).filter(k=>k.startsWith('fr_')).forEach(k=>{
-      if (!k.includes('filters')) localStorage.removeItem(k);
-    });
-  } catch(e) {}
-}
 
 
 
