@@ -37,11 +37,7 @@ h1{font-family:'Cinzel',serif;font-size:clamp(1.2rem,4.5vw,2rem);font-weight:900
 h1 span{color:var(--gl);}
 .sub{font-size:.68rem;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px;}
 
-/* ── Mode Toggle ── */
-.mode{display:flex;background:rgba(0,0,0,.5);border:1px solid rgba(201,168,76,.18);border-radius:8px;padding:3px;margin:12px auto 0;width:calc(100% - 32px);max-width:280px;position:relative;z-index:1;}
-.mb{flex:1;padding:8px 4px;border-radius:6px;border:none;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;cursor:pointer;transition:all .2s;background:transparent;color:var(--dim);display:flex;flex-direction:column;align-items:center;gap:1px;}
-.mb .ic{font-size:.9rem;}
-.mb.on{background:linear-gradient(135deg,var(--gl),var(--gold));color:#1a0800;box-shadow:0 2px 10px rgba(201,168,76,.4);}
+
 
 /* ── Filter Tags ── */
 .fs{display:none;flex-wrap:wrap;gap:4px;justify-content:center;padding:0 16px;margin-top:6px;position:relative;z-index:1;}
@@ -215,10 +211,7 @@ h1 span{color:var(--gl);}
   <p class="sub">Place your bets · The wheel decides</p>
 </div>
 
-<div class="mode">
-  <button class="mb on" id="btnR" onclick="setMode('restaurant')"><span class="ic">🏪</span>Restaurant</button>
-  <button class="mb"    id="btnM" onclick="setMode('meal')"><span class="ic">🍽️</span>Specific Meal</button>
-</div>
+
 <div class="fs" id="fSum"></div>
 
 <div class="wz">
@@ -391,10 +384,9 @@ let REST = FALLBACK_REST; // populated from API or fallback
    APP STATE
 ════════════════════════════════════════════ */
 const BD = {1:{l:'$',d:'Under $15'},2:{l:'$$',d:'~$15–$30'},3:{l:'$$$',d:'~$30–$60'},4:{l:'$$$$',d:'~$60+'}};
-let mode     = 'restaurant';
+const mode = 'restaurant';
 let spinning = false;
 let rndRest  = null;   // shuffled restaurant pool
-let rndMeal  = null;   // shuffled meal pool
 const F = { cuisines:['any'], budget:2, dist:'any', rating:0, openNow:false, diet:[] };
 const history = []; // last 5 results: {emoji, name, sub, price, open, col}
 
@@ -916,21 +908,12 @@ function onDone() {
   if (!w) return;
   const item = w.item;
 
-  elWE.textContent = item.emoji;
-  if (mode === 'meal') {
-    elWL.textContent    = "Tonight's Meal";
-    elWN.textContent    = item.name;
-    elWD.style.display  = 'block';
-    elWD.textContent    = item.desc || '';
-    elWP.innerHTML = `<span class="pill p-c">from ${item._r||''}</span><span class="pill p-p">${item.price}</span><span class="pill p-r">⭐${item.rating}</span><span class="pill p-o">${item.open?'● Open':'○ Closed'}</span>`;
-    elWLnk.href = `https://www.doordash.com/search/store/${encodeURIComponent(item._r || item.name)}/`;
-  } else {
-    elWL.textContent    = "Tonight's Restaurant";
-    elWN.textContent    = item.name;
-    elWD.style.display  = 'none';
-    elWP.innerHTML = `<span class="pill p-c">${item.cuisine}</span><span class="pill p-p">${item.price}</span><span class="pill p-r">⭐${item.rating}</span><span class="pill p-o">${item.open?'● Open':'○ Closed'}</span>`;
-    elWLnk.href = `https://www.doordash.com/search/store/${encodeURIComponent(item.name)}/`;
-  }
+  elWE.textContent    = item.emoji;
+  elWL.textContent    = "Tonight's Restaurant";
+  elWN.textContent    = item.name;
+  elWD.style.display  = 'none';
+  elWP.innerHTML = `<span class="pill p-c">${item.cuisine}</span><span class="pill p-p">${item.price}</span><span class="pill p-r">⭐${item.rating}</span><span class="pill p-o">${item.open?'● Open':'○ Closed'}</span>`;
+  elWLnk.href = `https://www.doordash.com/search/store/${encodeURIComponent(item.name)}/`;
   elWA.textContent = '📍 ' + (item.addr || '');
 
   // Photo — built from photoRef using Places photo URL format
@@ -955,15 +938,16 @@ function onDone() {
     elWWebsite.style.display = 'flex'; hasContact = true;
   } else { elWWebsite.style.display = 'none'; }
 
-  if (item.mapsUrl) {
-    elWMaps.href = item.mapsUrl;
-    elWMaps.style.display = 'flex'; hasContact = true;
-  } else { elWMaps.style.display = 'none'; }
+  // Always show Maps — fallback to Google search if no direct link
+  const mapsHref = item.mapsUrl || `https://maps.google.com/?q=${encodeURIComponent(item.name + ' ' + item.addr)}`;
+  elWMaps.href = mapsHref;
+  elWMaps.style.display = 'flex'; hasContact = true;
 
   elWContact.style.display = hasContact ? 'flex' : 'none';
 
-  // Items to try (restaurant mode shows both items, meal mode hides)
-  if (mode === 'restaurant' && item.items && item.items.length) {
+  // Items to try — hide for live data (placeholder)
+  const hasRealItems = item.items && item.items.length && item.items[0].name !== 'See menu';
+  if (hasRealItems) {
     elWItms.style.display = '';
     elWItms.innerHTML = item.items.map(it =>
       `<div class="rw-item">
@@ -978,12 +962,12 @@ function onDone() {
   }
 
   // Add to history
-  const restName = mode === 'meal' ? (item._r || item.name) : item.name;
+  const restName = item.name;
   const restItem = REST.find(r => r.name === restName) || item;
   const col = restItem.items ? (RCOL(segs.indexOf(w)) === '#cc1000' ? 'red' : RCOL(segs.indexOf(w)) === '#0d8020' ? 'green' : 'black') : 'black';
   // Use pocket colour for casino dot
   const pCol = w.col === '#cc1000' ? 'red' : w.col === '#0d8020' ? 'green' : 'black';
-  history.unshift({ emoji: item.emoji, name: mode==='meal'?`${item.name} @ ${item._r||''}`:item.name, sub: `${item.cuisine||item.price} · ${item.price}`, price:item.price, open:item.open, col:pCol });
+  history.unshift({ emoji: item.emoji, name: item.name, sub: `${item.cuisine||item.price} · ${item.price}`, price:item.price, open:item.open, col:pCol });
   if (history.length > 5) history.pop();
   renderHistory();
 
@@ -1010,27 +994,10 @@ function renderHistory() {
 /* ════════════════════════════════════════════
    MODE + POOL
 ════════════════════════════════════════════ */
-function setMode(m) {
-  if (spinning && bP !== 'parked' && bP !== 'locked') return;
-  mode = m;
-  document.getElementById('btnR').className = 'mb' + (m === 'restaurant' ? ' on' : '');
-  document.getElementById('btnM').className = 'mb' + (m === 'meal'       ? ' on' : '');
-  elSBtn.textContent = m === 'meal' ? 'Spin for a Meal' : 'Spin the Wheel';
-  // Fade out result card if visible, then hide
-  if (elRsW.classList.contains('show')) {
-    elRsW.classList.add('fading');
-    setTimeout(() => { elRsW.classList.remove('show','fading'); }, 220);
-  } else {
-    elRsW.classList.remove('show');
-  }
-  elRsE.classList.remove('hide');
-  buildSegs(getActivePool());
-  draw(wAng);
-}
+
 
 function getActivePool() {
-  if (mode === 'restaurant' && rndRest) return rndRest;
-  if (mode === 'meal'       && rndMeal) return rndMeal;
+  if (rndRest) return rndRest;
   return getPool();
 }
 
@@ -1043,11 +1010,6 @@ function getPool() {
     if (F.openNow && !r.open)                                        return false;
     return true;
   });
-  if (mode === 'meal') return base.map(r => ({
-    ...r.items[0], _r: r.name,
-    price: r.price, pl: r.pl, rating: r.rating, open: r.open, addr: r.addr,
-    short: r.items[0].name.split(' ').slice(0,3).join(' '),
-  }));
   return base;
 }
 
@@ -1060,20 +1022,8 @@ function doRandomize() {
   // Draw a fresh random subset from the FULL REST array each time —
   // bypasses filters so every press gives genuinely new restaurants.
   const count = Math.max(getPool().length, 8);
-  let pool;
-  if (mode === 'meal') {
-    pool = REST.map(r => ({
-      ...r.items[0], _r:r.name, price:r.price, pl:r.pl,
-      rating:r.rating, open:r.open, addr:r.addr,
-      short:r.items[0].name.split(' ').slice(0,3).join(' '),
-    }));
-  } else {
-    pool = [...REST];
-  }
-  const shuffled = pool.sort(() => Math.random() - .5).slice(0, count);
-
-  if (mode === 'restaurant') rndRest = shuffled;
-  else                        rndMeal = shuffled;
+  const shuffled = [...REST].sort(() => Math.random() - .5).slice(0, count);
+  rndRest = shuffled;
   buildSegs(shuffled);
   draw(wAng);
 
@@ -1168,7 +1118,7 @@ function togChip(id, key) {
 }
 
 function applyF() {
-  rndRest = null; rndMeal = null;
+  rndRest = null;
   buildSegs(getPool());
   draw(wAng);
   updSum(); updDot();
@@ -1226,7 +1176,7 @@ function rmTag(k) {
     document.querySelector(`#cChips [data-v="${c}"]`)?.classList.remove('on');
     if (!F.cuisines.length) { F.cuisines=['any']; document.querySelector('#cChips [data-v="any"]').classList.add('on'); }
   }
-  rndRest=null; rndMeal=null;
+  rndRest=null;
   buildSegs(getPool()); draw(wAng);
   updSum(); updDot();
 }
