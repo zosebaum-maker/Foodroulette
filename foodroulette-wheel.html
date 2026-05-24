@@ -490,19 +490,20 @@ h1 span{
 .footer-share-btn:hover{border-color:rgba(201,168,76,.5);color:var(--gold);background:rgba(201,168,76,.06);}
 
 /* ── Delivery buttons ── */
-.delivery-row{display:flex;gap:6px;margin-top:8px;padding:0 16px;}
+.delivery-row{display:flex;gap:8px;margin-top:10px;padding:0 14px 14px;}
 .delivery-btn{
-  flex:1;padding:9px 6px;border-radius:8px;font-size:.72rem;font-weight:700;
-  text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;
-  transition:all .15s;border:1px solid transparent;
+  flex:1;padding:11px 6px;border-radius:10px;
+  font-size:.7rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  text-decoration:none;display:flex;align-items:center;justify-content:center;
+  transition:transform .12s ease,box-shadow .12s ease;
   font-family:system-ui,-apple-system,sans-serif;
+  box-shadow:0 3px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.2);
 }
-.delivery-btn.dd{background:#ff3008;color:#fff;border-color:#cc2600;}
-.delivery-btn.dd:hover{background:#e02800;}
-.delivery-btn.ue{background:#06c167;color:#fff;border-color:#059a52;}
-.delivery-btn.ue:hover{background:#059a52;}
-.delivery-btn.gz{background:#00b2d6;color:#fff;border-color:#0092b0;}
-.delivery-btn.gz:hover{background:#0092b0;}
+.delivery-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2);}
+.delivery-btn:active{transform:translateY(1px);}
+.delivery-btn.dd{background:#e00000;color:#fff;}
+.delivery-btn.ue{background:#06c167;color:#fff;}
+.delivery-btn.gz{background:#f63440;color:#fff;}
 
 /* ── Photo zoom-in on appear ── */
 @keyframes photoReveal{0%{transform:scale(1.08);opacity:0;}100%{transform:scale(1);opacity:1;}}
@@ -584,9 +585,9 @@ h1 span{
         </div>
       </div>
       <div class="delivery-row" id="deliveryRow">
-        <a class="delivery-btn dd" id="wDoorDash" href="#" target="_blank">🛵 DoorDash</a>
-        <a class="delivery-btn ue" id="wUberEats" href="#" target="_blank">🚗 Uber Eats</a>
-        <a class="delivery-btn gz" id="wGrubhub"  href="#" target="_blank">🍔 Grubhub</a>
+        <a class="delivery-btn dd" id="wDoorDash" href="#" target="_blank">DoorDash</a>
+        <a class="delivery-btn ue" id="wUberEats" href="#" target="_blank">Uber Eats</a>
+        <a class="delivery-btn gz" id="wGrubhub"  href="#" target="_blank">Grubhub</a>
       </div>
     </div>
   </div>
@@ -610,6 +611,7 @@ h1 span{
     <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy</a>
   </div>
   <p class="footer-note">Restaurant data provided by Google Maps Platform</p>
+  <p class="footer-note" style="margin-top:12px;opacity:.45;letter-spacing:.18em;font-family:'Cinzel',serif;font-size:.55rem;">✦ Built by <span style="color:var(--gold);opacity:1;letter-spacing:.12em;">Ric B</span> ✦</p>
 </footer>
 
 <!-- Filter sheet overlay -->
@@ -623,17 +625,26 @@ h1 span{
 
   <div class="ss"><div class="sl">Cuisine</div>
     <div class="cg" id="cChips">
-      <div class="ch on" data-v="any"      onclick="togC(this)">🎲 Any</div>
-      <div class="ch"    data-v="pizza"    onclick="togC(this)">🍕 Pizza</div>
-      <div class="ch"    data-v="burger"   onclick="togC(this)">🍔 Burgers</div>
-      <div class="ch"    data-v="sushi"    onclick="togC(this)">🍣 Sushi</div>
-      <div class="ch"    data-v="mexican"  onclick="togC(this)">🌮 Mexican</div>
-      <div class="ch"    data-v="chinese"  onclick="togC(this)">🥡 Chinese</div>
-      <div class="ch"    data-v="thai"     onclick="togC(this)">🍜 Thai</div>
-      <div class="ch"    data-v="indian"   onclick="togC(this)">🍛 Indian</div>
-      <div class="ch"    data-v="italian"  onclick="togC(this)">🍝 Italian</div>
-      <div class="ch"    data-v="korean"   onclick="togC(this)">🍱 Korean</div>
-      <div class="ch"    data-v="american" onclick="togC(this)">🥩 American</div>
+      <div class="ch on" data-v="any"          onclick="togC(this)">🎲 Any</div>
+      <div class="ch"    data-v="american"      onclick="togC(this)">🥩 American</div>
+      <div class="ch"    data-v="pizza"         onclick="togC(this)">🍕 Pizza</div>
+      <div class="ch"    data-v="burger"        onclick="togC(this)">🍔 Burgers</div>
+      <div class="ch"    data-v="mexican"       onclick="togC(this)">🌮 Mexican</div>
+      <div class="ch"    data-v="italian"       onclick="togC(this)">🍝 Italian</div>
+      <div class="ch"    data-v="chinese"       onclick="togC(this)">🥡 Chinese</div>
+      <div class="ch"    data-v="sushi"         onclick="togC(this)">🍣 Sushi</div>
+      <div class="ch"    data-v="japanese"      onclick="togC(this)">🍱 Japanese</div>
+      <div class="ch"    data-v="korean"        onclick="togC(this)">🥢 Korean</div>
+      <div class="ch"    data-v="thai"          onclick="togC(this)">🌶️ Thai</div>
+      <div class="ch"    data-v="vietnamese"    onclick="togC(this)">🍲 Vietnamese</div>
+      <div class="ch"    data-v="indian"        onclick="togC(this)">🍛 Indian</div>
+      <div class="ch"    data-v="mediterranean" onclick="togC(this)">🫒 Mediterranean</div>
+      <div class="ch"    data-v="greek"         onclick="togC(this)">🫒 Greek</div>
+      <div class="ch"    data-v="bbq"           onclick="togC(this)">🍖 BBQ</div>
+      <div class="ch"    data-v="seafood"       onclick="togC(this)">🦞 Seafood</div>
+      <div class="ch"    data-v="breakfast"     onclick="togC(this)">🥚 Breakfast</div>
+      <div class="ch"    data-v="sandwich"      onclick="togC(this)">🥪 Sandwiches</div>
+      <div class="ch"    data-v="wings"         onclick="togC(this)">🍗 Wings</div>
     </div>
   </div>
 
@@ -668,11 +679,10 @@ h1 span{
 
   <div class="ss" style="margin-top:14px;"><div class="sl">Options</div>
     <div class="cg">
-      <div class="ch on" id="openChip"  onclick="togChip('openChip','openNow')">🟢 Open Now</div>
-      <div class="ch" id="vegChip"   onclick="togChip('vegChip','veg')">🥦 Vegetarian</div>
-      <div class="ch" id="veganChip" onclick="togChip('veganChip','vegan')">🌱 Vegan</div>
-      <div class="ch" id="gfChip"    onclick="togChip('gfChip','gf')">🌾 Gluten Free</div>
-      <div class="ch" id="halalChip" onclick="togChip('halalChip','halal')">☪️ Halal</div>
+      <div class="ch on" id="openChip"    onclick="togChip('openChip','openNow')">🟢 Open Now</div>
+      <div class="ch"    id="phoneChip"   onclick="togChip('phoneChip','hasPhone')">📞 Has Phone</div>
+      <div class="ch"    id="websiteChip" onclick="togChip('websiteChip','hasWebsite')">🌐 Has Website</div>
+      <div class="ch"    id="topRatedChip" onclick="togChip('topRatedChip','topRated')">⭐ Top Rated 4.5+</div>
     </div>
   </div>
 
@@ -698,7 +708,7 @@ let locationGranted = false;
 const BD = {1:{l:'$',d:'Under $15'},2:{l:'$$',d:'~$15–$30'},3:{l:'$$$',d:'~$30–$60'},4:{l:'$$$$',d:'~$60+'}};
 let spinning = false;
 let rndRest  = null;
-const F = { cuisines:['any'], budget:4, dist:'any', rating:0, openNow:true, diet:[] };
+const F = { cuisines:['any'], budget:4, dist:'any', rating:0, openNow:true, diet:[], hasPhone:false, hasWebsite:false, topRated:false };
 let hasSpunOnce = false;
 
 const WORKER_URL = 'https://frworker.zosebaum.workers.dev';
@@ -1185,21 +1195,36 @@ function onDone() {
 
 const WHEEL_SIZE = 35;
 
+// Burger↔American and Sushi↔Japanese overlap in Google's data
+const CUISINE_ALIASES = {
+  burger:  ['burger','american'],
+  american:['american','burger'],
+  sushi:   ['sushi','japanese'],
+  japanese:['japanese','sushi'],
+};
+function cuisineMatches(rc) {
+  if (F.cuisines[0]==='any') return true;
+  return F.cuisines.some(c=>(CUISINE_ALIASES[c]||[c]).includes(rc));
+}
+
 function getPool() {
   // Full filtered pool — every restaurant that passes user filters
   return REST.filter(r=>{
-    if (F.cuisines[0]!=='any'&&!F.cuisines.includes(r.cuisine)) return false;
+    if (!cuisineMatches(r.cuisine)) return false;
     if (r.pl>F.budget) return false;
     if (F.dist!=='any'&&r.dist>parseFloat(F.dist)) return false;
     if (r.rating<F.rating) return false;
     if (F.openNow&&!r.open) return false;
+    if (F.hasPhone&&!r.phone) return false;
+    if (F.hasWebsite&&!r.website) return false;
+    if (F.topRated&&r.rating<4.5) return false;
     return true;
   });
 }
 function getPoolIgnoreOpen() {
   // Same filters but ignores openNow — used for padding when open pool is small
   return REST.filter(r=>{
-    if (F.cuisines[0]!=='any'&&!F.cuisines.includes(r.cuisine)) return false;
+    if (!cuisineMatches(r.cuisine)) return false;
     if (r.pl>F.budget) return false;
     if (F.dist!=='any'&&r.dist>parseFloat(F.dist)) return false;
     if (r.rating<F.rating) return false;
@@ -1346,8 +1371,12 @@ function selChip(el,gid,fk,isInt) {
 
 function togChip(id,key) {
   const el=document.getElementById(id); el.classList.toggle('on');
-  if (key==='openNow') F.openNow=el.classList.contains('on');
-  else { if (el.classList.contains('on')) F.diet.push(key); else F.diet=F.diet.filter(x=>x!==key); }
+  const on=el.classList.contains('on');
+  if      (key==='openNow')    F.openNow=on;
+  else if (key==='hasPhone')   F.hasPhone=on;
+  else if (key==='hasWebsite') F.hasWebsite=on;
+  else if (key==='topRated')   F.topRated=on;
+  else { if(on) F.diet.push(key); else F.diet=F.diet.filter(x=>x!==key); }
   applyF();
 }
 
@@ -1381,7 +1410,8 @@ function resetF() {
   document.querySelectorAll('#bChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#bChips [data-v="4"]').classList.add('on');
   document.querySelectorAll('#dChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#dChips [data-v="any"]').classList.add('on');
   document.querySelectorAll('#rChips .ch').forEach(x=>x.classList.remove('on')); document.querySelector('#rChips [data-v="0"]').classList.add('on');
-  ['vegChip','veganChip','gfChip','halalChip'].forEach(id=>{document.getElementById(id)?.classList.remove('on');});
+  ['phoneChip','websiteChip','topRatedChip'].forEach(id=>{document.getElementById(id)?.classList.remove('on');});
+  F.hasPhone=false; F.hasWebsite=false; F.topRated=false;
   document.getElementById('openChip')?.classList.add('on');
   applyF();
 }
@@ -1397,7 +1427,10 @@ function updSum() {
   if (F.budget<4) tags.push({l:BD[F.budget].l+' budget',k:'budget'});
   if (F.dist!=='any') tags.push({l:'≤'+F.dist+' mi',k:'dist'});
   if (F.rating>0) tags.push({l:'⭐'+F.rating+'+',k:'rating'});
-  if (F.openNow) tags.push({l:'🟢 Open now',k:'openNow'});
+  if (F.openNow)    tags.push({l:'🟢 Open now',  k:'openNow'});
+  if (F.hasPhone)   tags.push({l:'📞 Has phone',  k:'hasPhone'});
+  if (F.hasWebsite) tags.push({l:'🌐 Has website', k:'hasWebsite'});
+  if (F.topRated)   tags.push({l:'⭐ Top rated',   k:'topRated'});
   F.diet.forEach(d=>tags.push({l:d,k:'d_'+d}));
   const s=document.getElementById('fSum');
   s.innerHTML=tags.map(t=>`<div class="ft">${t.l}<span class="fx" onclick="rmTag('${t.k}')">×</span></div>`).join('');
@@ -1408,7 +1441,10 @@ function rmTag(k) {
   if (k==='budget') { F.budget=4; document.querySelectorAll('#bChips .ch').forEach(x=>x.classList.toggle('on',x.dataset.v==='4')); }
   else if (k==='dist') { F.dist='any'; document.querySelectorAll('#dChips .ch').forEach(x=>x.classList.toggle('on',x.dataset.v==='any')); }
   else if (k==='rating') { F.rating=0; document.querySelectorAll('#rChips .ch').forEach(x=>x.classList.toggle('on',x.dataset.v==='0')); }
-  else if (k==='openNow') { F.openNow=false; document.getElementById('openChip')?.classList.remove('on'); }
+  else if (k==='openNow')    { F.openNow=false;    document.getElementById('openChip')?.classList.remove('on'); }
+  else if (k==='hasPhone')   { F.hasPhone=false;   document.getElementById('phoneChip')?.classList.remove('on'); }
+  else if (k==='hasWebsite') { F.hasWebsite=false; document.getElementById('websiteChip')?.classList.remove('on'); }
+  else if (k==='topRated')   { F.topRated=false;   document.getElementById('topRatedChip')?.classList.remove('on'); }
   else if (k.startsWith('d_')) { const d=k.slice(2); F.diet=F.diet.filter(x=>x!==d); document.querySelectorAll('.ch').forEach(r=>{if(r.dataset&&r.dataset.v===d)r.classList.remove('on');}); }
   else if (k.startsWith('c_')) { const c=k.slice(2); F.cuisines=F.cuisines.filter(x=>x!==c); document.querySelector(`#cChips [data-v="${c}"]`)?.classList.remove('on'); if(!F.cuisines.length){F.cuisines=['any'];document.querySelector('#cChips [data-v="any"]').classList.add('on');} }
   invalidateWheel(); buildSegs(getWheelSlice()); draw(wAng); updSum(); updDot();
