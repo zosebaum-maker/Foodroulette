@@ -216,7 +216,7 @@ h1 span{
 .rb:disabled{opacity:0;pointer-events:none;}
 
 /* ── Result Strip — unified vp-card ── */
-@keyframes winPop{0%{opacity:0;transform:translateY(12px) scale(.96)}70%{opacity:1;transform:translateY(-2px) scale(1.01)}100%{opacity:1;transform:none}}
+@keyframes winPop{0%{opacity:0;transform:translateY(20px) scale(.92)}60%{opacity:1;transform:translateY(-4px) scale(1.02)}80%{transform:translateY(1px) scale(.99)}100%{opacity:1;transform:none}}
 @keyframes fadeOut{0%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px)}}
 .strip{width:calc(100% - 24px);max-width:600px;margin:22px auto 14px;position:relative;z-index:1;}
 .vp-card{animation:none;}
@@ -303,7 +303,40 @@ h1 span{
   filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));
   animation:winnerPop .4s cubic-bezier(.34,1.6,.64,1) both;
 }
-@keyframes winnerPop{0%{transform:scale(0) rotate(-15deg);}100%{transform:scale(1) rotate(0);}}
+@keyframes winnerPop{
+  0%  {transform:scale(0) rotate(-20deg);opacity:0;}
+  60% {transform:scale(1.18) rotate(4deg);opacity:1;}
+  80% {transform:scale(0.94) rotate(-2deg);}
+  100%{transform:scale(1) rotate(0deg);}
+}
+/* Gold flash on win */
+@keyframes goldFlash{
+  0%  {opacity:0;}
+  15% {opacity:.35;}
+  100%{opacity:0;}
+}
+.win-flash{
+  position:fixed;inset:0;pointer-events:none;z-index:199;
+  background:radial-gradient(ellipse at 50% 40%, rgba(240,201,58,.55) 0%, transparent 70%);
+  animation:goldFlash .8s ease-out forwards;
+}
+/* Streak badge */
+.streak-bar{
+  display:none;
+  align-items:center;justify-content:center;gap:6px;
+  padding:5px 0 0;
+  font-family:'Cinzel',serif;font-size:.58rem;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(201,168,76,.7);
+}
+.streak-bar.on{display:flex;}
+.streak-num{
+  font-size:1.1rem;font-weight:900;color:var(--gold);
+  text-shadow:0 0 12px rgba(240,201,58,.6);
+  animation:streakPop .4s cubic-bezier(.34,1.6,.64,1) both;
+}
+@keyframes streakPop{0%{transform:scale(0.5);}100%{transform:scale(1);}}
+.streak-fire{font-size:1rem;animation:streakPop .4s cubic-bezier(.34,1.6,.64,1) .05s both;}
 .vp-winner-name{
   font-family:'Cinzel',serif;font-size:1.5rem;font-weight:900;
   color:#fff;text-align:center;letter-spacing:.06em;text-transform:uppercase;
@@ -524,6 +557,7 @@ h1 span{
     <div id="vpWin" style="display:none">
       <div class="rw-photo-wrap" id="wPhotoWrap" style="display:none"><img class="rw-photo" id="wPhoto" src="" alt=""></div>
       <div class="rw-photo-attr" id="wPhotoAttr" style="display:none"></div>
+      <div class="streak-bar" id="streakBar"><span class="streak-fire">🔥</span><span class="streak-num" id="streakNum">1</span><span>spins tonight</span></div>
       <div class="vp-header">
         <span class="vp-header-suit"><span class="suit-b">♠</span> <span class="suit-r">♥</span></span>
         <span class="vp-header-txt" id="wL">Tonight's Restaurant</span>
@@ -645,6 +679,7 @@ let spinning = false;
 let rndRest  = null;
 const F = { budget:4, dist:'any', rating:0, openNow:true, hasPhone:false, hasWebsite:false, topRated:false };
 let hasSpunOnce = false;
+let spinCount = 0; // spins this session
 
 const WORKER_URL = 'https://frworker.zosebaum.workers.dev';
 // Photos proxied through worker — no API key exposed in client
@@ -1122,8 +1157,24 @@ function onDone() {
   } else { elWItms.style.display='none'; elWItms.innerHTML=''; }
 
   hasSpunOnce=true;
-  setTimeout(()=>{ elVpSpin.style.display='none'; elVpWin.style.display=''; elVpWin.style.animation='winPop .35s cubic-bezier(.22,1,.36,1) both'; document.getElementById('vpCard').classList.remove('vp-card--spin'); },80);
-  setTimeout(confetti,120);
+  spinCount++;
+  // Gold flash overlay
+  const flash=document.createElement('div'); flash.className='win-flash';
+  document.body.appendChild(flash); setTimeout(()=>flash.remove(), 900);
+  // Update streak bar
+  const sb=document.getElementById('streakBar');
+  const sn=document.getElementById('streakNum');
+  sn.textContent=spinCount;
+  sn.style.animation='none'; requestAnimationFrame(()=>{ sn.style.animation=''; });
+  sb.classList.toggle('on', spinCount>1);
+  // Reveal card
+  setTimeout(()=>{
+    elVpSpin.style.display='none';
+    elVpWin.style.display='';
+    elVpWin.style.animation='winPop .45s cubic-bezier(.22,1,.36,1) both';
+    document.getElementById('vpCard').classList.remove('vp-card--spin');
+  },80);
+  setTimeout(confetti,200);
 }
 
 
