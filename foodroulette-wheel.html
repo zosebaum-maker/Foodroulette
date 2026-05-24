@@ -131,13 +131,18 @@ h1 span{color:var(--gl);}
 /* Restaurant photo */
 .rw-photo{
   width:100%;height:160px;object-fit:cover;display:block;
-  border-bottom:1px solid rgba(201,168,76,.12);
 }
 .rw-photo-wrap{position:relative;overflow:hidden;max-height:160px;}
 .rw-photo-wrap::after{
   content:'';position:absolute;inset:0;
   background:linear-gradient(to bottom,transparent 50%,rgba(2,8,3,.85) 100%);
 }
+.rw-photo-attr{
+  font-size:.55rem;color:var(--dim);text-align:right;
+  padding:3px 8px;background:rgba(0,0,0,.4);
+}
+.rw-photo-attr a{color:var(--dim);text-decoration:none;}
+.rw-photo-attr a:hover{color:var(--gold);}
 
 /* Contact row */
 .rw-contact{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
@@ -172,9 +177,9 @@ h1 span{color:var(--gl);}
 /* Filter sections */
 .ss{padding:14px 18px 0;}
 .sl{font-family:'Cinzel',serif;font-size:.5rem;text-transform:uppercase;letter-spacing:.22em;color:var(--dim);font-weight:700;margin-bottom:9px;}
-/* Chip grid — used for cuisine, budget, distance, rating, open, dietary */
+/* Chip grid */
 .cg{display:flex;flex-wrap:wrap;gap:6px;}
-.ch{padding:7px 13px;border-radius:50px;border:1px solid rgba(201,168,76,.15);background:rgba(255,255,255,.04);color:var(--dim);font-size:.78rem;font-weight:600;cursor:pointer;user-select:none;transition:background .1s,color .1s,border-color .1s;}
+.ch{padding:7px 13px;border-radius:50px;border:1px solid rgba(201,168,76,.15);background:rgba(255,255,255,.04);color:var(--dim);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;user-select:none;transition:background .1s,color .1s,border-color .1s;}
 .ch.on{background:var(--gold);border-color:var(--gold);color:#1a0800;}
 .sr{display:block;text-align:center;margin:14px 0 4px;font-size:.67rem;color:var(--dim);cursor:pointer;letter-spacing:.1em;text-transform:uppercase;padding-bottom:8px;}
 .sr:hover{color:var(--gold);}
@@ -197,6 +202,20 @@ h1 span{color:var(--gl);}
 .hist-badge{font-size:.6rem;padding:2px 7px;border-radius:8px;background:rgba(0,0,0,.4);border:1px solid rgba(201,168,76,.15);color:var(--dim);white-space:nowrap;flex-shrink:0;}
 .hist-row.newest .hist-name{color:var(--gl);}
 .hist-row.newest .hist-badge{border-color:rgba(201,168,76,.4);color:var(--gold);}
+
+/* ── Footer ── */
+.app-footer{
+  width:100%;max-width:600px;margin:8px auto 20px;
+  padding:14px 16px;position:relative;z-index:1;
+  border-top:1px solid rgba(201,168,76,.15);
+  text-align:center;
+}
+.footer-google{height:18px;display:block;margin:0 auto 8px;}
+.footer-links{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
+.footer-links a{font-size:.62rem;color:var(--dim);text-decoration:none;}
+.footer-links a:hover{color:var(--gold);}
+.footer-links span{color:var(--dim);font-size:.62rem;}
+.footer-note{font-size:.58rem;color:var(--dim);opacity:.6;}
 
 /* ── Confetti particles ── */
 .pt{position:fixed;pointer-events:none;z-index:200;border-radius:50%;animation:pf 1.4s ease forwards;}
@@ -237,6 +256,7 @@ h1 span{color:var(--gl);}
       <div class="rw-photo-wrap" id="wPhotoWrap" style="display:none">
         <img class="rw-photo" id="wPhoto" src="" alt="">
       </div>
+      <div class="rw-photo-attr" id="wPhotoAttr" style="display:none"></div>
       <!-- Hero: emoji + name centered -->
       <div class="rw-hero">
         <span class="rw-emoji" id="wE">🍕</span>
@@ -270,6 +290,20 @@ h1 span{color:var(--gl);}
   </div>
   <div class="hist-board" id="histBoard"></div>
 </div>
+
+<!-- Footer: Google attribution + legal links -->
+<footer class="app-footer">
+  <img src="https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-non-white3.png"
+       alt="Powered by Google" translate="no" class="footer-google">
+  <div class="footer-links">
+    <a href="privacy.html" target="_blank">Privacy Policy</a>
+    <span>·</span>
+    <a href="https://cloud.google.com/maps-platform/terms" target="_blank" rel="noopener">Google Terms</a>
+    <span>·</span>
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy</a>
+  </div>
+  <p class="footer-note">Restaurant data provided by Google Maps Platform</p>
+</footer>
 
 <!-- Filter sheet overlay -->
 <div class="so" id="shOv" onclick="closeSheet()"></div>
@@ -340,36 +374,36 @@ h1 span{color:var(--gl);}
 
 <script>
 const FALLBACK_REST=[
-  {name:"Tony's Pizza",short:"Tony's",emoji:"🍕",cuisine:"pizza",price:"$$",pl:2,rating:4.6,open:true,dist:0.3,addr:"1570 Stockton St",phone:"+1 415-835-9888",website:"https://tonyspizzanapoletana.com",mapsUrl:"https://maps.google.com/?q=Tony's+Pizza+Napoletana+SF",photoRef:"",items:[{name:"Margherita",emoji:"🍕",desc:"San Marzano tomato, mozzarella"},{name:"Funghi Tartufo",emoji:"🍕",desc:"Wild mushrooms, truffle oil"}]},
-  {name:"Burma Superstar",short:"Burma",emoji:"🍜",cuisine:"thai",price:"$$",pl:2,rating:4.4,open:true,dist:0.8,addr:"309 Clement St",phone:"+1 415-387-2147",website:"https://www.burmasuperstar.com",mapsUrl:"https://maps.google.com/?q=Burma+Superstar",photoRef:"",items:[{name:"Tea Leaf Salad",emoji:"🥗",desc:"Fermented tea leaves, crunchy mix"},{name:"Rainbow Salad",emoji:"🌈",desc:"12 ingredients, tamarind"}]},
+  {name:"Tony's Pizza",short:"Tony's",emoji:"🍕",cuisine:"pizza",price:"$$",pl:2,rating:4.6,open:true,dist:0.3,addr:"1570 Stockton St",phone:"+1 415-835-9888",website:"https://tonyspizzanapoletana.com",mapsUrl:"https://maps.google.com/?q=Tony's+Pizza+Napoletana+SF",photoRef:"https://picsum.photos/seed/pizza/600/320",items:[{name:"Margherita",emoji:"🍕",desc:"San Marzano tomato, mozzarella"},{name:"Funghi Tartufo",emoji:"🍕",desc:"Wild mushrooms, truffle oil"}]},
+  {name:"Burma Superstar",short:"Burma",emoji:"🍜",cuisine:"thai",price:"$$",pl:2,rating:4.4,open:true,dist:0.8,addr:"309 Clement St",phone:"+1 415-387-2147",website:"https://www.burmasuperstar.com",mapsUrl:"https://maps.google.com/?q=Burma+Superstar",photoRef:"https://picsum.photos/seed/burma/600/320",items:[{name:"Tea Leaf Salad",emoji:"🥗",desc:"Fermented tea leaves, crunchy mix"},{name:"Rainbow Salad",emoji:"🌈",desc:"12 ingredients, tamarind"}]},
   {name:"Sushirrito",short:"Sushirrito",emoji:"🍣",cuisine:"sushi",price:"$$",pl:2,rating:4.2,open:false,dist:1.1,addr:"59 New Montgomery",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Sushirrito",photoRef:"",items:[{name:"Sumo Crunch",emoji:"🍣",desc:"Spicy tuna, tempura, avocado"},{name:"Geisha's Kiss",emoji:"🍣",desc:"Salmon, yuzu cream cheese"}]},
-  {name:"Tacolicious",short:"Tacolicious",emoji:"🌮",cuisine:"mexican",price:"$$",pl:2,rating:4.3,open:true,dist:0.6,addr:"741 Valencia St",phone:"+1 415-626-1344",website:"https://tacolicious.com",mapsUrl:"https://maps.google.com/?q=Tacolicious",photoRef:"",items:[{name:"Carnitas Taco",emoji:"🌮",desc:"Braised pork, salsa verde"},{name:"Fish Taco",emoji:"🌮",desc:"Beer battered, cabbage slaw"}]},
-  {name:"Nopa",short:"Nopa",emoji:"🥩",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.5,addr:"560 Divisadero St",phone:"+1 415-864-8643",website:"https://nopasf.com",mapsUrl:"https://maps.google.com/?q=Nopa+San+Francisco",photoRef:"",items:[{name:"Pork Chop",emoji:"🥩",desc:"Stone fruit chutney, greens"},{name:"Burger",emoji:"🍔",desc:"Grass-fed beef, aged cheddar"}]},
-  {name:"Cheung Hing",short:"Cheung Hing",emoji:"🥡",cuisine:"chinese",price:"$",pl:1,rating:4.1,open:true,dist:0.9,addr:"209 Clement St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cheung+Hing",photoRef:"",items:[{name:"BBQ Pork Rice",emoji:"🍖",desc:"Char siu, steamed rice"},{name:"Wonton Soup",emoji:"🍜",desc:"Hand-folded wontons"}]},
+  {name:"Tacolicious",short:"Tacolicious",emoji:"🌮",cuisine:"mexican",price:"$$",pl:2,rating:4.3,open:true,dist:0.6,addr:"741 Valencia St",phone:"+1 415-626-1344",website:"https://tacolicious.com",mapsUrl:"https://maps.google.com/?q=Tacolicious",photoRef:"https://picsum.photos/seed/taco/600/320",items:[{name:"Carnitas Taco",emoji:"🌮",desc:"Braised pork, salsa verde"},{name:"Fish Taco",emoji:"🌮",desc:"Beer battered, cabbage slaw"}]},
+  {name:"Nopa",short:"Nopa",emoji:"🥩",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.5,addr:"560 Divisadero St",phone:"+1 415-864-8643",website:"https://nopasf.com",mapsUrl:"https://maps.google.com/?q=Nopa+San+Francisco",photoRef:"https://picsum.photos/seed/nopa/600/320",items:[{name:"Pork Chop",emoji:"🥩",desc:"Stone fruit chutney, greens"},{name:"Burger",emoji:"🍔",desc:"Grass-fed beef, aged cheddar"}]},
+  {name:"Cheung Hing",short:"Cheung Hing",emoji:"🥡",cuisine:"chinese",price:"$",pl:1,rating:4.1,open:true,dist:0.9,addr:"209 Clement St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Cheung+Hing",photoRef:"https://picsum.photos/seed/chinese/600/320",items:[{name:"BBQ Pork Rice",emoji:"🍖",desc:"Char siu, steamed rice"},{name:"Wonton Soup",emoji:"🍜",desc:"Hand-folded wontons"}]},
   {name:"Lers Ros Thai",short:"Lers Ros",emoji:"🍛",cuisine:"thai",price:"$",pl:1,rating:4.4,open:false,dist:0.7,addr:"730 Larkin St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Lers+Ros+Thai",photoRef:"",items:[{name:"Pad Kee Mao",emoji:"🍜",desc:"Drunken noodles, Thai basil"},{name:"Massaman Curry",emoji:"🍛",desc:"Braised beef, potato, peanuts"}]},
   {name:"The Bird",short:"The Bird",emoji:"🍔",cuisine:"burger",price:"$",pl:1,rating:4.3,open:true,dist:1.2,addr:"115 New Montgomery",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=The+Bird",photoRef:"",items:[{name:"Chicken Sandwich",emoji:"🍗",desc:"Buttermilk-brined, slaw"},{name:"Chicken & Waffles",emoji:"🧇",desc:"Maple sriracha"}]},
-  {name:"Flour + Water",short:"Flour+Water",emoji:"🍝",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:1.4,addr:"2401 Harrison St",phone:"+1 415-826-7000",website:"https://flourandwater.com",mapsUrl:"https://maps.google.com/?q=Flour+++Water",photoRef:"",items:[{name:"Tagliatelle",emoji:"🍝",desc:"Lamb ragu, pecorino, herbs"},{name:"Ricotta Gnudi",emoji:"🍝",desc:"Brown butter, sage"}]},
+  {name:"Flour + Water",short:"Flour+Water",emoji:"🍝",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:1.4,addr:"2401 Harrison St",phone:"+1 415-826-7000",website:"https://flourandwater.com",mapsUrl:"https://maps.google.com/?q=Flour+++Water",photoRef:"https://picsum.photos/seed/pasta/600/320",items:[{name:"Tagliatelle",emoji:"🍝",desc:"Lamb ragu, pecorino, herbs"},{name:"Ricotta Gnudi",emoji:"🍝",desc:"Brown butter, sage"}]},
   {name:"PPQ Dungeness",short:"PPQ",emoji:"🦀",cuisine:"chinese",price:"$$",pl:2,rating:4.5,open:true,dist:2.1,addr:"2332 Clement St",phone:"+1 415-386-8266",website:"https://ppqdungeness.com",mapsUrl:"https://maps.google.com/?q=PPQ+Dungeness",photoRef:"",items:[{name:"Roast Crab",emoji:"🦀",desc:"Garlic noodles, ginger scallion"},{name:"Salt Pepper Shrimp",emoji:"🍤",desc:"Crispy, chili, garlic"}]},
   {name:"Komaaj",short:"Komaaj",emoji:"🫓",cuisine:"indian",price:"$$",pl:2,rating:4.6,open:true,dist:1.8,addr:"2404 Mission St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Komaaj",photoRef:"",items:[{name:"Ghormeh Sabzi",emoji:"🍲",desc:"Herb stew, kidney beans, lamb"},{name:"Zereshk Polo",emoji:"🍚",desc:"Barberry rice, saffron chicken"}]},
   {name:"Liholiho Yacht",short:"Liholiho",emoji:"🌺",cuisine:"american",price:"$$$",pl:3,rating:4.8,open:false,dist:0.6,addr:"871 Sutter St",phone:"+1 415-440-5446",website:"https://liholihoyachtclub.com",mapsUrl:"https://maps.google.com/?q=Liholiho+Yacht",photoRef:"",items:[{name:"Spam Fried Rice",emoji:"🍱",desc:"Kalua pork, fried egg"},{name:"Oxtail Dumplings",emoji:"🥟",desc:"Ginger, scallion"}]},
   {name:"Dragon Beaux",short:"Dragon Beaux",emoji:"🐉",cuisine:"chinese",price:"$$$",pl:3,rating:4.5,open:true,dist:3.2,addr:"5700 Geary Blvd",phone:"+1 415-333-8899",website:"https://dragonbeaux.com",mapsUrl:"https://maps.google.com/?q=Dragon+Beaux",photoRef:"",items:[{name:"Har Gow",emoji:"🥟",desc:"Steamed shrimp dumplings"},{name:"Char Siu Bao",emoji:"🍞",desc:"BBQ pork buns"}]},
-  {name:"Daeho",short:"Daeho",emoji:"🥩",cuisine:"korean",price:"$$",pl:2,rating:4.6,open:true,dist:0.4,addr:"2355 Lombard St",phone:"+1 415-931-1028",website:"https://daehosf.com",mapsUrl:"https://maps.google.com/?q=Daeho",photoRef:"",items:[{name:"Galbi Jim",emoji:"🥩",desc:"Braised short ribs, radish"},{name:"Brisket",emoji:"🥩",desc:"House BBQ, banchan"}]},
-  {name:"Sotto Mare",short:"Sotto Mare",emoji:"🦞",cuisine:"italian",price:"$$",pl:2,rating:4.5,open:true,dist:0.9,addr:"552 Green St",phone:"+1 415-398-3181",website:"https://sottomaresf.com",mapsUrl:"https://maps.google.com/?q=Sotto+Mare",photoRef:"",items:[{name:"Cioppino",emoji:"🦞",desc:"Dungeness crab, clams, fish"},{name:"Calamari",emoji:"🦑",desc:"Grilled, lemon, herbs"}]},
-  {name:"Rich Table",short:"Rich Table",emoji:"🍽️",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:1.1,addr:"199 Gough St",phone:"+1 415-355-9085",website:"https://richtablesf.com",mapsUrl:"https://maps.google.com/?q=Rich+Table",photoRef:"",items:[{name:"Sardine Chips",emoji:"🐟",desc:"Porcini, rosemary"},{name:"Pasta",emoji:"🍝",desc:"Seasonal, house made"}]},
+  {name:"Daeho",short:"Daeho",emoji:"🥩",cuisine:"korean",price:"$$",pl:2,rating:4.6,open:true,dist:0.4,addr:"2355 Lombard St",phone:"+1 415-931-1028",website:"https://daehosf.com",mapsUrl:"https://maps.google.com/?q=Daeho",photoRef:"https://picsum.photos/seed/korean/600/320",items:[{name:"Galbi Jim",emoji:"🥩",desc:"Braised short ribs, radish"},{name:"Brisket",emoji:"🥩",desc:"House BBQ, banchan"}]},
+  {name:"Sotto Mare",short:"Sotto Mare",emoji:"🦞",cuisine:"italian",price:"$$",pl:2,rating:4.5,open:true,dist:0.9,addr:"552 Green St",phone:"+1 415-398-3181",website:"https://sottomaresf.com",mapsUrl:"https://maps.google.com/?q=Sotto+Mare",photoRef:"https://picsum.photos/seed/seafood/600/320",items:[{name:"Cioppino",emoji:"🦞",desc:"Dungeness crab, clams, fish"},{name:"Calamari",emoji:"🦑",desc:"Grilled, lemon, herbs"}]},
+  {name:"Rich Table",short:"Rich Table",emoji:"🍽️",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:1.1,addr:"199 Gough St",phone:"+1 415-355-9085",website:"https://richtablesf.com",mapsUrl:"https://maps.google.com/?q=Rich+Table",photoRef:"https://picsum.photos/seed/richtable/600/320",items:[{name:"Sardine Chips",emoji:"🐟",desc:"Porcini, rosemary"},{name:"Pasta",emoji:"🍝",desc:"Seasonal, house made"}]},
   {name:"Bi-Rite Creamery",short:"Bi-Rite",emoji:"🍦",cuisine:"american",price:"$",pl:1,rating:4.7,open:true,dist:0.7,addr:"3692 18th St",phone:"+1 415-626-5600",website:"https://biritemarket.com",mapsUrl:"https://maps.google.com/?q=Bi-Rite+Creamery",photoRef:"",items:[{name:"Salted Caramel",emoji:"🍦",desc:"House made, sea salt"},{name:"Honey Lavender",emoji:"🍦",desc:"Local honey, lavender"}]},
   {name:"Z & Y Restaurant",short:"Z & Y",emoji:"🌶️",cuisine:"chinese",price:"$$",pl:2,rating:4.3,open:true,dist:0.5,addr:"655 Jackson St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Z+&+Y+Restaurant",photoRef:"",items:[{name:"Dan Dan Noodles",emoji:"🍜",desc:"Sichuan peppercorn, pork"},{name:"Mapo Tofu",emoji:"🍲",desc:"Silken tofu, Sichuan spice"}]},
-  {name:"Tartine Bakery",short:"Tartine",emoji:"🥐",cuisine:"american",price:"$",pl:1,rating:4.8,open:true,dist:0.8,addr:"600 Guerrero St",phone:"+1 415-487-2600",website:"https://tartinebakery.com",mapsUrl:"https://maps.google.com/?q=Tartine+Bakery+San+Francisco",photoRef:"",items:[{name:"Country Loaf",emoji:"🍞",desc:"Sourdough, wood fired"},{name:"Morning Bun",emoji:"🥐",desc:"Orange zest, cinnamon"}]},
-  {name:"Mensho Tokyo",short:"Mensho",emoji:"🍥",cuisine:"sushi",price:"$$",pl:2,rating:4.6,open:true,dist:0.6,addr:"672 Geary St",phone:"+1 415-800-8345",website:"https://mensho.tokyo",mapsUrl:"https://maps.google.com/?q=Mensho+Tokyo",photoRef:"",items:[{name:"Toripaitan Ramen",emoji:"🍥",desc:"Rich chicken broth, truffle"},{name:"Lamb Tsukemen",emoji:"🍜",desc:"Dipping ramen, spiced lamb"}]},
-  {name:"State Bird",short:"State Bird",emoji:"🐦",cuisine:"american",price:"$$$",pl:3,rating:4.7,open:true,dist:1.3,addr:"1529 Fillmore St",phone:"+1 415-795-1272",website:"https://statebirddprovisions.com",mapsUrl:"https://maps.google.com/?q=State+Bird",photoRef:"",items:[{name:"State Bird",emoji:"🐦",desc:"Fried quail, pine nut"},{name:"Dungeness Pancake",emoji:"🥞",desc:"Crab, black bean sauce"}]},
-  {name:"Zuni Café",short:"Zuni",emoji:"🍗",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:0.8,addr:"1658 Market St",phone:"+1 415-552-2522",website:"https://zunicafe.com",mapsUrl:"https://maps.google.com/?q=Zuni+Café",photoRef:"",items:[{name:"Roast Chicken",emoji:"🍗",desc:"Brick oven, bread salad"},{name:"Burger",emoji:"🍔",desc:"Focaccia, house pickles"}]},
+  {name:"Tartine Bakery",short:"Tartine",emoji:"🥐",cuisine:"american",price:"$",pl:1,rating:4.8,open:true,dist:0.8,addr:"600 Guerrero St",phone:"+1 415-487-2600",website:"https://tartinebakery.com",mapsUrl:"https://maps.google.com/?q=Tartine+Bakery+San+Francisco",photoRef:"https://picsum.photos/seed/bakery/600/320",items:[{name:"Country Loaf",emoji:"🍞",desc:"Sourdough, wood fired"},{name:"Morning Bun",emoji:"🥐",desc:"Orange zest, cinnamon"}]},
+  {name:"Mensho Tokyo",short:"Mensho",emoji:"🍥",cuisine:"sushi",price:"$$",pl:2,rating:4.6,open:true,dist:0.6,addr:"672 Geary St",phone:"+1 415-800-8345",website:"https://mensho.tokyo",mapsUrl:"https://maps.google.com/?q=Mensho+Tokyo",photoRef:"https://picsum.photos/seed/ramen/600/320",items:[{name:"Toripaitan Ramen",emoji:"🍥",desc:"Rich chicken broth, truffle"},{name:"Lamb Tsukemen",emoji:"🍜",desc:"Dipping ramen, spiced lamb"}]},
+  {name:"State Bird",short:"State Bird",emoji:"🐦",cuisine:"american",price:"$$$",pl:3,rating:4.7,open:true,dist:1.3,addr:"1529 Fillmore St",phone:"+1 415-795-1272",website:"https://statebirddprovisions.com",mapsUrl:"https://maps.google.com/?q=State+Bird",photoRef:"https://picsum.photos/seed/statebird/600/320",items:[{name:"State Bird",emoji:"🐦",desc:"Fried quail, pine nut"},{name:"Dungeness Pancake",emoji:"🥞",desc:"Crab, black bean sauce"}]},
+  {name:"Zuni Café",short:"Zuni",emoji:"🍗",cuisine:"american",price:"$$$",pl:3,rating:4.6,open:true,dist:0.8,addr:"1658 Market St",phone:"+1 415-552-2522",website:"https://zunicafe.com",mapsUrl:"https://maps.google.com/?q=Zuni+Café",photoRef:"https://picsum.photos/seed/zuni/600/320",items:[{name:"Roast Chicken",emoji:"🍗",desc:"Brick oven, bread salad"},{name:"Burger",emoji:"🍔",desc:"Focaccia, house pickles"}]},
   {name:"Nopalito",short:"Nopalito",emoji:"🌿",cuisine:"mexican",price:"$$",pl:2,rating:4.5,open:true,dist:1.0,addr:"306 Broderick St",phone:"+1 415-437-0303",website:"https://nopalitosf.com",mapsUrl:"https://maps.google.com/?q=Nopalito",photoRef:"",items:[{name:"Carnitas",emoji:"🌮",desc:"Slow roasted pork"},{name:"Enchiladas",emoji:"🫔",desc:"Mole negro, crema"}]},
-  {name:"Hog Island Oyster",short:"Hog Island",emoji:"🦪",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.4,addr:"1 Ferry Building",phone:"+1 415-391-7117",website:"https://hogislandoysters.com",mapsUrl:"https://maps.google.com/?q=Hog+Island+Oyster",photoRef:"",items:[{name:"Oysters",emoji:"🦪",desc:"Tomales Bay, mignonette"},{name:"Clam Chowder",emoji:"🍲",desc:"New England, sourdough bowl"}]},
+  {name:"Hog Island Oyster",short:"Hog Island",emoji:"🦪",cuisine:"american",price:"$$$",pl:3,rating:4.5,open:true,dist:0.4,addr:"1 Ferry Building",phone:"+1 415-391-7117",website:"https://hogislandoysters.com",mapsUrl:"https://maps.google.com/?q=Hog+Island+Oyster",photoRef:"https://picsum.photos/seed/oyster/600/320",items:[{name:"Oysters",emoji:"🦪",desc:"Tomales Bay, mignonette"},{name:"Clam Chowder",emoji:"🍲",desc:"New England, sourdough bowl"}]},
   {name:"Izakaya Rintaro",short:"Rintaro",emoji:"🍱",cuisine:"korean",price:"$$$",pl:3,rating:4.7,open:true,dist:1.6,addr:"82 14th St",phone:"+1 415-589-7022",website:"https://izakayarintaro.com",mapsUrl:"https://maps.google.com/?q=Izakaya+Rintaro",photoRef:"",items:[{name:"Yakitori",emoji:"🍢",desc:"Binchotan grilled chicken"},{name:"Karaage",emoji:"🍗",desc:"Fried chicken, kewpie mayo"}]},
   {name:"Beretta",short:"Beretta",emoji:"🫙",cuisine:"italian",price:"$$",pl:2,rating:4.3,open:true,dist:0.9,addr:"1199 Valencia St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Beretta",photoRef:"",items:[{name:"Margherita",emoji:"🍕",desc:"Neapolitan, fior di latte"},{name:"Meatballs",emoji:"🍖",desc:"San Marzano, basil"}]},
   {name:"Plow",short:"Plow",emoji:"🥚",cuisine:"american",price:"$$",pl:2,rating:4.4,open:true,dist:2.0,addr:"1299 18th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Plow",photoRef:"",items:[{name:"Ricotta Pancakes",emoji:"🥞",desc:"Seasonal fruit, maple syrup"},{name:"Eggs Baked in Cream",emoji:"🥚",desc:"House toast, chives"}]},
   {name:"Kin Khao",short:"Kin Khao",emoji:"🌸",cuisine:"thai",price:"$$",pl:2,rating:4.5,open:true,dist:0.3,addr:"55 Cyril Magnin St",phone:"+1 415-362-7456",website:"https://kinkhao.com",mapsUrl:"https://maps.google.com/?q=Kin+Khao",photoRef:"",items:[{name:"Khao Soi",emoji:"🍜",desc:"Coconut curry, crispy noodles"},{name:"Som Tum",emoji:"🥗",desc:"Green papaya, peanut"}]},
   {name:"Mister Jiu's",short:"Mister Jiu's",emoji:"🥢",cuisine:"chinese",price:"$$$",pl:3,rating:4.6,open:false,dist:0.4,addr:"28 Waverly Place",phone:"+1 415-857-9688",website:"https://misterjius.com",mapsUrl:"https://maps.google.com/?q=Mister+Jiu's",photoRef:"",items:[{name:"Quail & Foie Gras",emoji:"🥢",desc:"House XO, crispy rice"},{name:"Kung Pao Pastrami",emoji:"🌶️",desc:"Peanuts, dried chilies"}]},
-  {name:"Cotogna",short:"Cotogna",emoji:"🫕",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:0.5,addr:"490 Pacific Ave",phone:"+1 415-775-8508",website:"https://cotognasf.com",mapsUrl:"https://maps.google.com/?q=Cotogna",photoRef:"",items:[{name:"Wood-Fired Pizza",emoji:"🍕",desc:"House cured meats"},{name:"Handmade Pasta",emoji:"🍝",desc:"Daily changing"}]},
+  {name:"Cotogna",short:"Cotogna",emoji:"🫕",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:true,dist:0.5,addr:"490 Pacific Ave",phone:"+1 415-775-8508",website:"https://cotognasf.com",mapsUrl:"https://maps.google.com/?q=Cotogna",photoRef:"https://picsum.photos/seed/italian/600/320",items:[{name:"Wood-Fired Pizza",emoji:"🍕",desc:"House cured meats"},{name:"Handmade Pasta",emoji:"🍝",desc:"Daily changing"}]},
   {name:"Soba Ichi",short:"Soba Ichi",emoji:"🍜",cuisine:"sushi",price:"$$",pl:2,rating:4.5,open:true,dist:2.8,addr:"2218 Broadway, Oakland",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Soba+Ichi",photoRef:"",items:[{name:"Zaru Soba",emoji:"🍜",desc:"Cold buckwheat, dipping broth"},{name:"Tempura Set",emoji:"🍤",desc:"Seasonal vegetables"}]},
   {name:"Shizen",short:"Shizen",emoji:"🌱",cuisine:"sushi",price:"$$",pl:2,rating:4.6,open:true,dist:1.0,addr:"370 14th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=Shizen",photoRef:"",items:[{name:"Vegan Omakase",emoji:"🌱",desc:"Seasonal plant-based nigiri"},{name:"Truffle Roll",emoji:"🍣",desc:"Truffle oil, asparagus"}]},
   {name:"La Ciccia",short:"La Ciccia",emoji:"🐟",cuisine:"italian",price:"$$$",pl:3,rating:4.7,open:false,dist:2.2,addr:"291 30th St",phone:"",website:"",mapsUrl:"https://maps.google.com/?q=La+Ciccia",photoRef:"",items:[{name:"Spaghetti Bottarga",emoji:"🐟",desc:"Sardinian mullet roe"},{name:"Roast Suckling Pig",emoji:"🐷",desc:"Myrtle, fennel, sea salt"}]},
@@ -888,6 +922,7 @@ const elWP   = document.getElementById('wP');
 const elWA   = document.getElementById('wA');
 const elWLnk     = document.getElementById('wLink');
 const elWPhoto   = document.getElementById('wPhoto');
+const elWPhotoAt = document.getElementById('wPhotoAttr');
 const elWPhotoW  = document.getElementById('wPhotoWrap');
 const elWContact = document.getElementById('wContact');
 const elWPhone   = document.getElementById('wPhone');
@@ -918,12 +953,25 @@ function onDone() {
 
   // Photo — built from photoRef using Places photo URL format
   if (item.photoRef) {
-    const photoUrl = `https://places.googleapis.com/v1/${item.photoRef}/media?maxHeightPx=320&maxWidthPx=600&key=${GOOGLE_CLIENT_KEY}`;
+    const photoUrl = item.photoRef.startsWith('http')
+      ? item.photoRef
+      : `https://places.googleapis.com/v1/${item.photoRef}/media?maxHeightPx=320&maxWidthPx=600&key=${GOOGLE_CLIENT_KEY}`;
     elWPhoto.src = photoUrl;
     elWPhoto.onload  = () => { elWPhotoW.style.display = ''; };
     elWPhoto.onerror = () => { elWPhotoW.style.display = 'none'; };
+    // Photo attribution — required by Google Places API policy
+    if (item.photoAttr && item.photoAttr.name) {
+      elWPhotoAt.style.display = '';
+      elWPhotoAt.innerHTML = `Photo: <a href="${item.photoAttr.uri||'#'}" target="_blank" rel="noopener">${item.photoAttr.name}</a> · Google Maps`;
+    } else if (!item.photoRef.startsWith('http')) {
+      elWPhotoAt.style.display = '';
+      elWPhotoAt.innerHTML = `Photo via <a href="https://maps.google.com" target="_blank" rel="noopener">Google Maps</a>`;
+    } else {
+      elWPhotoAt.style.display = 'none';
+    }
   } else {
     elWPhotoW.style.display = 'none';
+    elWPhotoAt.style.display = 'none';
   }
 
   // Contact links
@@ -1338,6 +1386,7 @@ async function loadRestaurants() {
             setCache(key, processed);   // save for next time
             REST = processed;
             showLocStatus(`🎰 ${data.length} spots nearby — spin it!`);
+            document.getElementById('gAttr').classList.add('on');
           } else {
             showLocStatus('🎰 Ready to spin!');
           }
