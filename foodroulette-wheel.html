@@ -71,9 +71,9 @@ body{
     radial-gradient(ellipse 100% 100% at 50% 50%,transparent 40%,rgba(0,0,0,.6) 100%);
 }
 /* Gold border frame */
-body::after{content:'';position:fixed;inset:10px;border:1px solid rgba(201,168,76,.2);pointer-events:none;z-index:0;top:10px;bottom:auto;height:calc(100vh - 20px);}
+body::after{content:'';position:fixed;inset:10px;border:1px solid rgba(201,168,76,.2);border-bottom:none;pointer-events:none;z-index:0;top:10px;bottom:auto;height:calc(100vh - 20px);}
 /* Inner subtle glow on border */
-body::before{content:'';position:fixed;inset:11px;border:1px solid rgba(201,168,76,.06);pointer-events:none;z-index:0;top:11px;bottom:auto;height:calc(100vh - 22px);}
+body::before{content:'';position:fixed;inset:11px;border:1px solid rgba(201,168,76,.06);border-bottom:none;pointer-events:none;z-index:0;top:11px;bottom:auto;height:calc(100vh - 22px);}
 
 /* ── Animations ── */
 @keyframes winPop{0%{opacity:0;transform:translateY(14px) scale(.95)}70%{opacity:1;transform:translateY(-3px) scale(1.01)}100%{opacity:1;transform:translateY(0) scale(1)}}
@@ -81,11 +81,11 @@ body::before{content:'';position:fixed;inset:11px;border:1px solid rgba(201,168,
 .rs-winner.fading{animation:fadeOut .22s ease forwards;}
 
 /* ── Header ── */
-.hd{padding:20px 16px 0;text-align:center;position:relative;z-index:1;max-width:100%;overflow:hidden;}
-.logo-r{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.hd{padding:28px 16px 0;text-align:center;position:relative;z-index:1;max-width:100%;}
+.logo-r{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .logo-l{height:1px;flex:1;background:linear-gradient(to right,transparent,rgba(201,168,76,.45),transparent);}
 .logo-t{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);font-weight:700;white-space:nowrap;}
-h1{font-family:'Cinzel',serif;font-size:clamp(1.4rem,5.5vw,2.4rem);font-weight:900;line-height:1.15;color:var(--cream);text-shadow:0 2px 20px rgba(0,0,0,.9),0 0 40px rgba(201,168,76,.2);letter-spacing:.04em;margin-bottom:6px;}
+h1{margin-bottom:6px;line-height:1.1;}
 h1 span{
   display:block;
   font-family:'Yellowtail',cursive;
@@ -121,6 +121,111 @@ h1 span{
 
 
 
+/* ── Header collapse — all sections use grid trick, zero display:none flipping ── */
+.hd-top,.hd-bot,.hd-brand{
+  display:grid;grid-template-rows:1fr;
+  will-change:grid-template-rows;
+  transition:grid-template-rows .52s cubic-bezier(.4,0,.2,1);
+}
+.hd-winwrap{
+  display:grid;grid-template-rows:0fr;
+  will-change:grid-template-rows;
+  transition:grid-template-rows .52s cubic-bezier(.4,0,.2,1);
+}
+.hd-top-in,.hd-bot-in,.hd-brand-in{
+  overflow:hidden;min-height:0;
+  will-change:transform,opacity;
+  transition:opacity .38s ease,transform .48s cubic-bezier(.4,0,.2,1);
+}
+.hd-winwrap-in{
+  overflow:hidden;min-height:0;
+  will-change:transform,opacity;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .4s ease .08s,transform .48s cubic-bezier(.4,0,.2,1) .08s;
+}
+.h1-pre{
+  font-family:'Cinzel',serif;font-size:clamp(1.4rem,5.5vw,2.4rem);font-weight:900;
+  color:var(--cream);letter-spacing:.04em;
+  text-shadow:0 2px 20px rgba(0,0,0,.9),0 0 40px rgba(201,168,76,.2);
+  margin:0 0 4px;line-height:1.15;
+}
+.hd--collapsed{padding:28px 16px 4px;}
+.hd--collapsed .hd-top,
+.hd--collapsed .hd-bot,
+.hd--collapsed .hd-brand{grid-template-rows:0fr;}
+.hd--collapsed .hd-top-in,
+.hd--collapsed .hd-bot-in,
+.hd--collapsed .hd-brand-in{opacity:0;transform:translateY(-8px);}
+.hd--collapsed .hd-winwrap{grid-template-rows:1fr;}
+.hd--collapsed .hd-winwrap-in{opacity:1;transform:translateY(0);}
+
+/* ── WINNER! old-Vegas-bulb style (page header, results screen only) ── */
+.hd-winner{
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  padding:14px 0 2px;width:100%;
+}
+
+/* Bulb row — spans full text width */
+.winner-bulbs{
+  display:flex;align-items:center;justify-content:space-between;
+  width:min(100%,clamp(270px,82vw,490px));
+}
+/* Old incandescent Vegas bulb — warm amber-white, not electric yellow */
+.bulb{
+  width:11px;height:11px;border-radius:50%;flex-shrink:0;
+  border:1px solid rgba(180,110,30,.4);
+  animation:bulbAlt .5s step-end infinite;
+}
+.bulb:nth-child(even){animation-delay:.25s;}
+@keyframes bulbAlt{
+  0%,100%{
+    background:radial-gradient(circle at 38% 32%,#fff8e8 0%,#ffd080 55%,#c87820 100%);
+    box-shadow:0 0 5px #ffc850,0 0 12px rgba(255,180,60,.55),0 0 22px rgba(255,150,30,.3);
+    opacity:1;
+  }
+  50%{
+    background:radial-gradient(circle at 38% 32%,#2a1800 0%,#1a0e00 100%);
+    box-shadow:none;
+    opacity:.85;
+  }
+}
+
+/* WINNER! text — warm incandescent white, not neon */
+.winner-word{
+  font-family:'Cinzel',serif;font-size:clamp(2rem,7.5vw,3.2rem);font-weight:900;
+  letter-spacing:.14em;line-height:1;
+  animation:winnerFlash .55s step-end infinite;
+}
+@keyframes winnerFlash{
+  0%,100%{
+    color:#ffe8b0;
+    text-shadow:0 0 10px rgba(255,210,100,.8),0 0 24px rgba(255,170,50,.5),0 0 48px rgba(255,140,20,.25);
+  }
+  50%{
+    color:#fff5e0;
+    text-shadow:0 0 14px rgba(255,230,160,.9),0 0 30px rgba(255,200,90,.55),0 0 55px rgba(255,160,40,.28);
+  }
+}
+
+/* ── Pause background animations during result reveal to prevent stutter ── */
+.anim-pause .sb::before,
+.anim-pause .sb::after{animation-play-state:paused;}
+
+/* ── Static gold accent line — bottom of page, not fixed ── */
+.page-bottom-line{
+  width:calc(100% - 20px);max-width:620px;
+  margin:0 auto 10px;
+  height:1px;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(201,168,76,.25) 15%,
+    rgba(201,168,76,.6) 40%,
+    rgba(240,201,58,.8) 50%,
+    rgba(201,168,76,.6) 60%,
+    rgba(201,168,76,.25) 85%,
+    transparent 100%
+  );
+}
 /* ── Filter Tags ── */
 .fs{display:none;flex-wrap:wrap;gap:4px;justify-content:center;padding:0 16px;margin-top:6px;position:relative;z-index:1;width:100%;max-width:600px;}
 .fs.on{display:flex;}
@@ -231,6 +336,7 @@ h1 span{
 /* ── Results: playing card design ── */
 #vpWin{
   position:relative;overflow:hidden;
+  will-change:transform,opacity;
   background:#fdf8f0;
   background-image:radial-gradient(circle,rgba(120,80,20,.042) 1px,transparent 1px);
   background-size:12px 12px;
@@ -508,8 +614,22 @@ h1 span{
 
 <div class="hd">
   <div class="logo-r"><div class="logo-l"></div><div class="logo-t">✦ Established 2026 ✦</div><div class="logo-l"></div></div>
-  <h1>Welcome to <span>Ric's Food Roulette</span></h1>
-  <p class="sub" id="tagline">Place your bets · The wheel decides</p>
+  <div class="hd-top"><div class="hd-top-in">
+    <p class="h1-pre">Welcome to</p>
+  </div></div>
+  <div class="hd-brand"><div class="hd-brand-in">
+    <h1><span>Ric's Food Roulette</span></h1>
+  </div></div>
+  <div class="hd-winwrap"><div class="hd-winwrap-in">
+    <div class="hd-winner" id="hdWinner" aria-hidden="true">
+    <div class="winner-bulbs"><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span></div>
+    <div class="winner-word">WINNER!</div>
+    <div class="winner-bulbs"><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span></div>
+  </div>
+  </div></div>
+  <div class="hd-bot"><div class="hd-bot-in">
+    <p class="sub" id="tagline">Place your bets · The wheel decides</p>
+  </div></div>
 </div>
 
 
@@ -598,6 +718,8 @@ h1 span{
   <p class="footer-note">Restaurant data provided by Google Maps Platform</p>
   <p class="footer-note" style="margin-top:12px;opacity:.45;letter-spacing:.18em;font-family:'Cinzel',serif;font-size:.55rem;">✦ Built by <span style="color:var(--gold);opacity:1;letter-spacing:.12em;">Ric B</span> ✦</p>
 </footer>
+
+<div class="page-bottom-line"></div>
 
 <!-- Filter sheet overlay -->
 <div class="so" id="shOv" onclick="closeSheet()"></div>
@@ -1106,6 +1228,8 @@ function doSpin() {
 
   const startSpin = () => {
     spinning=true; fired=false; bP='idle'; parkedOffset=0; bounceF=0;
+    document.querySelector('.hd').classList.remove('hd--collapsed');
+    document.body.classList.remove('anim-pause');
     elVpWin.style.display='none'; elVpSpin.style.display=''; document.getElementById('vpCard').classList.add('vp-card--spin');
   if (hasSpunOnce) {
     document.getElementById('rsStatus').textContent='Awaiting your spin';
@@ -1187,8 +1311,27 @@ function onDone() {
   } else { elWItms.style.display='none'; elWItms.innerHTML=''; }
 
   hasSpunOnce=true;
-  setTimeout(()=>{ elVpSpin.style.display='none'; elVpWin.style.display=''; elVpWin.style.animation='winPop .35s cubic-bezier(.22,1,.36,1) both'; document.getElementById('vpCard').classList.remove('vp-card--spin'); },80);
-  setTimeout(confetti,120);
+  // Stage 1 (t=60ms): collapse header — runs alone, no competition
+  setTimeout(() => {
+    document.querySelector('.hd').classList.add('hd--collapsed');
+  }, 60);
+
+  // Stage 2 (t=200ms): reveal card — header collapse is well underway
+  setTimeout(() => {
+    document.body.classList.add('anim-pause'); // pause bg animations briefly
+    elVpSpin.style.display='none';
+    elVpWin.style.display='';
+    requestAnimationFrame(() => {  // let display change settle before animating
+      elVpWin.style.animation='winPop .4s cubic-bezier(.22,1,.36,1) both';
+      document.getElementById('vpCard').classList.remove('vp-card--spin');
+    });
+  }, 200);
+
+  // Stage 3 (t=700ms): confetti — well after everything has settled
+  setTimeout(() => {
+    document.body.classList.remove('anim-pause');
+    confetti();
+  }, 700);
 }
 
 
@@ -1233,8 +1376,11 @@ function getWheelSlice() {
   const source = pool.length > 0 ? pool : getPoolIgnoreOpen();
   if (source.length === 0) return (REST !== FALLBACK_REST ? REST : FALLBACK_REST).slice(0, WHEEL_SIZE);
 
-  // Shuffle for fairness
-  const shuffled = [...source].sort(() => Math.random() - 0.5);
+  // Seeded Fisher-Yates: unbiased + daily variation from same cached data
+  // Seed changes at midnight so tomorrow's pool differs without an extra API call.
+  // Manual randomize button still uses fresh Math.random() for instant variety.
+  const seed = _dailyKey ? dailySeed(_dailyKey + Date.now().toString().slice(0,-5) + _rollCount) : 0;
+  const shuffled = seed ? seededFisherYates(source, seed) : fisherYates(source);
 
   // Fill to WHEEL_SIZE — pad with doubles if needed, never fake restaurants
   let slice = shuffled.length >= WHEEL_SIZE
@@ -1244,7 +1390,8 @@ function getWheelSlice() {
   _wheelCache = slice;
   return slice;
 }
-function invalidateWheel() { _wheelCache = null; rndRest = null; }
+let _rollCount = 0;
+function invalidateWheel() { _wheelCache = null; rndRest = null; _rollCount++; }
 function getActivePool() { return rndRest || getWheelSlice(); }
 
 function doRandomize() {
@@ -1458,7 +1605,50 @@ async function doZip() {
 }
 
 
-const CACHE_TTL=60*60*1000;
+
+/* ── Fair shuffle helpers ──────────────────────────────────────────
+   .sort(()=>Math.random()-.5) is biased — restaurants at the tail
+   of the API response get statistically less chance of appearing.
+   Fisher-Yates is truly uniform: every permutation equally likely.
+   ─────────────────────────────────────────────────────────────── */
+function fisherYates(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Seeded variant — same seed → same order.
+// Use today's date as seed so the selection rotates daily
+// from the same cached data without an extra API call.
+function seededFisherYates(arr, seed) {
+  const a = [...arr];
+  let s = seed >>> 0 || 1;
+  const rng = () => { s ^= s<<13; s ^= s>>17; s ^= s<<5; return (s>>>0)/0xffffffff; };
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Daily seed: changes at midnight so the wheel shows a fresh
+// slice tomorrow even when API data is still cached.
+function dailySeed(locationKey) {
+  const d = new Date();
+  const day = d.getFullYear() * 10000 + d.getMonth() * 100 + d.getDate();
+  let h = day;
+  for (let i = 0; i < locationKey.length; i++) {
+    h = Math.imul(h ^ locationKey.charCodeAt(i), 0x9e3779b9) | 0;
+  }
+  return Math.abs(h);
+}
+
+let _dailyKey = ''; // set when restaurants load, used by getWheelSlice
+
+const CACHE_TTL=60*60*24*1000; // 24 hours — one API pull per day per location
 function cacheKey(lat,lng,meters){const rlat=Math.round(lat*100)/100,rlng=Math.round(lng*100)/100;return `fr_${rlat}_${rlng}_${meters}`;}
 function getCached(key){try{const raw=localStorage.getItem(key);if(!raw)return null;const{ts,data}=JSON.parse(raw);if(Date.now()-ts>CACHE_TTL){localStorage.removeItem(key);return null;}return data;}catch(e){return null;}}
 function setCache(key,data){try{localStorage.setItem(key,JSON.stringify({ts:Date.now(),data}));}catch(e){}}
@@ -1475,6 +1665,7 @@ async function loadRestaurants() {
         const {latitude:lat,longitude:lng}=pos.coords;
         const miles=10, meters=Math.round(miles*1609); // always fetch full 10mi pool; distance filter applied client-side
         const key=cacheKey(lat,lng,meters);
+        _dailyKey = key; // used for daily seed in getWheelSlice
         const cached=getCached(key);
         if (cached){REST=cached;locationGranted=true;invalidateWheel();showLocStatus(`${cached.length} spots nearby — spin it!`);resolve();return;}
         const res=await fetch(`${WORKER_URL}?lat=${+lat}&lng=${+lng}&radius=${+meters}`);
