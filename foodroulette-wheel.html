@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://*.googleusercontent.com https://*.googleapis.com https://*.gstatic.com https://frworker.zosebaum.workers.dev; connect-src https://frworker.zosebaum.workers.dev https://nominatim.openstreetmap.org; frame-src 'none'; object-src 'none'; base-uri 'self';">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Ric's Food Roulette</title>
 <meta name="description" content="Spin the wheel. Let fate pick where you eat tonight.">
 <meta property="og:type"         content="website">
@@ -45,7 +45,7 @@
 }
 html,body{height:100%;}
 body{
-  font-family:system-ui,-apple-system,sans-serif;min-height:100svh;
+  font-family:system-ui,-apple-system,sans-serif;min-height:100svh;-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden;
   display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   color:var(--cream);overflow-x:hidden;
   background-color:#0d3d20;
@@ -81,7 +81,7 @@ body::before{content:'';position:fixed;inset:11px;border:1px solid rgba(201,168,
 .rs-winner.fading{animation:fadeOut .22s ease forwards;}
 
 /* ── Header ── */
-.hd{padding:20px 16px 0;text-align:center;position:relative;z-index:1;}
+.hd{padding:20px 16px 0;text-align:center;position:relative;z-index:1;max-width:100%;overflow:hidden;}
 .logo-r{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .logo-l{height:1px;flex:1;background:linear-gradient(to right,transparent,rgba(201,168,76,.45),transparent);}
 .logo-t{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);font-weight:700;white-space:nowrap;}
@@ -129,9 +129,9 @@ h1 span{
 
 /* ── Wheel ── */
 .wz{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;margin-top:6px;}
-.wr{position:relative;display:flex;align-items:center;justify-content:center;}
-#wc{display:block;border-radius:50%;cursor:default;box-shadow:0 10px 40px rgba(0,0,0,.7);will-change:contents;touch-action:pan-y;image-rendering:crisp-edges;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;outline:none;}
-@media(max-width:620px){.wz{padding:0;}.wr{width:100%;}}
+.wr{position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:600px;}
+#wc{display:block;border-radius:50%;cursor:default;max-width:100%;box-shadow:0 10px 40px rgba(0,0,0,.7);will-change:contents;touch-action:pan-y;image-rendering:-webkit-optimize-contrast;image-rendering:auto;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;outline:none;}
+@media(max-width:620px){.wz{padding:0;}.wr{width:100%;max-width:100%;}.strip{width:100%;margin-left:0;margin-right:0;}}
 
 /* ── Action Bar ── */
 .ab{display:flex;gap:10px;align-items:center;width:calc(100% - 24px);max-width:600px;margin:20px auto 0;position:relative;z-index:1;}
@@ -148,7 +148,7 @@ h1 span{
 .fd{width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--felt);position:absolute;top:2px;right:2px;display:none;}
 .fd.on{display:block;}
 .sb{
-  flex:1;padding:18px 14px;border:none;border-radius:12px;cursor:pointer;
+  flex:1;min-width:0;padding:18px 14px;border:none;border-radius:12px;cursor:pointer;
   font-family:'Cinzel',serif;font-size:1.05rem;font-weight:900;
   letter-spacing:.22em;text-transform:uppercase;
   color:#fff;
@@ -759,29 +759,30 @@ function setTagline() {
 const cv   = document.getElementById('wc');
 const cx   = cv.getContext('2d');
 const ring = document.getElementById('wRing');
+// Cap DPR at 2 — beyond that the gain is imperceptible
+const DPR  = Math.min(window.devicePixelRatio || 1, 3);
 
-const SZ = Math.min(600, window.innerWidth);
-const R  = SZ / 2;
-cv.width = cv.height = SZ;
-cv.style.width = cv.style.height = SZ + 'px';
-ring.style.width = ring.style.height = SZ + 'px';
+let SZ, R, RO, ROB, RWI, RGA, RPI, RBL, RGC, RGD, RSH, RDM, RTK, RMD, RBO, RBI;
 
-
-
-const RO  = R * .960;
-const ROB = R * .995;
-const RWI = R * .800;
-const RGA = R * .748;
-const RPI = R * .490;
-const RBL = R * .440;
-const RGC = R * .434;
-const RGD = R * .394;
-const RSH = R * .088;
-const RDM = R * .128;
-const RTK = R * .940;
-const RMD = (RGA + RPI) / 2;
-const RBO = RGA - R * 0.030;
-const RBI = RPI + R * 0.018;
+function initWheel() {
+  SZ = Math.min(600, window.innerWidth);
+  R  = SZ / 2;
+  // Physical canvas pixels = logical × DPR → crisp on retina
+  cv.width  = cv.height  = Math.round(SZ * DPR);
+  cv.style.width = cv.style.height = SZ + 'px';
+  ring.style.width = ring.style.height = SZ + 'px';
+  // Reset transform then re-apply DPR scale so all drawing code uses logical px
+  cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  cx.imageSmoothingEnabled = true;
+  cx.imageSmoothingQuality = 'high';
+  RO  = R * .960; ROB = R * .995; RWI = R * .800; RGA = R * .748;
+  RPI = R * .490; RBL = R * .440; RGC = R * .434; RGD = R * .394;
+  RSH = R * .088; RDM = R * .128; RTK = R * .940;
+  RMD = (RGA + RPI) / 2;
+  RBO = RGA - R * 0.030;
+  RBI = RPI + R * 0.018;
+}
+initWheel();
 
 const RCOL = (i, n) => {
   if (i === 0)                       return '#0d8020'; // green #1
@@ -796,7 +797,9 @@ let segs = [];
 let wAng = 0;
 let wIdx = 0;
 
+let _lastPool = [];
 function buildSegs(pool) {
+  if (pool && pool.length) _lastPool = pool;
   const n   = pool.length;
   if (n === 0) return; // keep existing segs — never blank the wheel
   const arc = (Math.PI * 2) / n;
@@ -822,8 +825,9 @@ function bakeStatic() {
   let _s = 0x9e3779b9;
   const rnd = () => { _s ^= _s << 13; _s ^= _s >> 17; _s ^= _s << 5; return ((_s >>> 0) / 0xffffffff); };
   const oc = document.createElement('canvas');
-  oc.width = oc.height = SZ;
+  oc.width = oc.height = Math.round(SZ * DPR);
   const ox = oc.getContext('2d');
+  ox.scale(DPR, DPR); // all drawing uses logical px; DPR gives extra resolution
 
   // Raised outer border
   ox.save();
@@ -934,21 +938,18 @@ function bakeStatic() {
   // Drawn after the hub so it sits on top; clipped to a circle so the
   // square image corners are hidden. Clip radius = RPI * 0.98 keeps
   // the logo entirely inside the hub and away from the coloured slots.
-  if (_logoImg) {
-    const lr = RPI * 0.98;
-    ox.save();
-    ox.beginPath(); ox.arc(R, R, lr, 0, Math.PI * 2); ox.clip();
-    ox.drawImage(_logoImg, R - lr, R - lr, lr * 2, lr * 2);
-    ox.restore();
-  }
-
+  // Logo drawn in draw() directly at full DPR — removed from offscreen canvas
   staticImg = oc;
 }
 
-// Pre-cache gradient — created once, reused every frame
-const _outerShadow = cx.createRadialGradient(R,R,RGA*0.88,R,R,RGA);
-_outerShadow.addColorStop(0,'rgba(0,0,0,0.0)');
-_outerShadow.addColorStop(1,'rgba(0,0,0,0.22)');
+// Pre-cache gradient — recreated when wheel resizes
+let _outerShadow;
+function makeOuterShadow() {
+  _outerShadow = cx.createRadialGradient(R,R,RGA*0.88,R,R,RGA);
+  _outerShadow.addColorStop(0,'rgba(0,0,0,0.0)');
+  _outerShadow.addColorStop(1,'rgba(0,0,0,0.22)');
+}
+makeOuterShadow();
 
 function draw(ang) {
   cx.clearRect(0,0,SZ,SZ);
@@ -966,7 +967,7 @@ function draw(ang) {
     cx.beginPath(); cx.moveTo(ix,iy); cx.lineTo(ox2,oy2); cx.strokeStyle='rgba(0,0,0,0.8)'; cx.lineWidth=2.5; cx.stroke();
     cx.beginPath(); cx.moveTo(ix,iy); cx.lineTo(ox2,oy2); cx.strokeStyle='rgba(220,200,140,0.65)'; cx.lineWidth=1.0; cx.stroke();
   });
-  if (staticImg) cx.drawImage(staticImg,0,0);
+  if (staticImg) cx.drawImage(staticImg, 0, 0, SZ, SZ); // explicit size → correct at any DPR
   cx.textAlign='center'; cx.textBaseline='middle';
   segs.forEach(seg => {
     const ma=seg.ma+ang, lx=R+Math.cos(ma)*RMD, ly=R+Math.sin(ma)*RMD;
@@ -981,6 +982,16 @@ function draw(ang) {
     cx.strokeText(nm,lx,ly+seg.eSz*.7); cx.fillStyle='#fff'; cx.fillText(nm,lx,ly+seg.eSz*.7);
     cx.restore();
   });
+  // Logo drawn last, direct into cx — one crisp DPR-native paint, no double-blit
+  if (_logoImg) {
+    const lr = RPI * 0.98;
+    cx.save();
+    cx.imageSmoothingEnabled = true;
+    cx.imageSmoothingQuality = 'high';
+    cx.beginPath(); cx.arc(R, R, lr, 0, Math.PI * 2); cx.clip();
+    cx.drawImage(_logoImg, R - lr, R - lr, lr * 2, lr * 2);
+    cx.restore();
+  }
 }
 
 function drawBall(bx,by) {
@@ -1496,6 +1507,24 @@ document.fonts.ready.then(async ()=>{
   await loadRestaurants();
   buildSegs(getWheelSlice());
   if (locationGranted) elSBtn.classList.remove('locked');
+});
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE RESIZE — redraws wheel cleanly
+═══════════════════════════════════════════ */
+let _resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(() => {
+    const newSZ = Math.min(600, window.innerWidth);
+    if (Math.abs(newSZ - SZ) < 2) return; // nothing meaningful changed
+    initWheel();          // recompute SZ, R, all radii + re-scale context
+    makeOuterShadow();    // gradient depends on R & RGA — must recreate
+    staticImg = null;     // force bakeStatic to repaint at new size
+    bakeStatic();         // redraw wooden frame, gold ring, hub, logo
+    if (_lastPool.length) buildSegs(_lastPool); // recompute font sizes for new R
+    draw(wAng);           // render frame at current spin angle
+  }, 120);
 });
 </script>
 </body>
