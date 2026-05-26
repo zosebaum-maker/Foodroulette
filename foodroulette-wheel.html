@@ -240,12 +240,52 @@ h1 span{
 .hd--collapsed .bulb:nth-child(even){animation-delay:.55s;}
 .hd--collapsed .winner-word{animation-play-state:running;animation-delay:.28s;}
 
+/* ══════════════════════════════════════════════════
+   PANEL SWITCHING — spin vs results
+   Both panels in the same grid cell. Height = max
+   of both. Switching is opacity only, no reflow.
+═══════════════════════════════════════════════════ */
+.vp-card{
+  animation:none;
+  font-family:'Cinzel',serif;
+  max-width:780px;
+  display:grid;
+  grid-template-areas:"panel";
+}
 
-/* ── Panel switching — opacity only, no layout reflow ── */
-.vp-card--win 
-.vp-card--win #vpWin{opacity:1;pointer-events:auto;animation:winPop .4s cubic-bezier(.22,1,.36,1) both;}
-#vpSpin{transition:opacity .15s ease;}
-#vpWin{transition:opacity .0s;}
+/* Spin panel — visible by default */
+#vpSpin{
+  grid-area:panel;
+  opacity:1;
+  transition:opacity .15s ease;
+}
+
+/* Results panel — hidden by default, full card styling */
+#vpWin{
+  grid-area:panel;
+  opacity:0;
+  pointer-events:none;
+  overflow:hidden;
+  background:#fdf8f0;
+  background-image:radial-gradient(circle,rgba(120,80,20,.042) 1px,transparent 1px);
+  background-size:12px 12px;
+  border-radius:18px;
+  border:1.5px solid rgba(150,110,40,.3);
+  box-shadow:0 10px 44px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.95);
+  margin:0 4px;
+  will-change:opacity;
+}
+
+/* Win state — swap visibility */
+.vp-card--win #vpSpin{opacity:0;pointer-events:none;}
+.vp-card--win #vpWin{
+  opacity:1;
+  pointer-events:auto;
+  animation:winPop .4s cubic-bezier(.22,1,.36,1) both;
+}
+
+.vp-card.exiting{animation:cardExit .18s ease forwards;pointer-events:none;}
+
 /* ── Filter Tags ── */
 .fs{display:none;flex-wrap:wrap;gap:4px;justify-content:center;padding:0 16px;margin-top:6px;position:relative;z-index:1;width:100%;max-width:600px;}
 .fs.on{display:flex;}
@@ -341,36 +381,14 @@ h1 span{
 @keyframes winPop{0%{opacity:0;transform:translateY(12px) scale(.96)}70%{opacity:1;transform:translateY(-2px) scale(1.01)}100%{opacity:1;transform:none}}
 @keyframes fadeOut{0%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px)}}
 
-.vp-card{
-  animation:none;
-  font-family:'Cinzel',serif;
-  max-width:780px;
-  position:relative;
-}
-
 /* ── Unified video poker style card ── */
-.vp-card--spin{ /* no extra styles needed */ }
 
 /* No box — content floats on the felt */
 
 /* ── Results: playing card design ── */
-#vpWin{
-  position:absolute;top:0;left:0;right:0;
-  overflow:hidden;
-  opacity:0;pointer-events:none;
-  will-change:opacity,transform;
-  background:#fdf8f0;
-  background-image:radial-gradient(circle,rgba(120,80,20,.042) 1px,transparent 1px);
-  background-size:12px 12px;
-  border-radius:18px;
-  border:1.5px solid rgba(150,110,40,.3);
-  box-shadow:
-    0 10px 44px rgba(0,0,0,.45),
-    0 2px 8px rgba(0,0,0,.25),
-    inset 0 1px 0 rgba(255,255,255,.95);
-  margin:0 4px;
-}
+
 /* Inner card frame — like a real playing card */
+
 #vpWin::before{
   content:'';position:absolute;inset:7px;
   border:1px solid rgba(150,110,40,.18);
@@ -613,7 +631,6 @@ h1 span{
 
 /* ── Spin-again card exit ── */
 @keyframes cardExit{0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-12px) scale(.97);}}
-.vp-card.exiting{animation:cardExit .18s ease forwards;pointer-events:none;}
 
 /* ── Confetti particles ── */
 .pt{position:fixed;pointer-events:none;z-index:200;border-radius:50%;animation:pf 1.2s cubic-bezier(.22,1,.36,1) forwards;}
@@ -1308,7 +1325,7 @@ function doSpin() {
 
   // If winner card is showing, animate it out first
   const card = document.getElementById('vpCard');
-  if (elVpWin.style.display !== 'none') {
+  if (card.classList.contains('vp-card--win')) {
     card.classList.add('exiting');
     setTimeout(() => { card.classList.remove('exiting'); startSpin(); }, 180);
   } else {
