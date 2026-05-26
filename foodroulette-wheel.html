@@ -76,8 +76,7 @@ body::after{content:'';position:fixed;inset:10px;border:1px solid rgba(201,168,7
 body::before{content:'';position:fixed;inset:11px;border:1px solid rgba(201,168,76,.06);border-bottom:none;pointer-events:none;z-index:0;top:11px;bottom:auto;height:calc(100vh - 22px);}
 
 /* ── Animations ── */
-@keyframes winPop{0%{opacity:0;transform:translateY(14px) scale(.95)}70%{opacity:1;transform:translateY(-3px) scale(1.01)}100%{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes fadeOut{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-8px)}}
+
 .rs-winner.fading{animation:fadeOut .22s ease forwards;}
 
 /* ── Header ── */
@@ -93,6 +92,8 @@ h1 span{
   font-weight:400;
   letter-spacing:.02em;
   color:#e03030;
+  text-shadow:0 0 8px rgba(220,40,40,.9),0 0 20px rgba(220,40,40,.7),0 0 40px rgba(220,40,40,.4),0 2px 6px rgba(0,0,0,.8);
+  will-change:opacity;
   animation:neonFlicker 4s infinite;
   text-shadow:
     0 0 8px rgba(220,40,40,.9),
@@ -103,109 +104,55 @@ h1 span{
 }
 
 @keyframes neonFlicker{
-  /* Full bright red — most of the time */
-  0%,17%,21%,51%,55%,100%{
-    color:#e03030;
-    text-shadow:0 0 8px rgba(220,40,40,.9),0 0 20px rgba(220,40,40,.7),0 0 40px rgba(220,40,40,.4),0 2px 6px rgba(0,0,0,.8);
-  }
-  /* Quick off flick */
-  18%,19%{color:rgba(200,30,30,.15);text-shadow:0 2px 6px rgba(0,0,0,.8);}
-  52%,53%{color:rgba(200,30,30,.15);text-shadow:0 2px 6px rgba(0,0,0,.8);}
-  /* Subtle dim */
-  30%{color:#c82020;text-shadow:0 0 5px rgba(200,30,30,.6),0 0 12px rgba(180,20,20,.4),0 2px 6px rgba(0,0,0,.8);}
-  35%{color:#e03030;text-shadow:0 0 8px rgba(220,40,40,.9),0 0 20px rgba(220,40,40,.7),0 0 40px rgba(220,40,40,.4),0 2px 6px rgba(0,0,0,.8);}
-  70%{color:#d02828;text-shadow:0 0 6px rgba(210,35,35,.7),0 0 14px rgba(180,20,20,.4),0 2px 6px rgba(0,0,0,.8);}
-  75%{color:#e03030;text-shadow:0 0 8px rgba(220,40,40,.9),0 0 20px rgba(220,40,40,.7),0 0 40px rgba(220,40,40,.4),0 2px 6px rgba(0,0,0,.8);}
+  0%,17%,21%,51%,55%,100%{opacity:1;}
+  18%,19%{opacity:.06;}
+  52%,53%{opacity:.06;}
+  30%{opacity:.72;}
+  70%{opacity:.78;}
 }
 .sub{font-size:.62rem;color:rgba(255,255,255,.6);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
 
+.hd-prespin,
 
+/* Pre-spin layer: full header text, visible by default */
 
-/* ── Header collapse — all sections use grid trick, zero display:none flipping ── */
-.hd-top,.hd-bot,.hd-brand{
-  display:grid;grid-template-rows:1fr;
-  will-change:grid-template-rows;
-  transition:grid-template-rows .52s cubic-bezier(.4,0,.2,1);
-}
-.hd-winwrap{
-  display:grid;grid-template-rows:0fr;
-  will-change:grid-template-rows;
-  transition:grid-template-rows .52s cubic-bezier(.4,0,.2,1);
-}
-.hd-top-in,.hd-bot-in,.hd-brand-in{
-  overflow:hidden;min-height:0;
-  will-change:transform,opacity;
-  transition:opacity .38s ease,transform .48s cubic-bezier(.4,0,.2,1);
-}
-.hd-winwrap-in{
-  overflow:hidden;min-height:0;
-  will-change:transform,opacity;
-  opacity:0;transform:translateY(8px);
-  transition:opacity .4s ease .08s,transform .48s cubic-bezier(.4,0,.2,1) .08s;
-}
+/* Winner layer: WINNER! + bulbs, absolutely positioned to overlap */
+
+/* Collapsed state: swap layer visibility — pure opacity, zero layout cost */
+
+.hd--collapsed 
+
+/* Bulb + winner-word animations start only when winner is visible */
+
+.hd--collapsed 
+
+/* h1-pre "Welcome to" label */
 .h1-pre{
   font-family:'Cinzel',serif;font-size:clamp(1.4rem,5.5vw,2.4rem);font-weight:900;
   color:var(--cream);letter-spacing:.04em;
   text-shadow:0 2px 20px rgba(0,0,0,.9),0 0 40px rgba(201,168,76,.2);
   margin:0 0 4px;line-height:1.15;
 }
-.hd--collapsed{padding:28px 16px 4px;}
-.hd--collapsed .hd-top,
-.hd--collapsed .hd-bot,
-.hd--collapsed .hd-brand{grid-template-rows:0fr;}
-.hd--collapsed .hd-top-in,
-.hd--collapsed .hd-bot-in,
-.hd--collapsed .hd-brand-in{opacity:0;transform:translateY(-8px);}
-.hd--collapsed .hd-winwrap{grid-template-rows:1fr;}
-.hd--collapsed .hd-winwrap-in{opacity:1;transform:translateY(0);}
+/* Collapsed padding stays same so logo-r never shifts */
+.hd--collapsed{padding:28px 16px 0;}
 
 /* ── WINNER! old-Vegas-bulb style (page header, results screen only) ── */
-.hd-winner{
-  display:flex;flex-direction:column;align-items:center;gap:7px;
-  padding:14px 0 2px;width:100%;
-}
 
-/* Bulb row — spans full text width */
-.winner-bulbs{
-  display:flex;align-items:center;justify-content:space-between;
-  width:min(100%,clamp(270px,82vw,490px));
-}
-/* Old incandescent Vegas bulb — warm amber-white, not electric yellow */
-.bulb{
-  width:11px;height:11px;border-radius:50%;flex-shrink:0;
-  border:1px solid rgba(180,110,30,.4);
-  animation:bulbAlt .5s step-end infinite;
-}
-.bulb:nth-child(even){animation-delay:.25s;}
+/* Old incandescent Vegas bulb — static gradient, opacity-only flash (GPU composited) */
+
+/* Only opacity flips — no background/shadow repaint */
 @keyframes bulbAlt{
-  0%,100%{
-    background:radial-gradient(circle at 38% 32%,#fff8e8 0%,#ffd080 55%,#c87820 100%);
-    box-shadow:0 0 5px #ffc850,0 0 12px rgba(255,180,60,.55),0 0 22px rgba(255,150,30,.3);
-    opacity:1;
-  }
-  50%{
-    background:radial-gradient(circle at 38% 32%,#2a1800 0%,#1a0e00 100%);
-    box-shadow:none;
-    opacity:.85;
-  }
+  0%,100%{opacity:1;}
+  50%{opacity:.12;}
 }
 
-/* WINNER! text — warm incandescent white, not neon */
-.winner-word{
-  font-family:'Cinzel',serif;font-size:clamp(2rem,7.5vw,3.2rem);font-weight:900;
-  letter-spacing:.14em;line-height:1;
-  animation:winnerFlash .55s step-end infinite;
-}
 @keyframes winnerFlash{
-  0%,100%{
-    color:#ffe8b0;
-    text-shadow:0 0 10px rgba(255,210,100,.8),0 0 24px rgba(255,170,50,.5),0 0 48px rgba(255,140,20,.25);
-  }
-  50%{
-    color:#fff5e0;
-    text-shadow:0 0 14px rgba(255,230,160,.9),0 0 30px rgba(255,200,90,.55),0 0 55px rgba(255,160,40,.28);
-  }
+  0%,100%{opacity:1;filter:brightness(1);}
+  50%{opacity:.78;filter:brightness(1.35);}
 }
+
+/* Start animations only when winner is showing — after grid finishes expanding */
+.hd--collapsed 
 
 /* ── Pause background animations during result reveal to prevent stutter ── */
 .anim-pause .sb::before,
@@ -214,7 +161,7 @@ h1 span{
 /* ── Static gold accent line — bottom of page, not fixed ── */
 .page-bottom-line{
   width:calc(100% - 20px);max-width:620px;
-  margin:0 auto 10px;
+  margin:16px auto 14px;
   height:1px;
   background:linear-gradient(90deg,
     transparent 0%,
@@ -226,6 +173,79 @@ h1 span{
     transparent 100%
   );
 }
+
+/* ── CSS containment — isolate layout/style recalcs to each section ── */
+.strip{
+  contain:layout style;
+  width:calc(100% - 24px);
+  margin-left:0;
+  margin-right:0;
+  max-width:600px;
+  margin:22px auto 14px;
+  position:relative;
+  z-index:1;
+}
+
+.sh{
+  contain:layout style;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#061008;
+  border-top:1px solid rgba(201,168,76,.2);
+  border-radius:18px 18px 0 0;
+  padding:0 0 env(safe-area-inset-bottom,20px);
+  z-index:101;
+  transform:translateY(100%);
+  transition:transform .22s cubic-bezier(.32,.72,0,1);
+}
+
+/* ── Header layers (crossfade — zero layout animation) ── */
+.hd-layers{position:relative;width:100%;}
+.hd-prespin,.hd-winner{width:100%;transition:opacity .38s ease;will-change:opacity;}
+.hd-prespin{display:flex;flex-direction:column;align-items:center;opacity:1;pointer-events:auto;}
+.hd-winner{
+  position:absolute;top:0;left:0;right:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:7px;padding:14px 0;
+  opacity:0;pointer-events:none;
+  contain:layout style;
+}
+.hd--collapsed .hd-prespin{opacity:0;pointer-events:none;}
+.hd--collapsed .hd-winner{opacity:1;pointer-events:auto;}
+
+/* ── Vegas bulbs — opacity-only flash, paused until winner visible ── */
+.winner-bulbs{display:flex;align-items:center;justify-content:space-between;width:min(100%,clamp(270px,82vw,490px));}
+.bulb{
+  width:11px;height:11px;border-radius:50%;flex-shrink:0;
+  border:1px solid rgba(180,110,30,.4);
+  background:radial-gradient(circle at 38% 32%,#fff8e8 0%,#ffd080 55%,#c87820 100%);
+  box-shadow:0 0 5px #ffc850,0 0 12px rgba(255,180,60,.55),0 0 22px rgba(255,150,30,.3);
+  will-change:opacity;
+  animation:bulbAlt .5s step-end infinite;
+  animation-play-state:paused;
+}
+.bulb:nth-child(even){animation-delay:.25s;}
+.winner-word{
+  font-family:'Cinzel',serif;font-size:clamp(2rem,7.5vw,3.2rem);font-weight:900;
+  letter-spacing:.14em;line-height:1;
+  color:#ffe8b0;
+  text-shadow:0 0 12px rgba(255,210,100,.85),0 0 28px rgba(255,170,50,.5),0 0 52px rgba(255,140,20,.25);
+  will-change:opacity,filter;
+  animation:winnerFlash .55s step-end infinite;
+  animation-play-state:paused;
+}
+.hd--collapsed .bulb{animation-play-state:running;animation-delay:.3s;}
+.hd--collapsed .bulb:nth-child(even){animation-delay:.55s;}
+.hd--collapsed .winner-word{animation-play-state:running;animation-delay:.28s;}
+
+
+/* ── Panel switching — opacity only, no layout reflow ── */
+.vp-card--win 
+.vp-card--win #vpWin{opacity:1;pointer-events:auto;animation:winPop .4s cubic-bezier(.22,1,.36,1) both;}
+#vpSpin{transition:opacity .15s ease;}
+#vpWin{transition:opacity .0s;}
 /* ── Filter Tags ── */
 .fs{display:none;flex-wrap:wrap;gap:4px;justify-content:center;padding:0 16px;margin-top:6px;position:relative;z-index:1;width:100%;max-width:600px;}
 .fs.on{display:flex;}
@@ -235,8 +255,9 @@ h1 span{
 /* ── Wheel ── */
 .wz{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;margin-top:6px;}
 .wr{position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:600px;}
+
 #wc{display:block;border-radius:50%;cursor:default;max-width:100%;box-shadow:0 10px 40px rgba(0,0,0,.7);will-change:contents;touch-action:pan-y;image-rendering:-webkit-optimize-contrast;image-rendering:auto;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;outline:none;}
-@media(max-width:620px){.wz{padding:0;}.wr{width:100%;max-width:100%;}.strip{width:100%;margin-left:0;margin-right:0;}}
+@media(max-width:620px){.wz{padding:0;}}
 
 /* ── Action Bar ── */
 .ab{display:flex;gap:10px;align-items:center;width:calc(100% - 24px);max-width:600px;margin:20px auto 0;position:relative;z-index:1;}
@@ -267,23 +288,18 @@ h1 span{
     inset 0 -2px 0 rgba(0,0,0,.3);
   position:relative;overflow:hidden;
   transition:transform .12s ease, box-shadow .12s ease, opacity .35s ease;
-  animation:sbPulse 3s ease-in-out infinite;
 }
-@keyframes sbPulse{
-  0%,100%{box-shadow:0 6px 24px rgba(201,168,76,.5),0 4px 0 #1a0800,0 6px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3);}
-  50%{box-shadow:0 10px 40px rgba(201,168,76,.8),0 4px 0 #1a0800,0 6px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3);}
-}
+
 /* Shine sweep */
 .sb::before{
-  content:'';position:absolute;top:0;left:-75%;width:50%;height:100%;
+  content:'';position:absolute;top:0;width:50%;height:100%;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
-  transform:skewX(-15deg);
+  will-change:transform;
   animation:sbShine 4s linear infinite;
 }
 @keyframes sbShine{
-  0%{left:-75%;}
-  20%{left:125%;}
-  100%{left:125%;}
+  0%{transform:skewX(-15deg) translateX(-200%);}
+  20%,100%{transform:skewX(-15deg) translateX(350%);}
 }
 .sb::after{
   content:'';position:absolute;inset:0;
@@ -324,19 +340,25 @@ h1 span{
 /* ── Result Strip — unified vp-card ── */
 @keyframes winPop{0%{opacity:0;transform:translateY(12px) scale(.96)}70%{opacity:1;transform:translateY(-2px) scale(1.01)}100%{opacity:1;transform:none}}
 @keyframes fadeOut{0%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px)}}
-.strip{width:calc(100% - 24px);max-width:600px;margin:22px auto 14px;position:relative;z-index:1;}
-.vp-card{animation:none;}
+
+.vp-card{
+  animation:none;
+  font-family:'Cinzel',serif;
+  max-width:780px;
+  position:relative;
+}
 
 /* ── Unified video poker style card ── */
 .vp-card--spin{ /* no extra styles needed */ }
-.vp-card{ font-family:'Cinzel',serif; }
 
 /* No box — content floats on the felt */
 
 /* ── Results: playing card design ── */
 #vpWin{
-  position:relative;overflow:hidden;
-  will-change:transform,opacity;
+  position:absolute;top:0;left:0;right:0;
+  overflow:hidden;
+  opacity:0;pointer-events:none;
+  will-change:opacity,transform;
   background:#fdf8f0;
   background-image:radial-gradient(circle,rgba(120,80,20,.042) 1px,transparent 1px);
   background-size:12px 12px;
@@ -354,7 +376,6 @@ h1 span{
   border:1px solid rgba(150,110,40,.18);
   border-radius:12px;pointer-events:none;z-index:1;
 }
-
 
 /* ── Logo watermark ── */
 .vp-wm{
@@ -470,23 +491,20 @@ h1 span{
 .vp-share-btn:active{transform:translateY(1px);}
 
 /* ── Delivery row ── */
-.delivery-row{display:flex;gap:8px;margin-top:10px;padding:0 14px 14px;}
 
 /* ── Legacy (spin state) ── */
 .vp-footer{padding:10px 16px 14px;display:flex;align-items:center;justify-content:center;border-top:1px solid rgba(201,168,76,.15);}
-.vp-footer-btn{flex:1;padding:10px;border-radius:8px;background:rgba(0,0,0,.3);border:1px solid rgba(201,168,76,.3);color:rgba(201,168,76,.85);font-family:system-ui,-apple-system,sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s;}
+
 .vp-footer-btn:hover{background:rgba(0,0,0,.45);border-color:rgba(201,168,76,.55);color:var(--gold);}
 
-
 /* ── Spin state (pre-result card) ── */
-.vp-spin-row{display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 0 10px;}
-.vp-food{font-size:2.6rem;line-height:1;filter:drop-shadow(2px 2px 0 rgba(0,0,0,.12));animation:vpBounce 1.8s ease-in-out infinite;}
+
 .vp-food:nth-child(2){animation-delay:.25s;}
 .vp-food:nth-child(3){animation-delay:.5s;}
 .vp-food:nth-child(4){animation-delay:.75s;}
 .vp-food:nth-child(5){animation-delay:1s;}
 @keyframes vpBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
-.vp-spin-msg{display:none;}
+
 .zip-row{display:flex;gap:8px;padding:8px 14px 12px;align-items:center;}
 .zip-input{
   flex:1;background:rgba(0,0,0,.3);border:1px solid rgba(201,168,76,.25);
@@ -507,7 +525,7 @@ h1 span{
 .vp-spin-rule{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.3));}
 .vp-spin-rule.right{background:linear-gradient(270deg,transparent,rgba(201,168,76,.3));}
 .vp-spin-diamond{color:rgba(201,168,76,.6);font-size:.5rem;flex-shrink:0;}
-.vp-spin-corner{display:none;}
+
 .vp-spin-center{
   font-family:'Cinzel',serif;font-size:.6rem;font-weight:700;
   letter-spacing:.28em;text-transform:uppercase;
@@ -518,7 +536,7 @@ h1 span{
 /* ── Filter Sheet ── */
 .so{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
 .so.on{opacity:1;pointer-events:all;}
-.sh{position:fixed;bottom:0;left:0;right:0;background:#061008;border-top:1px solid rgba(201,168,76,.2);border-radius:18px 18px 0 0;padding:0 0 env(safe-area-inset-bottom,20px);z-index:101;transform:translateY(100%);transition:transform .22s cubic-bezier(.32,.72,0,1);}
+
 .sh.on{transform:translateY(0);}
 .sh-h{display:flex;justify-content:center;padding:10px 0 6px;}
 .sh-b{width:36px;height:4px;background:rgba(201,168,76,.25);border-radius:2px;}
@@ -536,38 +554,30 @@ h1 span{
 .sr:hover{color:var(--gold);}
 
 /* ── History — classic casino tote board ── */
-.hist{width:calc(100% - 24px);max-width:600px;margin:0 auto 16px;position:relative;z-index:1;}
-.hist-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.hist-hd-line{height:1px;flex:1;background:rgba(201,168,76,.15);}
-.hist-hd-txt{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);white-space:nowrap;}
-.hist-board{background:rgba(0,0,0,.6);border:1px solid rgba(201,168,76,.18);border-radius:10px;overflow:hidden;}
+
 .hist-board::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.3),transparent);}
-.hist-row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);transition:opacity .3s;}
+
 .hist-row:last-child{border-bottom:none;}
-.hist-num{font-family:'Cinzel',serif;font-size:.6rem;color:var(--dim);width:16px;text-align:right;flex-shrink:0;}
-.hist-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;border:2px solid rgba(0,0,0,.3);}
+
 .hist-dot.red{background:#9a0000;}.hist-dot.black{background:#1a1a1a;border-color:#333;}.hist-dot.green{background:#006622;}
-.hist-info{flex:1;min-width:0;}
-.hist-name{font-size:.78rem;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.hist-sub{font-size:.62rem;color:var(--dim);}
-.hist-badge{font-size:.6rem;padding:2px 7px;border-radius:8px;background:rgba(0,0,0,.4);border:1px solid rgba(201,168,76,.15);color:var(--dim);white-space:nowrap;flex-shrink:0;}
-.hist-row.newest .hist-name{color:var(--gl);}
-.hist-row.newest .hist-badge{border-color:rgba(201,168,76,.4);color:var(--gold);}
+
+.hist-row.newest 
+.hist-row.newest 
 
 /* ── Footer ── */
 .app-footer{
-  width:100%;max-width:600px;margin:8px auto 20px;
-  padding:14px 16px;position:relative;z-index:1;
+  width:100%;max-width:600px;margin:8px auto 28px;
+  padding:22px 16px 10px;position:relative;z-index:1;
   border-top:1px solid rgba(201,168,76,.15);
   text-align:center;
 }
-.footer-google{height:22px;display:block;margin:0 auto 10px;filter:brightness(0) invert(1);opacity:.7;}
-.footer-links{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
-.footer-links a{font-size:.62rem;color:var(--dim);text-decoration:none;}
+.footer-google{height:22px;display:block;margin:0 auto 14px;filter:brightness(0) invert(1);opacity:.7;}
+.footer-links{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
+.footer-links a{font-size:.62rem;color:rgba(255,255,255,.5);text-decoration:none;}
 .footer-links a:hover{color:var(--gold);}
-.footer-links span{color:var(--dim);font-size:.62rem;}
-.footer-note{font-size:.58rem;color:var(--dim);opacity:.6;}
-.footer-share{font-size:.68rem;color:rgba(255,255,255,.35);margin-bottom:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.footer-links span{color:rgba(255,255,255,.35);font-size:.62rem;}
+.footer-note{font-size:.58rem;color:rgba(255,255,255,.55);text-align:center;margin-bottom:8px;}
+.footer-share{font-size:.68rem;color:rgba(255,255,255,.6);margin-bottom:24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;}
 .footer-share p{margin-bottom:8px;}
 .footer-share-btn{
   background:transparent;
@@ -581,7 +591,8 @@ h1 span{
 .footer-share-btn:hover{border-color:rgba(201,168,76,.5);color:var(--gold);background:rgba(201,168,76,.06);}
 
 /* ── Delivery buttons ── */
-.delivery-row{display:flex;gap:8px;margin-top:10px;padding:0 14px 14px;}
+
+.delivery-row{display:flex;gap:8px;padding:0 14px 14px;margin-top:10px;}
 .delivery-btn{
   flex:1;padding:11px 6px;border-radius:10px;
   font-size:.7rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
@@ -604,32 +615,42 @@ h1 span{
 @keyframes cardExit{0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-12px) scale(.97);}}
 .vp-card.exiting{animation:cardExit .18s ease forwards;pointer-events:none;}
 
-
 /* ── Confetti particles ── */
 .pt{position:fixed;pointer-events:none;z-index:200;border-radius:50%;animation:pf 1.2s cubic-bezier(.22,1,.36,1) forwards;}
 @keyframes pf{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.02);}}
+
+/* ── Bigger wheel on desktop — tiered by viewport ── */
+@media(min-width:900px){
+  .wr{ max-width:860px; }
+  .ab{ max-width:700px; }
+  .hd{ max-width:860px; }
+  .strip,
+}
+@media(min-width:1400px){
+  .wr{ max-width:1000px; }
+  .ab{ max-width:780px; }
+  .hd{ max-width:1000px; }
+  .strip,
+}
+
 </style>
 </head>
 <body>
 
 <div class="hd">
   <div class="logo-r"><div class="logo-l"></div><div class="logo-t">✦ Established 2026 ✦</div><div class="logo-l"></div></div>
-  <div class="hd-top"><div class="hd-top-in">
-    <p class="h1-pre">Welcome to</p>
-  </div></div>
-  <div class="hd-brand"><div class="hd-brand-in">
-    <h1><span>Ric's Food Roulette</span></h1>
-  </div></div>
-  <div class="hd-winwrap"><div class="hd-winwrap-in">
+  <div class="hd-layers">
+    <div class="hd-prespin">
+      <p class="h1-pre">Welcome to</p>
+      <h1><span>Ric's Food Roulette</span></h1>
+      <p class="sub" id="tagline">Place your bets · The wheel decides</p>
+    </div>
     <div class="hd-winner" id="hdWinner" aria-hidden="true">
-    <div class="winner-bulbs"><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span></div>
-    <div class="winner-word">WINNER!</div>
-    <div class="winner-bulbs"><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span></div>
+      <div class="winner-bulbs"><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span></div>
+      <div class="winner-word">WINNER!</div>
+      <div class="winner-bulbs"><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span></div>
+    </div>
   </div>
-  </div></div>
-  <div class="hd-bot"><div class="hd-bot-in">
-    <p class="sub" id="tagline">Place your bets · The wheel decides</p>
-  </div></div>
 </div>
 
 
@@ -666,7 +687,7 @@ h1 span{
       </div>
     </div>
     <!-- WINNER STATE (hidden until spin) -->
-    <div id="vpWin" style="display:none"><img id="vpWatermark" class="vp-wm" alt="">
+    <div id="vpWin"><img id="vpWatermark" class="vp-wm" alt="">
       <div class="rw-photo-wrap" id="wPhotoWrap" style="display:none"><img class="rw-photo" id="wPhoto" src="" alt=""></div>
       <div class="rw-photo-attr" id="wPhotoAttr" style="display:none"></div>
       <div class="vp-header">
@@ -716,7 +737,7 @@ h1 span{
     <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy</a>
   </div>
   <p class="footer-note">Restaurant data provided by Google Maps Platform</p>
-  <p class="footer-note" style="margin-top:12px;opacity:.45;letter-spacing:.18em;font-family:'Cinzel',serif;font-size:.55rem;">✦ Built by <span style="color:var(--gold);opacity:1;letter-spacing:.12em;">Ric B</span> ✦</p>
+  <p class="footer-note" style="margin-top:12px;text-align:center;letter-spacing:.18em;font-family:'Cinzel',serif;font-size:.75rem;color:rgba(255,255,255,.85);">✦ Built by <span style="color:var(--gold);letter-spacing:.12em;">Ric B</span> ✦</p>
 </footer>
 
 <div class="page-bottom-line"></div>
@@ -772,6 +793,11 @@ h1 span{
 </div>
 
 <script>
+
+
+// ═══════════════════════════════════════════════════════
+// CONFIG & CONSTANTS
+// ═══════════════════════════════════════════════════════
 const FALLBACK_REST=[
   {name:"Spin to load",short:"Loading",emoji:"🍕",cuisine:"pizza",price:"$$",pl:2,rating:4.5,open:true,dist:0.5,addr:"",phone:"",website:"",mapsUrl:"",photoRef:"",photoAttr:null,items:[]},
   {name:"Locating grub",short:"Loading",emoji:"🍔",cuisine:"american",price:"$$",pl:2,rating:4.5,open:true,dist:0.5,addr:"",phone:"",website:"",mapsUrl:"",photoRef:"",photoAttr:null,items:[]},
@@ -782,6 +808,11 @@ const FALLBACK_REST=[
   {name:"Locating grub",short:"Loading",emoji:"🥩",cuisine:"american",price:"$$",pl:2,rating:4.5,open:true,dist:0.5,addr:"",phone:"",website:"",mapsUrl:"",photoRef:"",photoAttr:null,items:[]},
 ];
 let REST = FALLBACK_REST;
+
+
+// ═══════════════════════════════════════════════════════
+// APP STATE
+// ═══════════════════════════════════════════════════════
 let locationGranted = false;
 
 /* ═══════════════════════════════════════════
@@ -790,6 +821,11 @@ let locationGranted = false;
 const BD = {1:{l:'$',d:'Under $15'},2:{l:'$$',d:'~$15–$30'},3:{l:'$$$',d:'~$30–$60'},4:{l:'$$$$',d:'~$60+'}};
 let spinning = false;
 let rndRest  = null;
+
+
+// ═══════════════════════════════════════════════════════
+// FILTER STATE
+// ═══════════════════════════════════════════════════════
 const F = { budget:4, dist:'any', rating:0, openNow:true, hasPhone:false, hasWebsite:false, topRated:false };
 let hasSpunOnce = false;
 
@@ -804,6 +840,10 @@ let _logoImg = null;
 
 // Photos proxied through worker — no API key exposed in client
 
+
+// ═══════════════════════════════════════════════════════
+// TAGLINES
+// ═══════════════════════════════════════════════════════
 const TAGLINES = [
   "Don't you ever stop eating?",
   "More food? The wheel respects the commitment.",
@@ -887,7 +927,11 @@ const DPR  = Math.min(window.devicePixelRatio || 1, 3);
 let SZ, R, RO, ROB, RWI, RGA, RPI, RBL, RGC, RGD, RSH, RDM, RTK, RMD, RBO, RBI;
 
 function initWheel() {
-  SZ = Math.min(600, window.innerWidth);
+  SZ = Math.min(
+    window.innerWidth >= 1400 ? 1000 :
+    window.innerWidth >= 900  ?  860 : 600,
+    window.innerWidth
+  );
   R  = SZ / 2;
   // Physical canvas pixels = logical × DPR → crisp on retina
   cv.width  = cv.height  = Math.round(SZ * DPR);
@@ -912,9 +956,11 @@ const RCOL = (i, n) => {
   return i % 2 === 1 ? '#cc1000' : '#111111';
 };
 
-/* ═══════════════════════════════════════════
-   SEGMENTS
-═══════════════════════════════════════════ */
+
+// ───────────────────────────────────────────────────────
+// SEGMENTS
+// ───────────────────────────────────────────────────────
+
 let segs = [];
 let wAng = 0;
 let wIdx = 0;
@@ -1135,9 +1181,12 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) requ
 document.addEventListener('visibilitychange', () => { if (!document.hidden) requestAnimationFrame(loop); });
 
 let lastT = 0;
+
 function loop(ts) {
   requestAnimationFrame(loop);
   if (document.hidden) return;
+
+
   const now = ts || performance.now();
   const dt = lastT ? Math.min((now - lastT) / (1000/60), 3) : 1;
   lastT = now;
@@ -1188,6 +1237,9 @@ function loop(ts) {
         const rel=((bA-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
         wIdx=Math.floor(rel/pArc)%segs.length;
         bA=wAng+segs[wIdx].ma; bRad=RMD; bVA=0; bVR=0; bP='locked';
+        // Pre-populate winner card NOW — DOM work happens during bounce frames,
+        // not in onDone, so the ball-landing frame paints with no main-thread block
+        populateWinnerCard(segs[wIdx].item);
         requestAnimationFrame(onDone);
       }
     } else if (bP==='locked') {
@@ -1210,9 +1262,11 @@ function loop(ts) {
   }
 }
 
-/* ═══════════════════════════════════════════
-   SPIN + DONE
-═══════════════════════════════════════════ */
+
+// ───────────────────────────────────────────────────────
+// SPIN LOGIC
+// ───────────────────────────────────────────────────────
+
 const elSBtn  = document.getElementById('sBtn');
 const elFBtn  = document.getElementById('fBtn');
 const elRndBtn= document.getElementById('rndBtn');
@@ -1228,15 +1282,21 @@ function doSpin() {
 
   const startSpin = () => {
     spinning=true; fired=false; bP='idle'; parkedOffset=0; bounceF=0;
-    document.querySelector('.hd').classList.remove('hd--collapsed');
-    document.body.classList.remove('anim-pause');
-    elVpWin.style.display='none'; elVpSpin.style.display=''; document.getElementById('vpCard').classList.add('vp-card--spin');
+    lastT = 0; // reset dt accumulator — prevents huge first-frame dt spike
+    document.getElementById('vpCard').classList.remove('vp-card--win');
+    // Stagger header expansion + bg animation reset to next rAF
+    // so DOM mutations settle before CSS transitions compete with canvas startup
+    requestAnimationFrame(() => {
+      document.querySelector('.hd').classList.remove('hd--collapsed');
+      document.body.classList.remove('anim-pause');
+    }); document.getElementById('vpCard').classList.add('vp-card--spin');
   if (hasSpunOnce) {
     document.getElementById('rsStatus').textContent='Awaiting your spin';
   }
     ring.classList.add('spinning');
     elSBtn.disabled=true; elFBtn.disabled=true; elRndBtn.disabled=true;
-    buildSegs(pool);
+    // buildSegs in rAF — separates heavy segment computation from spin kickoff
+    requestAnimationFrame(() => { buildSegs(pool); });
     wIdx=Math.floor(Math.random()*pool.length);
     const arc=(Math.PI*2)/pool.length, pMid=(wIdx+.5)*arc, tFinal=-pMid-Math.PI/2;
     const extra=4+Math.floor(Math.random()*3);
@@ -1271,13 +1331,9 @@ const elWMaps=document.getElementById('wMaps');
 const elWItms=document.getElementById('wItems');
 
 
-function onDone() {
-  if (fired) return; fired=true;
-  ring.classList.remove('spinning');
-  elSBtn.disabled=false; elSBtn.innerHTML='<span class="sb-txt">Let Fate Decide</span>';
-  elFBtn.disabled=false; elRndBtn.disabled=false;
-  const w=segs[wIdx]; if (!w) return;
-  const item=w.item;
+// Populate the winner card — called at ball-lock time, not in onDone,
+// so zero DOM work blocks the landing frame
+function populateWinnerCard(item) {
   elWE.textContent=item.emoji;
   elWL.textContent="Tonight's Restaurant";
   elWN.textContent=item.name;
@@ -1309,6 +1365,14 @@ function onDone() {
     elWItms.style.display='';
     elWItms.innerHTML=item.items.map(it=>`<div class="vp-item"><span class="vp-item-emoji">${sanitize(it.emoji)}</span><span class="vp-item-name">${sanitize(it.name)}</span><span class="vp-item-desc">${sanitize(it.desc)}</span></div>`).join('');
   } else { elWItms.style.display='none'; elWItms.innerHTML=''; }
+}
+
+function onDone() {
+  if (fired) return; fired=true;
+  ring.classList.remove('spinning');
+  // Card already populated by populateWinnerCard() at lock time — onDone is lean
+  elSBtn.disabled=false; elSBtn.innerHTML='<span class="sb-txt">Let Fate Decide</span>';
+  elFBtn.disabled=false; elRndBtn.disabled=false;
 
   hasSpunOnce=true;
   // Stage 1 (t=60ms): collapse header — runs alone, no competition
@@ -1316,30 +1380,27 @@ function onDone() {
     document.querySelector('.hd').classList.add('hd--collapsed');
   }, 60);
 
-  // Stage 2 (t=200ms): reveal card — header collapse is well underway
+  // Stage 2 (t=180ms): reveal card
   setTimeout(() => {
-    document.body.classList.add('anim-pause'); // pause bg animations briefly
-    elVpSpin.style.display='none';
-    elVpWin.style.display='';
-    requestAnimationFrame(() => {  // let display change settle before animating
-      elVpWin.style.animation='winPop .4s cubic-bezier(.22,1,.36,1) both';
-      document.getElementById('vpCard').classList.remove('vp-card--spin');
-    });
-  }, 200);
+    document.body.classList.add('anim-pause');
+    document.getElementById('vpCard').classList.add('vp-card--win');
+    document.getElementById('vpCard').classList.remove('vp-card--spin');
+  }, 180);
 
-  // Stage 3 (t=700ms): confetti — well after everything has settled
+  // Stage 3 (t=750ms): resume canvas + confetti
   setTimeout(() => {
     document.body.classList.remove('anim-pause');
     confetti();
-  }, 700);
+  }, 750);
 }
-
 
 
 const WHEEL_SIZE = 35;
 
 
-
+// ═══════════════════════════════════════════════════════
+// RESTAURANT DATA — filtering, shuffling, caching
+// ═══════════════════════════════════════════════════════
 function getPool() {
   // Full filtered pool — every restaurant that passes user filters
   return REST.filter(r=>{
@@ -1394,6 +1455,10 @@ let _rollCount = 0;
 function invalidateWheel() { _wheelCache = null; rndRest = null; _rollCount++; }
 function getActivePool() { return rndRest || getWheelSlice(); }
 
+
+// ═══════════════════════════════════════════════════════
+// UI HANDLERS
+// ═══════════════════════════════════════════════════════
 function doRandomize() {
   if (spinning&&bP!=='parked'&&bP!=='locked') return;
   if (REST===FALLBACK_REST) return;
@@ -1463,6 +1528,10 @@ function confetti() {
   }
 }
 
+
+// ═══════════════════════════════════════════════════════
+// FILTER SHEET
+// ═══════════════════════════════════════════════════════
 function openSheet()  { document.getElementById('sheet').classList.add('on'); document.getElementById('shOv').classList.add('on'); document.getElementById('fBtn').classList.add('on'); }
 function closeSheet() { document.getElementById('sheet').classList.remove('on'); document.getElementById('shOv').classList.remove('on'); document.getElementById('fBtn').classList.remove('on'); }
 
@@ -1544,6 +1613,11 @@ function rmTag(k) {
 }
 
 let _dotInterval = null;
+
+
+// ═══════════════════════════════════════════════════════
+// LOCATION & ZIP
+// ═══════════════════════════════════════════════════════
 function showLocStatus(msg, animate=false) {
   const el = document.getElementById('rsStatus');
   if (!el) return;
@@ -1605,7 +1679,6 @@ async function doZip() {
 }
 
 
-
 /* ── Fair shuffle helpers ──────────────────────────────────────────
    .sort(()=>Math.random()-.5) is biased — restaurants at the tail
    of the API response get statistically less chance of appearing.
@@ -1654,9 +1727,6 @@ function getCached(key){try{const raw=localStorage.getItem(key);if(!raw)return n
 function setCache(key,data){try{localStorage.setItem(key,JSON.stringify({ts:Date.now(),data}));}catch(e){}}
 
 
-
-
-
 async function loadRestaurants() {
   return new Promise(resolve=>{
     if (!navigator.geolocation){resolve();return;}
@@ -1680,9 +1750,21 @@ async function loadRestaurants() {
   });
 }
 
+
+// ═══════════════════════════════════════════════════════
+// INITIALISATION
+// ═══════════════════════════════════════════════════════
 setTagline();
 loadFilters();
 document.fonts.ready.then(async ()=>{
+  // Lock .hd-layers to prespin height so the wheel never shifts during crossfade
+  requestAnimationFrame(() => {
+    const layers = document.querySelector('.hd-layers');
+    const prespin = document.querySelector('.hd-prespin');
+    if (layers && prespin) {
+      layers.style.height = prespin.offsetHeight + 'px';
+    }
+  });
   elSBtn.classList.add('locked');
   // Pre-load logo so bakeStatic paints it from the first frame
   await new Promise(res => {
@@ -1700,14 +1782,20 @@ document.fonts.ready.then(async ()=>{
   if (locationGranted) elSBtn.classList.remove('locked');
 });
 
-/* ═══════════════════════════════════════════
-   RESPONSIVE RESIZE — redraws wheel cleanly
-═══════════════════════════════════════════ */
+
+// ───────────────────────────────────────────────────────
+// RESIZE HANDLER
+// ───────────────────────────────────────────────────────
+
 let _resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(_resizeTimer);
   _resizeTimer = setTimeout(() => {
-    const newSZ = Math.min(600, window.innerWidth);
+    const newSZ = Math.min(
+    window.innerWidth >= 1400 ? 1000 :
+    window.innerWidth >= 900  ?  860 : 600,
+    window.innerWidth
+  );
     if (Math.abs(newSZ - SZ) < 2) return; // nothing meaningful changed
     initWheel();          // recompute SZ, R, all radii + re-scale context
     makeOuterShadow();    // gradient depends on R & RGA — must recreate
