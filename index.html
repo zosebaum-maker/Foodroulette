@@ -406,18 +406,6 @@ h1 span{
   opacity:.07;pointer-events:none;z-index:0;transform:translateY(-50%);
 }
 
-/* All children sit above watermark & frame */
-#vpWin .rw-photo-wrap,
-#vpWin .rw-photo-attr,
-#vpWin .vp-header,
-#vpWin .vp-body,
-#vpWin 
-
-/* ── Photo — card art strip ── */
-.rw-photo-wrap{
-  overflow:hidden;
-  border-bottom:2px solid rgba(150,110,40,.3);
-}
 .rw-photo{width:100%;height:155px;object-fit:cover;display:block;}
 .rw-photo-attr{
   font-size:.52rem;color:rgba(80,50,0,.5);text-align:right;
@@ -873,94 +861,110 @@ h1 span{
 // ── End swipe-to-close ───────────────────────────────────────
 
 
-// ── Results Sheet (same mechanism as filter sheet) ──────────
+// ══ RESULTS SHEET ════════════════════════════════════════════════════════════
+
+// Build photo HTML from an item — extracted for clarity
+function buildPhotoHTML(item) {
+  if (!item.photoRef) return '';
+  const url = item.photoRef.startsWith('http')
+    ? item.photoRef
+    : `${WORKER_URL}/photo?ref=${encodeURIComponent(item.photoRef)}`;
+  const attr = item.photoAttr && item.photoAttr.name
+    ? `<p class="rw-photo-attr">Photo: <a href="${sanitize(item.photoAttr.uri||'#')}" target="_blank" rel="noopener">${sanitize(item.photoAttr.name)}</a> · Google Maps</p>`
+    : !item.photoRef.startsWith('http')
+      ? `<p class="rw-photo-attr">Photo via <a href="https://maps.google.com" target="_blank" rel="noopener">Google Maps</a></p>`
+      : '';
+  return `<div class="rw-photo-wrap"><img class="rw-photo" src="${url}" alt="" onerror="this.parentElement.style.display='none'"></div>${attr}`;
+}
+
 function openModal(item) {
-  if (typeof closeSheet === 'function') closeSheet();
-  var enc  = encodeURIComponent(item.name);
-  var dist = item.dist ? (item.dist < 0.1 ? 'nearby' : item.dist.toFixed(1) + ' mi') : '';
+  closeSheet(); // close filter if open
 
-  var photo = '';
-  if (item.photoRef) {
-    var url = item.photoRef.indexOf('http') === 0 ? item.photoRef
-      : WORKER_URL + '/photo?ref=' + encodeURIComponent(item.photoRef);
-    var attr = '';
-    if (item.photoAttr && item.photoAttr.name)
-      attr = '<p class="rw-photo-attr">Photo: <a href="' + sanitize(item.photoAttr.uri||'#')
-        + '" target="_blank" rel="noopener">' + sanitize(item.photoAttr.name) + '</a> &middot; Google Maps</p>';
-    else if (item.photoRef.indexOf('http') !== 0)
-      attr = '<p class="rw-photo-attr">Photo via <a href="https://maps.google.com" target="_blank" rel="noopener">Google Maps</a></p>';
-    photo = '<div class="rw-photo-wrap"><img class="rw-photo" src="' + url
-      + '" alt="" onerror="this.parentElement.style.display=String.fromCharCode(110,111,110,101)"></div>' + attr;
-  }
+  const enc  = encodeURIComponent(item.name);
+  const dist = item.dist
+    ? (item.dist < 0.1 ? 'nearby' : `${item.dist.toFixed(1)} mi`)
+    : '';
 
-  var pills = '<span class="vp-pill cuisine">' + sanitize(item.cuisine) + '</span>'
-    + '<span class="vp-pill price">' + sanitize(item.price) + '</span>'
-    + '<span class="vp-pill rating">&#x2B50;' + sanitize(item.rating) + '</span>'
-    + '<span class="vp-pill open">' + (item.open ? '&#x25CF; Open' : '&#x25CB; Closed') + '</span>'
-    + (dist ? '<span class="vp-pill rating">&#x1F4CD; ' + sanitize(dist) + '</span>' : '');
+  // Pills
+  const pills = [
+    `<span class="vp-pill cuisine">${sanitize(item.cuisine)}</span>`,
+    `<span class="vp-pill price">${sanitize(item.price)}</span>`,
+    `<span class="vp-pill rating">⭐ ${sanitize(item.rating)}</span>`,
+    `<span class="vp-pill open">${item.open ? '● Open' : '○ Closed'}</span>`,
+    dist ? `<span class="vp-pill rating">📍 ${sanitize(dist)}</span>` : ''
+  ].join('');
 
-  var contact = '';
-  if (item.phone)   contact += '<a class="vp-contact-btn" href="tel:' + item.phone + '">&#x1F4DE; Call</a>';
-  if (item.website) contact += '<a class="vp-contact-btn" href="' + sanitize(item.website)
-    + '" target="_blank" rel="noopener">&#x1F310; Website</a>';
-  var mapsUrl = item.mapsUrl || ('https://maps.google.com/?q=' + encodeURIComponent(item.name + ' ' + (item.addr||'')));
-  contact += '<a class="vp-contact-btn" href="' + mapsUrl + '" target="_blank" rel="noopener">&#x1F5FA;&#xFE0F; Maps</a>';
+  // Contact buttons
+  const mapsUrl = item.mapsUrl || `https://maps.google.com/?q=${encodeURIComponent(`${item.name} ${item.addr||''}`)}`;
+  const contact = [
+    item.phone   ? `<a class="vp-contact-btn" href="tel:${item.phone}">📞 Call</a>` : '',
+    item.website ? `<a class="vp-contact-btn" href="${sanitize(item.website)}" target="_blank" rel="noopener">🌐 Website</a>` : '',
+    `<a class="vp-contact-btn" href="${mapsUrl}" target="_blank" rel="noopener">🗺️ Maps</a>`
+  ].join('');
 
-  var items = '';
-  if (item.items && item.items.length && item.items[0].name !== 'See menu')
-    items = '<div class="vp-items">' + item.items.map(function(it) {
-      return '<div class="vp-item"><span class="vp-item-emoji">' + sanitize(it.emoji)
-        + '</span><span class="vp-item-name">' + sanitize(it.name)
-        + '</span><span class="vp-item-desc">' + sanitize(it.desc) + '</span></div>';
-    }).join('') + '</div>';
+  // Menu items (skipped if placeholder)
+  const hasItems = item.items && item.items.length && item.items[0].name !== 'See menu';
+  const menuItems = hasItems
+    ? `<div class="vp-items">${item.items.map(it =>
+        `<div class="vp-item">
+          <span class="vp-item-emoji">${sanitize(it.emoji)}</span>
+          <span class="vp-item-name">${sanitize(it.name)}</span>
+          <span class="vp-item-desc">${sanitize(it.desc)}</span>
+        </div>`).join('')}</div>`
+    : '';
 
-  document.getElementById('sheetContent').innerHTML = photo
-    + '<div class="vp-header">'
-    + '<span class="vp-header-suit"><span class="suit-b">&#x2660;</span> <span class="suit-r">&#x2665;</span></span>'
-    + '<span class="vp-header-txt">Tonight&#x27;s Restaurant</span>'
-    + '<span class="vp-header-suit"><span class="suit-r">&#x2666;</span> <span class="suit-b">&#x2663;</span></span>'
-    + '</div>'
-    + '<div class="vp-body">'
-    + '<span class="vp-winner-emoji">' + sanitize(item.emoji) + '</span>'
-    + '<span class="vp-winner-name">' + sanitize(item.name) + '</span>'
-    + '<div class="vp-pills">' + pills + '</div>'
-    + '<span class="vp-addr">&#x1F4CD; ' + sanitize(item.addr||'') + '</span>'
-    + items
-    + '<div class="vp-contact">' + contact + '</div>'
-    + '<div style="display:flex;gap:8px;margin-top:8px;padding:0 16px;">'
-    + '<button class="vp-share-btn" onclick="doShare()"><span class="share-icon">&#x1F4E4;</span> Share the Verdict</button>'
-    + '</div></div>'
-    + '<div class="delivery-row">'
-    + '<a class="delivery-btn dd" href="https://www.doordash.com/search/store/' + enc + '/" target="_blank" rel="noopener">DoorDash</a>'
-    + '<a class="delivery-btn ue" href="https://www.ubereats.com/search?q=' + enc + '" target="_blank" rel="noopener">Uber Eats</a>'
-    + '<a class="delivery-btn gz" href="https://www.grubhub.com/search?queryText=' + enc + '" target="_blank" rel="noopener">Grubhub</a>'
-    + '</div>';
+  document.getElementById('sheetContent').innerHTML = `
+    ${buildPhotoHTML(item)}
+    <div class="vp-header">
+      <span class="vp-header-suit"><span class="suit-b">♠</span> <span class="suit-r">♥</span></span>
+      <span class="vp-header-txt">Tonight's Restaurant</span>
+      <span class="vp-header-suit"><span class="suit-r">♦</span> <span class="suit-b">♣</span></span>
+    </div>
+    <div class="vp-body">
+      <span class="vp-winner-emoji">${sanitize(item.emoji)}</span>
+      <span class="vp-winner-name">${sanitize(item.name)}</span>
+      <div class="vp-pills">${pills}</div>
+      <span class="vp-addr">📍 ${sanitize(item.addr||'')}</span>
+      ${menuItems}
+      <div class="vp-contact">${contact}</div>
+      <div style="display:flex;gap:8px;margin-top:8px;padding:0 16px;">
+        <button class="vp-share-btn" onclick="doShare()">
+          <span class="share-icon">📤</span> Share the Verdict
+        </button>
+      </div>
+    </div>
+    <div class="delivery-row">
+      <a class="delivery-btn dd" href="https://www.doordash.com/search/store/${enc}/" target="_blank" rel="noopener">DoorDash</a>
+      <a class="delivery-btn ue" href="https://www.ubereats.com/search?q=${enc}" target="_blank" rel="noopener">Uber Eats</a>
+      <a class="delivery-btn gz" href="https://www.grubhub.com/search?queryText=${enc}" target="_blank" rel="noopener">Grubhub</a>
+    </div>
+  `;
 
-  document.getElementById('sheetContent').scrollTop = 0;
+  // Reset scroll and show sheet
   document.getElementById('resultSheet').scrollTop = 0;
-
-  /* Show overlay + slide sheet up — identical to openSheet() */
   document.getElementById('resultSheet').classList.add('on');
   document.getElementById('shOv').classList.add('on');
 }
 
 function closeModal() {
   document.getElementById('resultSheet').classList.remove('on');
-  /* Hide overlay only if filter sheet is also closed */
+  // Only hide overlay if filter is also closed
   if (!document.getElementById('sheet').classList.contains('on')) {
     document.getElementById('shOv').classList.remove('on');
   }
 }
 
-/* Close result sheet when overlay tapped */
+// Overlay tap: close filter only — results need intentional X or Spin Again
 document.getElementById('shOv') && document.getElementById('shOv').addEventListener('click', function() {
-  closeSheet(); // overlay tap closes filter only — results need X or Spin Again
+  closeSheet();
 });
 
+// ESC closes both sheets
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') { closeModal(); closeSheet(); }
 });
-// ── End Results Sheet ────────────────────────────────────────
+
+// ══ END RESULTS SHEET ═════════════════════════════════════════════════════════
 
 
 const FALLBACK_REST=[
