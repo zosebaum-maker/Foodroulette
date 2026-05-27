@@ -917,9 +917,8 @@ h1 span{
     }, { passive: true });
   }
   document.addEventListener('DOMContentLoaded', function() {
-    var rs = document.getElementById('resultSheet');
+    // Filter sheet only — results sheet is NOT swipe-dismissible (prevents accidents)
     var fs = document.getElementById('sheet');
-    if (rs) addSwipeClose(rs, closeModal);
     if (fs) addSwipeClose(fs, closeSheet);
   });
 })();
@@ -1007,8 +1006,7 @@ function closeModal() {
 
 /* Close result sheet when overlay tapped */
 document.getElementById('shOv') && document.getElementById('shOv').addEventListener('click', function() {
-  closeModal();
-  closeSheet();
+  closeSheet(); // overlay tap closes filter only — results need X or Spin Again
 });
 
 document.addEventListener('keydown', function(e) {
