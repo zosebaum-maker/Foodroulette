@@ -1840,13 +1840,7 @@ async function doZip() {
     const r2 = await fetch(`${WORKER_URL}?lat=${+lat}&lng=${+lng}&radius=${+meters}`);
     const places = await r2.json();
     if (Array.isArray(places)&&places.length>0) {
-      const seen = new Set();
-      REST = places.filter(r => {
-        const id = r.placeId || r.place_id || r.name;
-        if (seen.has(id)) return false;
-        seen.add(id);
-        return true;
-      }).map(r=>({...r}));
+      REST = places.map(r=>({...r}));
       locationGranted = true;
       elSBtn.classList.remove('locked');
       invalidateWheel(); buildSegs(getWheelSlice()); draw(wAng);
@@ -1923,14 +1917,7 @@ async function loadRestaurants() {
         const res=await fetch(`${WORKER_URL}?lat=${+lat}&lng=${+lng}&radius=${+meters}`);
         const data=await res.json();
         if (Array.isArray(data)&&data.length>0){
-          // Dedupe by place_id — Google Places can return the same spot across pages
-          const seen = new Set();
-          const processed = data.filter(r => {
-            const id = r.placeId || r.place_id || r.name;
-            if (seen.has(id)) return false;
-            seen.add(id);
-            return true;
-          }).map(r=>({...r}));
+          const processed = data.map(r=>({...r}));
           setCache(key,processed); REST=processed; locationGranted=true; invalidateWheel(); showLocStatus(`${processed.length} spots near you — spin it!`);
         } else { showLocStatus('🎰 Ready to spin!'); }
       } catch(e){showLocStatus('🎰 Ready to spin!');}
