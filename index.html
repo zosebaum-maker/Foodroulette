@@ -1592,7 +1592,7 @@ const WHEEL_SIZE = 35;
 
 function getPool() {
   // Full filtered pool — every restaurant that passes user filters
-  return REST.filter(r=>{
+  const filtered = REST.filter(r=>{
     if (r.pl>F.budget) return false;
     if (F.dist!=='any'&&r.dist>parseFloat(F.dist)) return false;
     if (r.rating<F.rating) return false;
@@ -1602,15 +1602,32 @@ function getPool() {
     if (F.topRated&&r.rating<4.5) return false;
     return true;
   });
+  // Dedupe chains — keep only the closest location per normalized name
+  // e.g. "Chick-fil-A #1234" and "Chick-fil-A" both normalize to "chickfila"
+  const chainMap = new Map();
+  for (const r of filtered) {
+    const key = r.name.toLowerCase().replace(/[^a-z0-9]/g,'').substring(0,12);
+    if (!chainMap.has(key) || r.dist < chainMap.get(key).dist) {
+      chainMap.set(key, r);
+    }
+  }
+  return [...chainMap.values()];
 }
 function getPoolIgnoreOpen() {
-  // Same filters but ignores openNow — used for padding when open pool is small
-  return REST.filter(r=>{
+  const filtered = REST.filter(r=>{
     if (r.pl>F.budget) return false;
     if (F.dist!=='any'&&r.dist>parseFloat(F.dist)) return false;
     if (r.rating<F.rating) return false;
     return true;
   });
+  const chainMap = new Map();
+  for (const r of filtered) {
+    const key = r.name.toLowerCase().replace(/[^a-z0-9]/g,'').substring(0,12);
+    if (!chainMap.has(key) || r.dist < chainMap.get(key).dist) {
+      chainMap.set(key, r);
+    }
+  }
+  return [...chainMap.values()];
 }
 let _wheelCache = null; // cached slice, invalidated by applyF/rmTag/loadRestaurants
 
