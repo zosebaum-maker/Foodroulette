@@ -64,7 +64,7 @@ body::before{content:'';position:fixed;inset:11px;border:1px solid rgba(201,168,
 .rs-winner.fading{animation:fadeOut .22s ease forwards;}
 
 /* ── Header ── */
-.hd{padding:28px 16px 0;text-align:center;position:relative;z-index:1;max-width:100%;}
+.hd{padding:16px 16px 0;text-align:center;position:relative;z-index:1;max-width:100%;}
 .logo-r{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .logo-l{height:1px;flex:1;background:linear-gradient(to right,transparent,rgba(201,168,76,.45),transparent);}
 .logo-t{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);font-weight:700;white-space:nowrap;}
@@ -143,7 +143,7 @@ h1 span{
   margin:0 0 4px;line-height:1.15;
 }
 /* Collapsed padding stays same so logo-r never shifts */
-.hd--collapsed{padding:28px 16px 0;}
+.hd--collapsed{padding:16px 16px 0;}
 
 /* ── WINNER! old-Vegas-bulb style (page header, results screen only) ── */
 .hd-winner{
@@ -286,7 +286,7 @@ h1 span{
 .fx{cursor:pointer;opacity:.7;}
 
 /* ── Wheel ── */
-.wz{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;margin-top:6px;}
+.wz{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;margin-top:2px;}
 .wr{position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:600px;}
 
 #wc{display:block;border-radius:50%;cursor:default;max-width:100%;box-shadow:0 10px 40px rgba(0,0,0,.7);will-change:contents;touch-action:pan-y;image-rendering:-webkit-optimize-contrast;image-rendering:auto;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;outline:none;}
@@ -306,6 +306,10 @@ h1 span{
 .fb:disabled{opacity:0;pointer-events:none;}
 .fd{width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--felt);position:absolute;top:2px;right:2px;display:none;}
 .fd.on{display:block;}
+@keyframes sbPulse{
+  0%,100%{box-shadow:0 8px 32px rgba(201,168,76,.6),0 4px 0 #1a0800,0 6px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3);}
+  50%{box-shadow:0 12px 48px rgba(201,168,76,.95),0 4px 0 #1a0800,0 6px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3);}
+}
 .sb{
   flex:1;min-width:0;padding:18px 14px;border:none;border-radius:12px;cursor:pointer;
   font-family:'Cinzel',serif;font-size:1.05rem;font-weight:900;
@@ -321,6 +325,7 @@ h1 span{
     inset 0 -2px 0 rgba(0,0,0,.3);
   position:relative;overflow:hidden;
   transition:transform .12s ease, box-shadow .12s ease, opacity .35s ease;
+  animation:sbPulse 2.4s ease-in-out infinite;
 }
 
 /* Shine sweep */
