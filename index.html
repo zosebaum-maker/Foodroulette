@@ -547,6 +547,19 @@ h1 span{
 .footer-links a:hover{color:var(--gold);}
 .footer-links span{color:var(--dim);font-size:.62rem;}
 .footer-note{font-size:.58rem;color:var(--dim);opacity:.6;}
+.footer-contact{margin:14px 0 10px;text-align:center;}
+.footer-contact-label{font-size:.65rem;color:rgba(255,255,255,.45);letter-spacing:.08em;margin-bottom:7px;}
+.footer-contact-btn{
+  display:inline-block;
+  padding:8px 20px;border-radius:8px;
+  border:1px solid rgba(201,168,76,.35);
+  background:rgba(201,168,76,.08);
+  color:var(--gold);
+  font-family:'Cinzel',serif;font-size:.68rem;font-weight:700;
+  letter-spacing:.1em;text-decoration:none;
+  transition:all .2s;
+}
+.footer-contact-btn:hover{background:rgba(201,168,76,.16);border-color:rgba(201,168,76,.6);}
 .footer-share{font-size:.68rem;color:rgba(255,255,255,.35);margin-bottom:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;}
 .footer-share p{margin-bottom:8px;}
 .footer-share-btn{
@@ -698,8 +711,10 @@ h1 span{
     <a href="https://cloud.google.com/maps-platform/terms" target="_blank" rel="noopener">Google Terms</a>
     <span>·</span>
     <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy</a>
-    <span>·</span>
-    <a href="mailto:ricsfoodroulette@gmail.com">Contact</a>
+  </div>
+  <div class="footer-contact">
+    <p class="footer-contact-label">Love it? Hate it? Got ideas?</p>
+    <a class="footer-contact-btn" href="mailto:ricsfoodroulette@gmail.com">✉ ricsfoodroulette@gmail.com</a>
   </div>
   <p class="footer-note">Restaurant data provided by Google Maps Platform</p>
   <p class="footer-note" style="margin-top:12px;opacity:.45;letter-spacing:.18em;font-family:'Cinzel',serif;font-size:.55rem;">✦ Built by <span style="color:var(--gold);opacity:1;letter-spacing:.12em;">Ric B</span> ✦</p>
