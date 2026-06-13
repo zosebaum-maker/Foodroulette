@@ -297,88 +297,37 @@ h1 span{
 #wc{display:block;border-radius:50%;cursor:default;max-width:100%;box-shadow:0 10px 40px rgba(0,0,0,.7);will-change:contents;touch-action:pan-y;image-rendering:-webkit-optimize-contrast;image-rendering:auto;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;outline:none;}
 @media(max-width:620px){.wz{padding:0;}.wr{width:100%;max-width:100%;}}
 
-/* ── Action Bar ── */
-.ab{display:flex;gap:10px;align-items:center;width:calc(100% - 24px);max-width:600px;margin:20px auto 0;position:relative;z-index:1;}
-.fb{
-  width:44px;height:44px;border-radius:6px;
-  background:transparent;
-  border:none;
-  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;position:relative;transition:all .2s ease, opacity .3s ease;
-  color:rgba(201,168,76,.7);
-}
-.fb:hover{background:rgba(201,168,76,.08);color:var(--gold);}
-.fb:disabled{opacity:0;pointer-events:none;}
-.fd{width:9px;height:9px;border-radius:50%;background:#e03030;border:2px solid var(--felt);position:absolute;top:1px;right:1px;display:none;box-shadow:0 0 6px rgba(220,40,40,.7);}
-.fd.on{display:block;}
-@keyframes sbPulse{
-  0%,100%{box-shadow:0 8px 32px rgba(201,168,76,.6),0 4px 0 #1a0800,0 6px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3);}
-  50%{box-shadow:0 12px 48px rgba(201,168,76,.95),0 4px 0 #1a0800,0 6px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3);}
-}
-.sb{
-  flex:1;min-width:0;padding:18px 14px;border:none;border-radius:12px;cursor:pointer;
-  font-family:'Cinzel',serif;font-size:1.05rem;font-weight:900;
-  letter-spacing:.22em;text-transform:uppercase;
-  color:#fff;
-  text-shadow:0 1px 3px rgba(0,0,0,.5), 0 0 20px rgba(255,220,100,.4);
-  background:linear-gradient(160deg,#2a1800 0%,#6a3c08 20%,#c9a84c 45%,#f0c93a 55%,#c9a84c 70%,#6a3c08 85%,#2a1800 100%);
-  box-shadow:
-    0 8px 32px rgba(201,168,76,.6),
-    0 4px 0 #1a0800,
-    0 6px 0 rgba(0,0,0,.5),
-    inset 0 1px 0 rgba(255,255,255,.2),
-    inset 0 -2px 0 rgba(0,0,0,.3);
+/* ── Utility Bar (Randomize · Filters · History) ── */
+.util-bar{display:flex;gap:10px;width:calc(100% - 24px);max-width:600px;margin:18px auto 0;position:relative;z-index:1;}
+.util-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:12px 8px 10px;border-radius:10px;cursor:pointer;
+  background:rgba(0,0,0,.32);
+  border:1px solid rgba(201,168,76,.18);
+  color:var(--gold);
+  transition:background .15s,border-color .15s,transform .1s;
+  -webkit-tap-highlight-color:transparent;
   position:relative;overflow:hidden;
-  transition:transform .12s ease, box-shadow .12s ease, opacity .35s ease;
-  animation:sbPulse 2.4s ease-in-out infinite;
 }
-
-/* Shine sweep */
-.sb::before{
-  content:'';position:absolute;top:0;width:50%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
-  will-change:transform;
-  animation:sbShine 4s linear infinite;
-}
-@keyframes sbShine{
-  0%{transform:skewX(-15deg) translateX(-200%);}
-  20%,100%{transform:skewX(-15deg) translateX(350%);}
-}
-.sb::after{
+.util-btn::before{
   content:'';position:absolute;inset:0;
-  border-radius:12px;
-  background:linear-gradient(135deg,rgba(255,255,255,.22) 0%,transparent 50%);
+  background:linear-gradient(135deg,rgba(255,255,255,.06) 0%,transparent 60%);
   pointer-events:none;
 }
-.sb:hover:not(:disabled){
-  transform:translateY(-3px);
-  box-shadow:0 14px 48px rgba(201,168,76,.8),0 4px 0 #5a3c04,0 8px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(0,0,0,.2);
-  animation:none;
-}
-.sb:active:not(:disabled){
-  transform:translateY(2px);
-  box-shadow:0 3px 12px rgba(201,168,76,.4),0 1px 0 #5a3c04,0 2px 0 rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(0,0,0,.2);
-}
-.sb:disabled{
-  opacity:0;pointer-events:none;
-}
-.sb.locked{
-  opacity:.45;filter:grayscale(.6);cursor:not-allowed;animation:none;
-}
-.sb.locked::before{display:none;}
-.sb:disabled::before{display:none;}
-.sb-txt{position:relative;z-index:1;}
-.sb:disabled .sb-txt{opacity:.3;}
-.rb{
-  width:44px;height:44px;border-radius:6px;
-  background:transparent;
-  border:none;
-  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;transition:all .2s ease, opacity .3s ease;
-  color:rgba(201,168,76,.7);
-}
-.rb:hover{background:rgba(201,168,76,.08);color:var(--gold);}
-.rb:disabled{opacity:0;pointer-events:none;}
+.util-btn:hover{background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.38);}
+.util-btn:active{transform:scale(.94);}
+.util-btn:disabled{opacity:.3;pointer-events:none;}
+.util-btn-icon{font-size:1.4rem;line-height:1;position:relative;}
+.util-btn-label{font-family:'Cinzel',serif;font-size:.47rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.65);}
+.fd{width:8px;height:8px;border-radius:50%;background:#e03030;border:2px solid #061008;position:absolute;top:9px;right:calc(50% - 16px);display:none;box-shadow:0 0 6px rgba(220,40,40,.7);}
+.fd.on{display:block;}
+/* History item styles */
+.hist-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(201,168,76,.07);}
+.hist-item:last-child{border-bottom:none;}
+.hist-emoji{font-size:1.5rem;flex-shrink:0;line-height:1;}
+.hist-name{font-family:'Cinzel',serif;font-size:.72rem;font-weight:700;color:var(--cream);letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-meta{font-size:.58rem;color:rgba(255,255,255,.38);margin-top:2px;}
+.hist-time{font-size:.55rem;color:rgba(201,168,76,.5);margin-left:auto;flex-shrink:0;font-family:'Cinzel',serif;letter-spacing:.05em;padding-left:8px;}
 
 /* ── Result Strip ── */
 @keyframes winPop{0%{opacity:0;transform:translateY(12px) scale(.96)}70%{opacity:1;transform:translateY(-2px) scale(1.01)}100%{opacity:1;transform:none}}
@@ -670,13 +619,13 @@ h1 span{
 /* ── Bigger wheel on desktop — tiered by viewport ── */
 @media(min-width:900px){
   .wr{ max-width:640px; }
-  .ab{ max-width:700px; }
+  .util-bar{ max-width:640px; }
   .hd{ max-width:640px; }
   .strip{ max-width:640px; }
 }
 @media(min-width:1400px){
   .wr{ max-width:820px; }
-  .ab{ max-width:780px; }
+  .util-bar{ max-width:820px; }
   .hd{ max-width:820px; }
   .strip{ max-width:820px; }
 }
@@ -711,10 +660,19 @@ h1 span{
 
 </div>
 
-<div class="ab">
-  <button class="fb" id="fBtn" onclick="openSheet();event.stopPropagation();">⚙<div class="fd" id="fDot"></div></button>
-  <button class="sb" id="sBtn" onclick="doSpin()"><span class="sb-txt">Let Fate Decide</span></button>
-  <button class="rb" id="rndBtn" onclick="doRandomize()" title="Randomize">🎲</button>
+<div class="util-bar">
+  <button class="util-btn" id="rndBtn" onclick="doRandomize()">
+    <span class="util-btn-icon">🎲</span>
+    <span class="util-btn-label">Randomize</span>
+  </button>
+  <button class="util-btn" id="fBtn" onclick="openSheet();event.stopPropagation();">
+    <span class="util-btn-icon">⚙️<div class="fd" id="fDot"></div></span>
+    <span class="util-btn-label">Filters</span>
+  </button>
+  <button class="util-btn" id="histBtn" onclick="openHistory()">
+    <span class="util-btn-icon">🕐</span>
+    <span class="util-btn-label">History</span>
+  </button>
 </div>
 
 <div class="strip">
@@ -869,6 +827,17 @@ h1 span{
   <span class="sr" onclick="resetF()">Reset all filters</span>
 </div>
 
+<!-- History Sheet -->
+<div class="sh" id="histSheet">
+  <div class="sh-h"><div class="sh-b"></div></div>
+  <div class="sh-hd">
+    <div class="sh-ti">Spin History</div>
+    <button class="sh-x" onclick="closeHistory()">✕</button>
+  </div>
+  <div id="histList" style="padding:0 18px 8px;overflow-y:auto;max-height:55svh;"></div>
+  <span class="sr" id="histClear" onclick="clearHistory()" style="display:none;">Clear History</span>
+</div>
+
 <script>
 // ──
 
@@ -891,6 +860,8 @@ h1 span{
     // Filter sheet: swipe to close
     var fs = document.getElementById('sheet');
     if (fs) addSwipeClose(fs, closeSheet);
+    var hs = document.getElementById('histSheet');
+    if (hs) addSwipeClose(hs, closeHistory);
 
     // Results sheet: prevent scroll leaking to page behind it
     var rs = document.getElementById('resultSheet');
@@ -998,14 +969,14 @@ function closeModal() {
   }
 }
 
-// Overlay tap: close filter only — results need intentional X or Spin Again
+// Overlay tap: close filter/history — results need intentional X or Spin Again
 document.getElementById('shOv') && document.getElementById('shOv').addEventListener('click', function() {
-  closeSheet();
+  closeSheet(); closeHistory();
 });
 
 // ESC closes both sheets
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') { closeModal(); closeSheet(); }
+  if (e.key === 'Escape') { closeModal(); closeSheet(); closeHistory(); }
 });
 
 // ══ END RESULTS SHEET ═════════════════════════════════════════════════════════
@@ -1348,8 +1319,36 @@ function draw(ang) {
     cx.strokeText(nm,lx,ly+seg.eSz*.7); cx.fillStyle='#fff'; cx.fillText(nm,lx,ly+seg.eSz*.7);
     cx.restore();
   });
-  // Black hub-centre disc — covers inner disc so logo sits on solid black,
-  // restoring the dark "table centre" look and giving the logo a clean surround.
+  // ── Logo glow ring — epic pulsing when ready, dim when locked ──
+  {
+    const lr = RPI * 0.98;
+    if (!locationGranted) {
+      // Locked: dim grey ring
+      cx.beginPath(); cx.arc(R, R, lr + 2, 0, Math.PI * 2);
+      cx.strokeStyle = 'rgba(120,120,120,0.35)';
+      cx.lineWidth = 2.5; cx.stroke();
+    } else if (!spinning) {
+      // Ready: layered gold pulse glow
+      const t = Date.now() * 0.0024;
+      const pulse = (Math.sin(t) + 1) / 2; // 0..1
+      // Wide soft radial halo
+      const halo = cx.createRadialGradient(R, R, lr * 0.85, R, R, lr + 22 + pulse * 10);
+      halo.addColorStop(0, 'rgba(0,0,0,0)');
+      halo.addColorStop(0.55, `rgba(240,201,58,${0.10 + pulse * 0.18})`);
+      halo.addColorStop(1,   'rgba(240,201,58,0)');
+      cx.beginPath(); cx.arc(R, R, lr + 22 + pulse * 10, 0, Math.PI * 2);
+      cx.fillStyle = halo; cx.fill();
+      // Bright inner ring
+      cx.beginPath(); cx.arc(R, R, lr + 2, 0, Math.PI * 2);
+      cx.strokeStyle = `rgba(240,201,58,${0.55 + pulse * 0.45})`;
+      cx.lineWidth = 2.5 + pulse * 2.5; cx.stroke();
+      // Second ring — wider, dimmer
+      cx.beginPath(); cx.arc(R, R, lr + 7 + pulse * 3, 0, Math.PI * 2);
+      cx.strokeStyle = `rgba(201,168,76,${0.18 + pulse * 0.22})`;
+      cx.lineWidth = 4 + pulse * 3; cx.stroke();
+    }
+  }
+  // Black hub-centre disc — covers inner disc so logo sits on solid black
   cx.beginPath(); cx.arc(R, R, RPI, 0, Math.PI * 2);
   cx.fillStyle = '#000'; cx.fill();
   // Logo drawn last, direct into cx — full DPR-native, highest smoothing quality
@@ -1468,9 +1467,26 @@ function loop(ts) {
 /* ═══════════════════════════════════════════
    SPIN + DONE
 ═══════════════════════════════════════════ */
-const elSBtn  = document.getElementById('sBtn');
 const elFBtn  = document.getElementById('fBtn');
 const elRndBtn= document.getElementById('rndBtn');
+const elHistBtn = document.getElementById('histBtn');
+
+// ── Canvas logo = spin button ──────────────────────────────────────────────
+cv.addEventListener('click', function(e) {
+  const rect = cv.getBoundingClientRect();
+  const scaleX = SZ / rect.width, scaleY = SZ / rect.height;
+  const x = (e.clientX - rect.left) * scaleX;
+  const y = (e.clientY - rect.top)  * scaleY;
+  if (Math.hypot(x - R, y - R) <= RPI * 0.98) doSpin();
+});
+cv.addEventListener('mousemove', function(e) {
+  const rect = cv.getBoundingClientRect();
+  const scaleX = SZ / rect.width, scaleY = SZ / rect.height;
+  const x = (e.clientX - rect.left) * scaleX;
+  const y = (e.clientY - rect.top)  * scaleY;
+  cv.style.cursor = (Math.hypot(x - R, y - R) <= RPI * 0.98 && locationGranted && !spinning)
+    ? 'pointer' : 'default';
+});
 
 function doSpin() {
   if (!locationGranted) { showLocStatus('📍 Location required to spin'); return; }
@@ -1494,7 +1510,7 @@ function doSpin() {
     document.getElementById('rsStatus').textContent='Awaiting your spin';
   }
     ring.classList.add('spinning');
-    elSBtn.disabled=true; elFBtn.disabled=true; elRndBtn.disabled=true;
+    elFBtn.disabled=true; elRndBtn.disabled=true; elHistBtn.disabled=true;
     // buildSegs in rAF — separates heavy segment computation from spin kickoff
     requestAnimationFrame(() => { buildSegs(pool); });
     wIdx=Math.floor(Math.random()*pool.length);
@@ -1534,8 +1550,7 @@ const elWItms=document.getElementById('wItems');
 function onDone() {
   if (fired) return; fired=true;
   ring.classList.remove('spinning');
-  elSBtn.disabled=false; elSBtn.innerHTML='<span class="sb-txt">Let Fate Decide</span>';
-  elFBtn.disabled=false; elRndBtn.disabled=false;
+  elFBtn.disabled=false; elRndBtn.disabled=false; elHistBtn.disabled=false;
   const w=segs[wIdx]; if (!w) return;
   const item=w.item;
   elWE.textContent=item.emoji;
@@ -1571,6 +1586,7 @@ function onDone() {
   } else { elWItms.style.display='none'; elWItms.innerHTML=''; }
 
   hasSpunOnce=true;
+  addToHistory(item);
   // Stage 1 (t=60ms): collapse header — runs alone, no competition
   setTimeout(() => {
     document.querySelector('.hd').classList.add('hd--collapsed');
@@ -1734,8 +1750,59 @@ function confetti() {
   }
 }
 
-function openSheet()  { closeModal(); document.getElementById('sheet').classList.add('on'); document.getElementById('shOv').classList.add('on'); document.getElementById('fBtn').classList.add('on'); }
-function closeSheet() { document.getElementById('sheet').classList.remove('on'); document.getElementById('shOv').classList.remove('on'); document.getElementById('fBtn').classList.remove('on'); }
+function openSheet()  { closeModal(); closeHistory(); document.getElementById('sheet').classList.add('on'); document.getElementById('shOv').classList.add('on'); document.getElementById('fBtn').classList.add('on'); }
+function closeSheet() { document.getElementById('sheet').classList.remove('on'); if(!document.getElementById('histSheet').classList.contains('on')) document.getElementById('shOv').classList.remove('on'); document.getElementById('fBtn').classList.remove('on'); }
+
+/* ── Spin History ──────────────────────────────────────────────────────── */
+let spinHistory = [];
+try { spinHistory = JSON.parse(localStorage.getItem('fr_history') || '[]'); } catch(e) {}
+
+function addToHistory(item) {
+  spinHistory.unshift({ name:item.name, emoji:item.emoji, cuisine:item.cuisine, price:item.price, rating:item.rating, ts:Date.now() });
+  if (spinHistory.length > 30) spinHistory.length = 30;
+  try { localStorage.setItem('fr_history', JSON.stringify(spinHistory)); } catch(e) {}
+}
+function openHistory() {
+  closeSheet();
+  renderHistory();
+  document.getElementById('histSheet').classList.add('on');
+  document.getElementById('shOv').classList.add('on');
+}
+function closeHistory() {
+  document.getElementById('histSheet').classList.remove('on');
+  if (!document.getElementById('sheet').classList.contains('on')) document.getElementById('shOv').classList.remove('on');
+}
+function clearHistory() {
+  spinHistory = [];
+  try { localStorage.removeItem('fr_history'); } catch(e) {}
+  renderHistory();
+}
+function timeAgo(ts) {
+  const s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 60)    return 'just now';
+  if (s < 3600)  return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+function renderHistory() {
+  const el = document.getElementById('histList');
+  const clr = document.getElementById('histClear');
+  if (!spinHistory.length) {
+    el.innerHTML = '<div style="padding:28px 0;text-align:center;color:rgba(255,255,255,.3);font-family:\'Cinzel\',serif;font-size:.7rem;letter-spacing:.12em;">No spins yet —<br>tap the wheel to start!</div>';
+    if (clr) clr.style.display = 'none';
+    return;
+  }
+  if (clr) clr.style.display = '';
+  el.innerHTML = spinHistory.map(h =>
+    `<div class="hist-item">
+      <span class="hist-emoji">${sanitize(h.emoji)}</span>
+      <div style="flex:1;min-width:0;">
+        <div class="hist-name">${sanitize(h.name)}</div>
+        <div class="hist-meta">${sanitize(h.cuisine)} · ${sanitize(h.price)} · ⭐${sanitize(String(h.rating))}</div>
+      </div>
+      <div class="hist-time">${timeAgo(h.ts)}</div>
+    </div>`).join('');
+}
 
 function selChip(el,gid,fk,isInt) {
   document.querySelectorAll(`#${gid} .ch`).forEach(x=>x.classList.remove('on')); el.classList.add('on');
@@ -1863,7 +1930,6 @@ async function doZip() {
     if (Array.isArray(places)&&places.length>0) {
       REST = places.map(r=>({...r}));
       locationGranted = true;
-      elSBtn.classList.remove('locked');
       invalidateWheel(); buildSegs(getWheelSlice()); draw(wAng);
       showLocStatus(`🎰 ${REST.length} spots near ${zip} — spin it!`);
       document.getElementById('zipRow').style.display='none';
@@ -1958,7 +2024,7 @@ document.fonts.ready.then(async ()=>{
       layers.style.height = prespin.offsetHeight + 'px';
     }
   });
-  elSBtn.classList.add('locked');
+  elFBtn.disabled=false; // re-enable after fonts loaded
   // Pre-load logo so bakeStatic paints it from the first frame
   await new Promise(res => {
     const img = new Image();
@@ -1972,7 +2038,7 @@ document.fonts.ready.then(async ()=>{
   showLocStatus('Locating grub', true);
   await loadRestaurants();
   buildSegs(getWheelSlice());
-  if (locationGranted) elSBtn.classList.remove('locked');
+  // locationGranted flag drives the logo glow state — no button class needed
 });
 
 /* ═══════════════════════════════════════════
