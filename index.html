@@ -1538,8 +1538,7 @@ cv.addEventListener('click', function(e) {
   const y = (e.clientY - rect.top)  * scaleY;
   if (Math.hypot(x - R, y - R) <= RPI * 0.98) {
     // Play spin sound
-    const snd = document.getElementById('spinSnd');
-    if (snd && _soundOn) { snd.volume = _sndVol; snd.currentTime = 0; snd.play().catch(()=>{}); }
+    _playSpinSound();
     doSpin();
   }
 });
@@ -2130,17 +2129,45 @@ window.addEventListener('resize', () => {
 /* ── Sound controls ── */
 let _soundOn = true;
 let _sndVol   = 0.8;
-let _audioUnlocked = false;
+let _audioCtx = null;
+let _sndBuf   = null;
 
-function _unlockAudio() {
-  if (_audioUnlocked) return;
-  const snd = document.getElementById('spinSnd');
-  if (!snd) return;
-  snd.volume = 0;
-  snd.play().then(() => { snd.pause(); snd.currentTime = 0; snd.volume = _sndVol; _audioUnlocked = true; }).catch(() => {});
+// Decode the embedded MP3 into a Web Audio buffer for reliable Chrome playback
+function _initAudio() {
+  if (_audioCtx) return;
+  try {
+    _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const el = document.getElementById('spinSnd');
+    if (!el) return;
+    // Fetch the data: URI and decode it
+    fetch(el.src)
+      .then(r => r.arrayBuffer())
+      .then(buf => _audioCtx.decodeAudioData(buf))
+      .then(decoded => { _sndBuf = decoded; })
+      .catch(() => {});
+  } catch(e) {}
 }
-document.addEventListener('click', _unlockAudio, { once: true });
-document.addEventListener('touchstart', _unlockAudio, { once: true });
+// Init after first interaction so AudioContext is allowed
+document.addEventListener('click', _initAudio, { once: true });
+document.addEventListener('touchstart', _initAudio, { once: true });
+
+function _playSpinSound() {
+  if (!_soundOn) return;
+  if (_audioCtx && _sndBuf) {
+    if (_audioCtx.state === 'suspended') _audioCtx.resume();
+    const src = _audioCtx.createBufferSource();
+    const gain = _audioCtx.createGain();
+    src.buffer = _sndBuf;
+    gain.gain.value = _sndVol;
+    src.connect(gain);
+    gain.connect(_audioCtx.destination);
+    src.start(0);
+  } else {
+    // Fallback: HTMLAudioElement
+    const snd = document.getElementById('spinSnd');
+    if (snd) { snd.volume = _sndVol; snd.currentTime = 0; snd.play().catch(() => {}); }
+  }
+}
 
 function toggleSound() {
   const pop = document.getElementById('sndPop');
