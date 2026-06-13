@@ -519,6 +519,47 @@ h1 span{
   transition:opacity .35s ease;
 }
 
+/* ── Pre-spin card ── */
+.vp-spin-card{
+  position:relative;
+  background:rgba(0,0,0,.32);
+  border:1px solid rgba(201,168,76,.2);
+  border-radius:12px;
+  margin:4px 0 0;
+  overflow:hidden;
+}
+.vp-spin-card::before{
+  content:'';position:absolute;inset:0;
+  background:
+    repeating-linear-gradient(47deg,transparent,transparent 2px,rgba(0,0,0,.06) 2px,rgba(0,0,0,.06) 3px),
+    repeating-linear-gradient(-47deg,transparent,transparent 2px,rgba(255,255,255,.02) 2px,rgba(255,255,255,.02) 3px);
+  border-radius:12px;pointer-events:none;
+}
+/* Corner suit marks */
+.vp-spin-corner-tl,.vp-spin-corner-tr,
+.vp-spin-corner-bl,.vp-spin-corner-br{
+  position:absolute;font-size:.75rem;line-height:1;opacity:.4;
+}
+.vp-spin-corner-tl{top:8px;left:10px;}
+.vp-spin-corner-tr{top:8px;right:10px;}
+.vp-spin-corner-bl{bottom:8px;left:10px;}
+.vp-spin-corner-br{bottom:8px;right:10px;}
+/* Food emoji hint row */
+.vp-spin-emoji-row{
+  display:flex;justify-content:center;gap:14px;
+  padding:14px 0 2px;
+  position:relative;z-index:1;
+}
+.vp-spin-emoji-row span{
+  font-size:1.6rem;opacity:.55;
+  animation:vpBounce 2.2s ease-in-out infinite;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));
+}
+.vp-spin-emoji-row span:nth-child(2){animation-delay:.18s;}
+.vp-spin-emoji-row span:nth-child(3){animation-delay:.36s;}
+.vp-spin-emoji-row span:nth-child(4){animation-delay:.54s;}
+.vp-spin-emoji-row span:nth-child(5){animation-delay:.72s;}
+
 /* ── Filter Sheet ── */
 .so{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
 .so.on{opacity:1;pointer-events:all;}
@@ -656,12 +697,21 @@ h1 span{
   <div id="vpCard" class="vp-card vp-card--spin">
     <!-- SPIN STATE (default) -->
     <div id="vpSpin">
-      <div class="vp-spin-simple">
-        <div class="vp-spin-rule"></div>
-        <span class="vp-spin-diamond">◆</span>
-        <div class="vp-spin-center" id="rsStatus">Spin to reveal your fate</div>
-        <span class="vp-spin-diamond">◆</span>
-        <div class="vp-spin-rule right"></div>
+      <div class="vp-spin-card">
+        <div class="vp-spin-corner-tl"><span class="suit-b">♠</span></div>
+        <div class="vp-spin-corner-tr"><span class="suit-r">♥</span></div>
+        <div class="vp-spin-emoji-row">
+          <span>🍕</span><span>🍔</span><span>🍣</span><span>🌮</span><span>🍜</span>
+        </div>
+        <div class="vp-spin-simple">
+          <div class="vp-spin-rule"></div>
+          <span class="vp-spin-diamond">◆</span>
+          <div class="vp-spin-center" id="rsStatus">Spin to reveal your fate</div>
+          <span class="vp-spin-diamond">◆</span>
+          <div class="vp-spin-rule right"></div>
+        </div>
+        <div class="vp-spin-corner-bl"><span class="suit-r">♦</span></div>
+        <div class="vp-spin-corner-br"><span class="suit-b">♣</span></div>
       </div>
       <div class="zip-row" id="zipRow" style="display:none">
         <input class="zip-input" id="zipInput" type="text" inputmode="numeric"
