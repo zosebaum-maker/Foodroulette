@@ -622,9 +622,9 @@ h1 span{
 /* ── Delivery buttons ── */
 
 .delivery-btn{
-  flex:1;padding:11px 6px;border-radius:10px;
-  font-size:.7rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
-  text-decoration:none;display:flex;align-items:center;justify-content:center;
+  flex:1;padding:13px 6px;border-radius:10px;
+  font-size:.68rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
   transition:transform .12s ease,box-shadow .12s ease;
   font-family:system-ui,-apple-system,sans-serif;
   box-shadow:0 3px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.2);
@@ -634,6 +634,8 @@ h1 span{
 .delivery-btn.dd{background:#e00000;color:#fff;}
 .delivery-btn.ue{background:#06c167;color:#fff;}
 .delivery-btn.gz{background:#f63440;color:#fff;}
+.delivery-btn-icon{font-size:1.3rem;line-height:1;}
+.delivery-btn-label{font-size:.62rem;font-weight:800;letter-spacing:.06em;}
 
 /* ── Photo zoom-in on appear ── */
 @keyframes photoReveal{0%{transform:scale(1.08);opacity:0;}100%{transform:scale(1);opacity:1;}}
@@ -744,9 +746,9 @@ h1 span{
         </div>
       </div>
       <div class="delivery-row" id="deliveryRow">
-        <a class="delivery-btn dd" id="wDoorDash" href="#" target="_blank" rel="noopener noreferrer">DoorDash</a>
-        <a class="delivery-btn ue" id="wUberEats" href="#" target="_blank" rel="noopener noreferrer">Uber Eats</a>
-        <a class="delivery-btn gz" id="wGrubhub"  href="#" target="_blank" rel="noopener noreferrer">Grubhub</a>
+        <a class="delivery-btn dd" id="wDoorDash" href="#" target="_blank" rel="noopener noreferrer"><span class="delivery-btn-icon">🛵</span><span class="delivery-btn-label">DoorDash</span></a>
+        <a class="delivery-btn ue" id="wUberEats" href="#" target="_blank" rel="noopener noreferrer"><span class="delivery-btn-icon">🚗</span><span class="delivery-btn-label">Uber Eats</span></a>
+        <a class="delivery-btn gz" id="wGrubhub"  href="#" target="_blank" rel="noopener noreferrer"><span class="delivery-btn-icon">🍔</span><span class="delivery-btn-label">Grubhub</span></a>
       </div>
     </div>
   </div>
@@ -945,9 +947,9 @@ function openModal(item) {
       </div>
     </div>
     <div class="delivery-row">
-      <a class="delivery-btn dd" href="https://www.doordash.com/search/store/${enc}/" target="_blank" rel="noopener">DoorDash</a>
-      <a class="delivery-btn ue" href="https://www.ubereats.com/search?q=${enc}" target="_blank" rel="noopener">Uber Eats</a>
-      <a class="delivery-btn gz" href="https://www.grubhub.com/search?queryText=${enc}" target="_blank" rel="noopener">Grubhub</a>
+      <a class="delivery-btn dd" href="https://www.doordash.com/search/store/${enc}/" target="_blank" rel="noopener"><span class="delivery-btn-icon">🛵</span><span class="delivery-btn-label">DoorDash</span></a>
+      <a class="delivery-btn ue" href="https://www.ubereats.com/search?q=${enc}" target="_blank" rel="noopener"><span class="delivery-btn-icon">🚗</span><span class="delivery-btn-label">Uber Eats</span></a>
+      <a class="delivery-btn gz" href="https://www.grubhub.com/search?queryText=${enc}" target="_blank" rel="noopener"><span class="delivery-btn-icon">🍔</span><span class="delivery-btn-label">Grubhub</span></a>
     </div>
   `;
 
