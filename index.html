@@ -17,6 +17,11 @@
 <meta name="twitter:title"       content="Ric's Food Roulette 🎰">
 <meta name="twitter:description" content="Can't decide where to eat? Spin the wheel. Let fate decide.">
 <meta name="twitter:image"       content="https://zosebaum-maker.github.io/Foodroulette/preview.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Yellowtail&display=swap" rel="stylesheet">
@@ -304,7 +309,7 @@ h1 span{
 }
 .fb:hover{background:rgba(201,168,76,.08);color:var(--gold);}
 .fb:disabled{opacity:0;pointer-events:none;}
-.fd{width:7px;height:7px;border-radius:50%;background:var(--gold);border:2px solid var(--felt);position:absolute;top:2px;right:2px;display:none;}
+.fd{width:9px;height:9px;border-radius:50%;background:#e03030;border:2px solid var(--felt);position:absolute;top:1px;right:1px;display:none;box-shadow:0 0 6px rgba(220,40,40,.7);}
 .fd.on{display:block;}
 @keyframes sbPulse{
   0%,100%{box-shadow:0 8px 32px rgba(201,168,76,.6),0 4px 0 #1a0800,0 6px 0 rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3);}
@@ -587,17 +592,34 @@ h1 span{
   border-top:1px solid rgba(201,168,76,.15);
   text-align:center;
 }
-.footer-google{height:22px;display:block;margin:0 auto 10px;filter:brightness(0) invert(1);opacity:.7;}
+.footer-divider{
+  display:flex;align-items:center;gap:0;
+  margin:18px 0;
+}
+.footer-divider::before,.footer-divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.3));
+}
+.footer-divider::after{
+  background:linear-gradient(270deg,transparent,rgba(201,168,76,.3));
+}
+.footer-divider-diamond{
+  color:rgba(201,168,76,.5);font-size:.55rem;padding:0 10px;flex-shrink:0;
+}
+.footer-legal{margin-top:20px;padding-top:16px;border-top:1px solid rgba(201,168,76,.1);}
+.footer-google-wrap{display:inline-block;background:rgba(255,255,255,.92);border-radius:5px;padding:4px 10px;margin:0 auto 12px;}
+.footer-google{height:16px;display:block;}
 .footer-links{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
 .footer-links a{font-size:.62rem;color:var(--dim);text-decoration:none;}
 .footer-links a:hover{color:var(--gold);}
 .footer-links span{color:var(--dim);font-size:.62rem;}
 .footer-note{font-size:.58rem;color:var(--dim);opacity:.6;}
-.footer-contact{margin:14px 0 10px;text-align:center;}
-.footer-contact-label{font-size:.65rem;color:rgba(255,255,255,.45);letter-spacing:.08em;margin-bottom:7px;}
+.footer-contact{margin:4px 0 0;text-align:center;}
+.footer-contact-label{font-size:.72rem;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.06em;margin-bottom:4px;}
+.footer-contact-sub{font-size:.62rem;color:rgba(255,255,255,.3);margin-bottom:12px;letter-spacing:.04em;}
 .footer-contact-btn{
   display:inline-block;
-  padding:8px 20px;border-radius:8px;
+  padding:10px 24px;border-radius:8px;
   border:1px solid rgba(201,168,76,.35);
   background:rgba(201,168,76,.08);
   color:var(--gold);
@@ -606,8 +628,8 @@ h1 span{
   transition:all .2s;
 }
 .footer-contact-btn:hover{background:rgba(201,168,76,.16);border-color:rgba(201,168,76,.6);}
-.footer-share{font-size:.68rem;color:rgba(255,255,255,.35);margin-bottom:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;}
-.footer-share p{margin-bottom:8px;}
+.footer-share{font-size:.68rem;color:rgba(255,255,255,.35);margin-bottom:4px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.footer-share p{margin-bottom:4px;}
 .footer-share-btn{
   background:transparent;
   border:1px solid rgba(201,168,76,.25);
@@ -760,21 +782,30 @@ h1 span{
     <p>Know someone who can't decide where to eat?</p>
     <button class="footer-share-btn" onclick="shareApp()">📤 Share the App</button>
   </div>
-  <img src="https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3.png"
-       alt="Powered by Google" translate="no" class="footer-google">
-  <div class="footer-links">
-    <a href="privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-    <span>·</span>
-    <a href="https://cloud.google.com/maps-platform/terms" target="_blank" rel="noopener">Google Terms</a>
-    <span>·</span>
-    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy</a>
-  </div>
+
+  <div class="footer-divider"><span class="footer-divider-diamond">◆</span></div>
+
   <div class="footer-contact">
     <p class="footer-contact-label">Love it? Hate it? Got ideas?</p>
+    <p class="footer-contact-sub">Feedback, suggestions, complaints — all welcome.</p>
     <a class="footer-contact-btn" href="mailto:ricsfoodroulette@gmail.com">✉ ricsfoodroulette@gmail.com</a>
   </div>
-  <p class="footer-note">Restaurant data provided by Google Maps Platform</p>
-  <p class="footer-note" style="margin-top:12px;opacity:.45;letter-spacing:.18em;font-family:'Cinzel',serif;font-size:.55rem;">✦ Built by <span style="color:var(--gold);opacity:1;letter-spacing:.12em;">Ric B</span> ✦</p>
+
+  <div class="footer-legal">
+    <div class="footer-google-wrap">
+      <img src="https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3.png"
+           alt="Powered by Google" translate="no" class="footer-google">
+    </div>
+    <div class="footer-links">
+      <a href="privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+      <span>·</span>
+      <a href="https://cloud.google.com/maps-platform/terms" target="_blank" rel="noopener">Google Terms</a>
+      <span>·</span>
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy</a>
+    </div>
+    <p class="footer-note">Restaurant data provided by Google Maps Platform</p>
+    <p class="footer-note" style="margin-top:12px;opacity:.45;letter-spacing:.18em;font-family:'Cinzel',serif;font-size:.55rem;">✦ Built by <span style="color:var(--gold);opacity:1;letter-spacing:.12em;">Ric B</span> ✦</p>
+  </div>
 </footer>
 
 <!-- Results Sheet -->
@@ -1601,8 +1632,8 @@ function getWheelSlice() {
   const seed = _dailyKey ? dailySeed(_dailyKey + Date.now().toString().slice(0,-5) + _rollCount) : 0;
   const shuffled = seed ? seededFisherYates(source, seed) : fisherYates(source);
 
-  // Fill to WHEEL_SIZE — pad with doubles if needed, never fake restaurants
-  let slice = shuffled.length >= WHEEL_SIZE
+  // Use unique restaurants first, pad with repeats only if needed to fill the wheel
+  const slice = shuffled.length >= WHEEL_SIZE
     ? shuffled.slice(0, WHEEL_SIZE)
     : (() => { const s=[...shuffled]; let i=0; while(s.length<WHEEL_SIZE){s.push(shuffled[i++%shuffled.length]);} return s; })();
 
@@ -1809,11 +1840,17 @@ async function doZip() {
     const r2 = await fetch(`${WORKER_URL}?lat=${+lat}&lng=${+lng}&radius=${+meters}`);
     const places = await r2.json();
     if (Array.isArray(places)&&places.length>0) {
-      REST = places.map(r=>({...r}));
+      const seen = new Set();
+      REST = places.filter(r => {
+        const id = r.placeId || r.place_id || r.name;
+        if (seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      }).map(r=>({...r}));
       locationGranted = true;
       elSBtn.classList.remove('locked');
       invalidateWheel(); buildSegs(getWheelSlice()); draw(wAng);
-      showLocStatus(`🎰 ${places.length} spots near ${zip} — spin it!`);
+      showLocStatus(`🎰 ${REST.length} spots near ${zip} — spin it!`);
       document.getElementById('zipRow').style.display='none';
     } else {
       showLocStatus('No restaurants found for ' + zip);
@@ -1886,8 +1923,15 @@ async function loadRestaurants() {
         const res=await fetch(`${WORKER_URL}?lat=${+lat}&lng=${+lng}&radius=${+meters}`);
         const data=await res.json();
         if (Array.isArray(data)&&data.length>0){
-          const processed=data.map(r=>({...r}));
-          setCache(key,processed); REST=processed; locationGranted=true; invalidateWheel(); showLocStatus(`${data.length} spots near you — spin it!`);
+          // Dedupe by place_id — Google Places can return the same spot across pages
+          const seen = new Set();
+          const processed = data.filter(r => {
+            const id = r.placeId || r.place_id || r.name;
+            if (seen.has(id)) return false;
+            seen.add(id);
+            return true;
+          }).map(r=>({...r}));
+          setCache(key,processed); REST=processed; locationGranted=true; invalidateWheel(); showLocStatus(`${processed.length} spots near you — spin it!`);
         } else { showLocStatus('🎰 Ready to spin!'); }
       } catch(e){showLocStatus('🎰 Ready to spin!');}
       resolve();
