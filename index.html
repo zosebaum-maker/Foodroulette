@@ -152,17 +152,18 @@ h1 span{
 
 /* ── FATE DECIDED epic banner ── */
 .hd-winner{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:10px 0 2px;width:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;padding:6px 0;width:100%;
+  /* absolutely fills hd-layers — content centred vertically */
 }
 
 /* Bulb row */
 .winner-bulbs{
   display:flex;align-items:center;justify-content:space-between;
-  width:min(100%,clamp(270px,88vw,520px));
+  width:min(100%,clamp(240px,85vw,500px));
 }
 .bulb{
-  width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  width:9px;height:9px;border-radius:50%;flex-shrink:0;
   background:radial-gradient(circle at 35% 30%,#fff 0%,#ffe060 40%,#d07810 100%);
   box-shadow:0 0 5px #ffd040,0 0 12px rgba(255,185,50,.75),0 0 24px rgba(255,140,20,.4);
   will-change:opacity;
@@ -193,7 +194,7 @@ h1 span{
   to  {opacity:1;transform:translateY(0);}
 }.decided-line{
   font-family:'Cinzel',serif;
-  font-size:clamp(2.4rem,9vw,4rem);
+  font-size:clamp(2rem,8vw,3.8rem);
   font-weight:900;letter-spacing:.06em;line-height:1;
   color:#fffdf5;
   text-shadow:0 2px 30px rgba(230,190,70,.2);
@@ -1807,9 +1808,6 @@ function doRandomize() {
   invalidateWheel();
   rndRest=getWheelSlice();
   buildSegs(rndRest); draw(wAng);
-  const btn=document.getElementById('rndBtn');
-  btn.style.transition='transform .4s ease'; btn.style.transform='rotate(360deg)';
-  setTimeout(()=>{btn.style.transition=''; btn.style.transform='';},420);
 }
 
 
