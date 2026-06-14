@@ -150,59 +150,89 @@ h1 span{
 /* Collapsed padding stays same so logo-r never shifts */
 .hd--collapsed{padding:16px 16px 0;}
 
-/* ── WINNER! old-Vegas-bulb style (page header, results screen only) ── */
+/* ── FATE DECIDED epic banner ── */
 .hd-winner{
-  display:flex;flex-direction:column;align-items:center;gap:7px;
-  padding:14px 0 2px;width:100%;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:10px 0 2px;width:100%;
 }
 
-/* Bulb row — spans full text width */
+/* Bulb row */
 .winner-bulbs{
   display:flex;align-items:center;justify-content:space-between;
-  width:min(100%,clamp(270px,82vw,490px));
+  width:min(100%,clamp(270px,88vw,520px));
 }
-/* Old incandescent Vegas bulb — static gradient, opacity-only flash (GPU composited) */
 .bulb{
-  width:11px;height:11px;border-radius:50%;flex-shrink:0;
-  border:1px solid rgba(180,110,30,.4);
-  background:radial-gradient(circle at 38% 32%,#fff8e8 0%,#ffd080 55%,#c87820 100%);
-  box-shadow:0 0 5px #ffc850,0 0 12px rgba(255,180,60,.55),0 0 22px rgba(255,150,30,.3);
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle at 35% 30%,#fff 0%,#ffe060 40%,#d07810 100%);
+  box-shadow:0 0 5px #ffd040,0 0 12px rgba(255,185,50,.75),0 0 24px rgba(255,140,20,.4);
   will-change:opacity;
-  animation:bulbAlt .5s step-end infinite;
+  animation:bulbAlt .45s step-end infinite;
   animation-play-state:paused;
 }
-.bulb:nth-child(even){animation-delay:.25s;}
-/* Only opacity flips — no background/shadow repaint */
+.bulb:nth-child(even){animation-delay:.22s;}
+.bulb:nth-child(3n){animation-delay:.11s;}
 @keyframes bulbAlt{
   0%,100%{opacity:1;}
-  50%{opacity:.12;}
+  50%{opacity:.08;}
 }
 
-/* WINNER! text — static colour, only brightness/opacity animate (compositor-eligible) */
-.winner-word{
-  font-family:'Cinzel',serif;font-size:clamp(2rem,7.5vw,3.2rem);font-weight:900;
-  letter-spacing:.14em;line-height:1;
-  color:#ffe8b0;
-  text-shadow:0 0 12px rgba(255,210,100,.85),0 0 28px rgba(255,170,50,.5),0 0 52px rgba(255,140,20,.25);
-  will-change:opacity,filter;
-  animation:winnerFlash .55s step-end infinite;
+/* "FATE" — drops in from above */
+.fate-line{
+  font-family:'Cinzel',serif;
+  font-size:clamp(.75rem,2.5vw,1rem);
+  font-weight:400;letter-spacing:.65em;text-transform:uppercase;
+  color:rgba(201,168,76,.7);
+  opacity:0;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  animation:fateIn .5s cubic-bezier(.22,1,.36,1) .15s both;
   animation-play-state:paused;
 }
-@keyframes winnerFlash{
-  0%,100%{opacity:1;filter:brightness(1);}
-  50%{opacity:.78;filter:brightness(1.35);}
+@keyframes fateIn{
+  from{opacity:0;transform:translateY(-8px);}
+  to  {opacity:1;transform:translateY(0);}
 }
 
-/* Start animations only when winner is showing — after grid finishes expanding */
-.hd--collapsed .bulb{
-  animation-play-state:running;
-  animation-delay:.45s; /* wait for grid to finish expanding */
+.decided-line{
+  font-family:'Cinzel',serif;
+  font-size:clamp(2.4rem,9vw,4rem);
+  font-weight:900;letter-spacing:.06em;line-height:1;
+  color:#fffdf5;
+  text-shadow:0 2px 30px rgba(230,190,70,.2);
+  position:relative;overflow:hidden;
+  opacity:0;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  animation:decidedIn .55s cubic-bezier(.22,1,.36,1) .35s both;
+  animation-play-state:paused;
 }
-.hd--collapsed .bulb:nth-child(even){animation-delay:.7s;}
-.hd--collapsed .winner-word{
-  animation-play-state:running;
-  animation-delay:.4s;
+@keyframes decidedIn{
+  0%  {opacity:0;transform:translateY(22px) scale(.85);}
+  65% {opacity:1;transform:translateY(-3px) scale(1.03);}
+  100%{opacity:1;transform:translateY(0) scale(1);}
 }
+
+/* Subtle shimmer sweep */
+.decided-line::after{
+  content:'';
+  position:absolute;top:-10%;left:-100%;
+  width:50%;height:120%;
+  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.18) 50%,transparent 65%);
+  animation:shimmerSweep 4s ease 1.2s infinite;
+  animation-play-state:paused;
+}
+@keyframes shimmerSweep{
+  from{left:-100%;}
+  to  {left:220%;}
+}
+
+/* Start all animations when winner is showing */
+.hd--collapsed .bulb{animation-play-state:running;animation-delay:.4s;}
+.hd--collapsed .bulb:nth-child(even){animation-delay:.62s;}
+.hd--collapsed .bulb:nth-child(3n){animation-delay:.51s;}
+.hd--collapsed .fate-line{animation-play-state:running;}
+.hd--collapsed .decided-line,
+.hd--collapsed .decided-line::after{animation-play-state:running;}
 
 /* ── Pause background animations during result reveal to prevent stutter ── */
 .anim-pause .sb::before,
@@ -704,9 +734,10 @@ h1 span{
       <p class="sub" id="tagline">Place your bets · The wheel decides</p>
     </div>
     <div class="hd-winner" id="hdWinner" aria-hidden="true">
-      <div class="winner-bulbs"><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span></div>
-      <div class="winner-word">WINNER!</div>
-      <div class="winner-bulbs"><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span></div>
+      <div class="winner-bulbs"><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span></div>
+      <div class="fate-line">Fate</div>
+      <div class="decided-line">DECIDED</div>
+      <div class="winner-bulbs"><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span><span class="bulb"></span></div>
     </div>
   </div>
 </div>
