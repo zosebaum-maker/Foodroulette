@@ -98,7 +98,10 @@ h1 span{
   30%{opacity:.72;}
   70%{opacity:.78;}
 }
-.sub{font-size:.62rem;color:rgba(255,255,255,.6);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;}
+.sub{font-size:.62rem;color:rgba(255,255,255,.6);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  width:100%;max-width:100%;padding:0 12px;box-sizing:border-box;
+  display:block;height:1.4em;line-height:1.4;}
 
 /* ── Header: fixed-height crossfade — zero layout animation, wheel never moves ──
    Two layers (.hd-prespin / .hd-winner) overlap inside .hd-layers.
@@ -315,8 +318,9 @@ h1 span{
 .hd-winner{ contain:layout style; }
 .strip{contain:layout style;width:calc(100% - 24px);margin-left:0;margin-right:0;max-width:600px;margin:22px auto 14px;position:relative;z-index:1}
 /* ── Filter Tags ── */
-.fs{display:none;flex-wrap:wrap;gap:4px;justify-content:center;padding:0 16px;margin-top:6px;position:relative;z-index:1;width:100%;max-width:600px;}
-.fs.on{display:flex;}
+.fs{display:none;flex-wrap:wrap;gap:4px;justify-content:center;padding:4px 16px;
+  pointer-events:none;width:100%;box-sizing:border-box;}
+.fs.on{display:flex;pointer-events:auto;}
 .ft{padding:2px 8px;border-radius:12px;background:rgba(0,0,0,.35);border:1px solid rgba(201,168,76,.2);color:var(--gold);font-size:.62rem;font-weight:600;display:flex;align-items:center;gap:3px;}
 .fx{cursor:pointer;opacity:.7;}
 
@@ -742,15 +746,14 @@ h1 span{
   </div>
 </div>
 
-
-<div class="fs" id="fSum"></div>
-
 <div class="wz" style="position:relative;">
   <div class="wr" id="wRing">
     <canvas id="wc"></canvas>
   </div>
 
 </div>
+
+<div class="fs" id="fSum"></div>
 
 <div class="util-bar">
   <button class="util-btn" id="rndBtn" onclick="doRandomize()">
