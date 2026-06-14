@@ -1023,6 +1023,7 @@ function openModal(item) {
 }
 
 function closeModal() {
+  _resultShowing = false;
   document.getElementById('resultSheet').classList.remove('on');
   // Only hide overlay if filter is also closed
   if (!document.getElementById('sheet').classList.contains('on')) {
@@ -1060,6 +1061,7 @@ let locationGranted = false;
 ═══════════════════════════════════════════ */
 const BD = {1:{l:'$',d:'Under $15'},2:{l:'$$',d:'~$15–$30'},3:{l:'$$$',d:'~$30–$60'},4:{l:'$$$$',d:'~$60+'}};
 let spinning = false;
+let _resultShowing = false;
 let rndRest  = null;
 const F = { budget:4, dist:'any', rating:0, openNow:true, hasPhone:false, hasWebsite:false, topRated:false };
 let hasSpunOnce = false;
@@ -1589,6 +1591,7 @@ cv.addEventListener('mousemove', function(e) {
 function doSpin() {
   if (!locationGranted) { showLocStatus('📍 Location required to spin'); return; }
   if (spinning && bP!=='parked' && bP!=='locked') return;
+  if (_resultShowing) return;
   setTagline();
   const pool=getActivePool();
   if (!pool.length) { alert('No restaurants match your filters!'); return; }
@@ -1620,14 +1623,7 @@ function doSpin() {
     bVA=-(0.24+Math.random()*0.06); bVR=0; bP='orbit';
   };
 
-  // If winner card is showing, animate it out first
-  const card = document.getElementById('vpCard');
-  if (document.getElementById('resultSheet').classList.contains('on')) {
-    card.classList.add('exiting');
-    setTimeout(() => { card.classList.remove('exiting'); startSpin(); }, 180);
-  } else {
-    startSpin();
-  }
+  startSpin();
 }
 
 const elWE=document.getElementById('wE');
@@ -1647,6 +1643,7 @@ const elWItms=document.getElementById('wItems');
 
 function onDone() {
   if (fired) return; fired=true;
+  _resultShowing = true;
   ring.classList.remove('spinning');
   elFBtn.disabled=false; elRndBtn.disabled=false; elHistBtn.disabled=false;
   const w=segs[wIdx]; if (!w) return;
