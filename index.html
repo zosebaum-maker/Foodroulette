@@ -191,9 +191,7 @@ h1 span{
 @keyframes fateIn{
   from{opacity:0;transform:translateY(-8px);}
   to  {opacity:1;transform:translateY(0);}
-}
-
-.decided-line{
+}.decided-line{
   font-family:'Cinzel',serif;
   font-size:clamp(2.4rem,9vw,4rem);
   font-weight:900;letter-spacing:.06em;line-height:1;
@@ -215,15 +213,16 @@ h1 span{
 /* Subtle shimmer sweep */
 .decided-line::after{
   content:'';
-  position:absolute;top:-10%;left:-100%;
+  position:absolute;top:-10%;left:0;
   width:50%;height:120%;
+  transform:translateX(-200%);
   background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.18) 50%,transparent 65%);
   animation:shimmerSweep 4s ease 1.2s infinite;
   animation-play-state:paused;
 }
 @keyframes shimmerSweep{
-  from{left:-100%;}
-  to  {left:220%;}
+  from{transform:translateX(-200%);}
+  to  {transform:translateX(440%);}
 }
 
 /* Start all animations when winner is showing */
@@ -324,7 +323,7 @@ h1 span{
 .wz{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;margin-top:2px;}
 .wr{position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:600px;}
 
-#wc{display:block;border-radius:50%;cursor:default;max-width:100%;box-shadow:0 10px 40px rgba(0,0,0,.7);will-change:contents;touch-action:pan-y;image-rendering:-webkit-optimize-contrast;image-rendering:auto;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;outline:none;}
+#wc{display:block;border-radius:50%;cursor:default;max-width:100%;box-shadow:0 10px 40px rgba(0,0,0,.7);will-change:transform;touch-action:pan-y;image-rendering:-webkit-optimize-contrast;image-rendering:auto;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;outline:none;}
 @media(max-width:620px){.wz{padding:0;}.wr{width:100%;max-width:100%;}}
 
 /* ── Utility Bar (Randomize · Filters · History) ── */
@@ -1417,27 +1416,20 @@ function draw(ang) {
   {
     const lr = RPI * 0.98;
     if (!locationGranted) {
-      // Locked: dim grey ring
       cx.beginPath(); cx.arc(R, R, lr + 2, 0, Math.PI * 2);
       cx.strokeStyle = 'rgba(120,120,120,0.35)';
       cx.lineWidth = 2.5; cx.stroke();
     } else if (!spinning) {
-      // Ready: layered gold pulse glow
-      const t = Date.now() * 0.0024;
-      const pulse = (Math.sin(t) + 1) / 2; // 0..1
-      // Wide soft radial halo
-      const halo = cx.createRadialGradient(R, R, lr * 0.85, R, R, lr + 22 + pulse * 10);
-      halo.addColorStop(0, 'rgba(0,0,0,0)');
-      halo.addColorStop(0.55, `rgba(240,201,58,${0.10 + pulse * 0.18})`);
-      halo.addColorStop(1,   'rgba(240,201,58,0)');
-      cx.beginPath(); cx.arc(R, R, lr + 22 + pulse * 10, 0, Math.PI * 2);
-      cx.fillStyle = halo; cx.fill();
-      // Bright inner ring
+      // Pulse using opacity only — no gradient creation per frame
+      const pulse = (Math.sin(Date.now() * 0.0024) + 1) / 2; // 0..1
+      cx.globalAlpha = 0.10 + pulse * 0.18;
+      cx.beginPath(); cx.arc(R, R, lr + 18, 0, Math.PI * 2);
+      cx.fillStyle = 'rgba(240,201,58,1)'; cx.fill();
+      cx.globalAlpha = 1;
       cx.beginPath(); cx.arc(R, R, lr + 2, 0, Math.PI * 2);
       cx.strokeStyle = `rgba(240,201,58,${0.55 + pulse * 0.45})`;
       cx.lineWidth = 2.5 + pulse * 2.5; cx.stroke();
-      // Second ring — wider, dimmer
-      cx.beginPath(); cx.arc(R, R, lr + 7 + pulse * 3, 0, Math.PI * 2);
+      cx.beginPath(); cx.arc(R, R, lr + 7, 0, Math.PI * 2);
       cx.strokeStyle = `rgba(201,168,76,${0.18 + pulse * 0.22})`;
       cx.lineWidth = 4 + pulse * 3; cx.stroke();
     }
@@ -1501,8 +1493,6 @@ function drawBall(bx,by) {
    PHYSICS STATE
 ═══════════════════════════════════════════ */
 let bP='idle', bA=0, bRad=0, bVA=0, bVR=0, wV=0.003, fired=false, parkedOffset=0, bounceF=0;
-
-document.addEventListener('visibilitychange', () => { if (!document.hidden) requestAnimationFrame(loop); });
 
 document.addEventListener('visibilitychange', () => { if (!document.hidden) requestAnimationFrame(loop); });
 
@@ -1598,26 +1588,28 @@ const elHistBtn = document.getElementById('histBtn');
 
 // ── Canvas logo = spin button ──────────────────────────────────────────────
 let _tapAnim = null;
+let _cvRect = cv.getBoundingClientRect();
+window.addEventListener('resize', () => { _cvRect = cv.getBoundingClientRect(); }, { passive: true });
+
+function _cvCoords(e) {
+  const scaleX = SZ / _cvRect.width, scaleY = SZ / _cvRect.height;
+  return { x: (e.clientX - _cvRect.left) * scaleX, y: (e.clientY - _cvRect.top) * scaleY };
+}
+
 cv.addEventListener('click', function(e) {
-  const rect = cv.getBoundingClientRect();
-  const scaleX = SZ / rect.width, scaleY = SZ / rect.height;
-  const x = (e.clientX - rect.left) * scaleX;
-  const y = (e.clientY - rect.top)  * scaleY;
+  const {x, y} = _cvCoords(e);
   if (Math.hypot(x - R, y - R) <= RPI * 0.98) {
-    _tapAnim = Date.now(); // trigger flash + shockwave
+    _tapAnim = Date.now();
     _startAmbiance();
     _playSpinSound();
     doSpin();
   }
 });
 cv.addEventListener('mousemove', function(e) {
-  const rect = cv.getBoundingClientRect();
-  const scaleX = SZ / rect.width, scaleY = SZ / rect.height;
-  const x = (e.clientX - rect.left) * scaleX;
-  const y = (e.clientY - rect.top)  * scaleY;
+  const {x, y} = _cvCoords(e);
   cv.style.cursor = (Math.hypot(x - R, y - R) <= RPI * 0.98 && locationGranted && !spinning)
     ? 'pointer' : 'default';
-});
+}, { passive: true });
 
 function doSpin() {
   if (!locationGranted) { showLocStatus('📍 Location required to spin'); return; }
