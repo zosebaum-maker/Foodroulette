@@ -943,7 +943,7 @@ function buildPhotoHTML(item) {
   if (!item.photoRef) return '';
   const url = item.photoRef.startsWith('http')
     ? item.photoRef
-    : `${WORKER_URL}/photo?ref=${encodeURIComponent(item.photoRef)}`;
+    : `${WORKER_URL}/photo?ref=${encodeURIComponent(item.photoRef)}&maxwidth=800`;
   const attr = item.photoAttr && item.photoAttr.name
     ? `<p class="rw-photo-attr">Photo: <a href="${sanitize(item.photoAttr.uri||'#')}" target="_blank" rel="noopener">${sanitize(item.photoAttr.name)}</a> · Google Maps</p>`
     : !item.photoRef.startsWith('http')
@@ -1660,7 +1660,8 @@ function onDone() {
   document.getElementById('wUberEats').href = `https://www.ubereats.com/search?q=${enc}`;
   document.getElementById('wGrubhub').href  = `https://www.grubhub.com/search?queryText=${enc}`;
   if (item.photoRef) {
-    const photoUrl=item.photoRef.startsWith('http')?item.photoRef:`${WORKER_URL}/photo?ref=${encodeURIComponent(item.photoRef)}`;
+    const photoW = Math.min(1600, Math.round(window.innerWidth * (window.devicePixelRatio || 1)));
+    const photoUrl=item.photoRef.startsWith('http')?item.photoRef:`${WORKER_URL}/photo?ref=${encodeURIComponent(item.photoRef)}&maxwidth=${photoW}`;
     elWPhoto.src=photoUrl;
     elWPhoto.classList.remove('revealed');
     elWPhoto.onload=()=>{ elWPhotoW.style.display=''; requestAnimationFrame(()=>elWPhoto.classList.add('revealed')); };
